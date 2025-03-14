@@ -9,7 +9,8 @@ namespace Models;
 
 public class ApplicationRole : IdentityRole<int>
 {
-    // Custom properties down here
     public virtual ICollection<ApplicationUserRole>? UserRoles { get; set; }
     public virtual ICollection<ApplicationRoleClaim>? RoleClaims { get; set; }
+
+    // voeg je eigen properties hieronder toe die nog niet door IdentityRole wordt ondersteund
 }
