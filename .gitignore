@@ -1,10 +1,11 @@
 # Visual Studio instellingen
+.vs/
 .vscode/
 
 # Build output
 bin/
 obj/
-MediMapAPI/.vs/
+
 # User-specifieke bestanden
 *.user
 *.suo
