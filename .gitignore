@@ -1,0 +1,56 @@
+# Visual Studio instellingen
+.vscode/
+
+# Build output
+bin/
+obj/
+
+# User-specifieke bestanden
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logbestanden en tijdelijk bestanden
+logs/
+*.log
+!ApplicationInsights.config
+
+# NuGet packages
+*.nupkg
+packages/
+project.lock.json
+
+# ASP.NET tijdelijke bestanden
+wwwroot/node_modules/
+wwwroot/lib/
+
+# Configuratie- en geheime bestanden
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+.env
+.env.*
+
+# Database bestanden
+*.mdf
+*.ldf
+
+# Resharper en Rider bestanden
+*.DotSettings.user
+.idea/
+
+# JetBrains Rider en Resharper folders
+.svn/
+_ReSharper.Caches/
+
+# SonarQube bestanden
+.sonarqube/
+
+# Azure deployment bestanden
+.publish/
+Azure/
+
+# Docker bestanden
+**/docker-compose.override.yml
+MediMapAPI/.vs/MediMapAPI/FileContentIndex/98c7c5c2-aacb-4ecf-8280-298bfdcce7c9.vsidx
