@@ -27,6 +27,7 @@ wwwroot/node_modules/
 wwwroot/lib/
 
 # Configuratie- en geheime bestanden
+appsettings.json
 appsettings.Development.json
 appsettings.Local.json
 secrets.json
