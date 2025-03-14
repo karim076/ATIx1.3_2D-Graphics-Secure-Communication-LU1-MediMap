@@ -1,9 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35828.75 d17.13
+VisualStudioVersion = 17.13.35828.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediMapAPI", "MediMapAPI\MediMapAPI.csproj", "{C44B1FA9-913A-47DA-840D-3075C963B230}"
+	ProjectSection(ProjectDependencies) = postProject
+		{99E36724-C4CF-402D-81C8-DE107C0BE14D} = {99E36724-C4CF-402D-81C8-DE107C0BE14D}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{99E36724-C4CF-402D-81C8-DE107C0BE14D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{97F5AC65-D4CD-487B-9057-805CD5820F75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +22,14 @@ Global
 		{C44B1FA9-913A-47DA-840D-3075C963B230}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C44B1FA9-913A-47DA-840D-3075C963B230}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C44B1FA9-913A-47DA-840D-3075C963B230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99E36724-C4CF-402D-81C8-DE107C0BE14D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99E36724-C4CF-402D-81C8-DE107C0BE14D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99E36724-C4CF-402D-81C8-DE107C0BE14D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99E36724-C4CF-402D-81C8-DE107C0BE14D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97F5AC65-D4CD-487B-9057-805CD5820F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97F5AC65-D4CD-487B-9057-805CD5820F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97F5AC65-D4CD-487B-9057-805CD5820F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97F5AC65-D4CD-487B-9057-805CD5820F75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
