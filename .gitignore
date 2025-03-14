@@ -4,7 +4,7 @@
 # Build output
 bin/
 obj/
-
+MediMapAPI/.vs/
 # User-specifieke bestanden
 *.user
 *.suo
@@ -53,9 +53,3 @@ Azure/
 
 # Docker bestanden
 **/docker-compose.override.yml
-MediMapAPI/.vs/MediMapAPI/FileContentIndex/98c7c5c2-aacb-4ecf-8280-298bfdcce7c9.vsidx
-MediMapAPI/.vs/MediMapAPI/FileContentIndex/04dd83f4-c473-4b03-a30f-ac60d8d8d654.vsidx
-MediMapAPI/.vs/MediMapAPI/FileContentIndex/c54da381-5ecb-4de9-be8f-e5435616e316.vsidx
-MediMapAPI/.vs/MediMapAPI/FileContentIndex/fe4d17bd-2db8-4e69-a14e-1c940596579e.vsidx
-MediMapAPI/.vs/MediMapAPI/FileContentIndex/d7d268ce-926a-44ad-be09-26d67d324d10.vsidx
-MediMapAPI/.vs/MediMapAPI/FileContentIndex/ff24f3cd-ae79-4ec8-abd3-389468e34c64.vsidx
