@@ -32,4 +32,9 @@ public class LoginManager : MonoBehaviour
         Register.SetActive(false);
         Login.SetActive(true);
     }
+    public void ReturnHome()
+    {
+        // Go to Home Scene
+        SceneManager.LoadScene("HomeScreenScene", LoadSceneMode.Single);
+    }
 }
