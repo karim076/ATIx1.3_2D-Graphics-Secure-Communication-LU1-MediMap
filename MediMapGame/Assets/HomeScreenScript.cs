@@ -3,20 +3,21 @@ using UnityEngine;
 
 public class HomeScreenScript : MonoBehaviour
 {
-    public GameObject Header;
-    public void LoadHeader()
+    //public GameObject Header;
+    public static void LoadHeader()
     {
-        //GameObject headerPrefab = GameObject.Find("HeaderPrefab");
-        //Vector3 location = new Vector3(0, 465, 0);
+        GameObject Prefab = Resources.Load<GameObject>("HeaderPrefab");
         Transform canvasTransform = GameObject.Find("Canvas").transform;
-        //location, quaternion.identity
-        GameObject newObject = Instantiate(Header, canvasTransform);
 
-        RectTransform buttonRect = newObject.GetComponent<RectTransform>();
-        buttonRect.anchoredPosition = new Vector2(0, 465); // Centered
-
-
-
+        if (Prefab != null)
+        {
+            GameObject newButton = Instantiate(Prefab, canvasTransform);
+            newButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 465);
+        }
+        else
+        {
+            Debug.LogError("ButtonPrefab not found or Canvas is missing!");
+        }
     }
     void Start()
     {
