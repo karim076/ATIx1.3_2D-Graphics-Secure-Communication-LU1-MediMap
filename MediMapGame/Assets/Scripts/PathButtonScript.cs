@@ -18,7 +18,7 @@ public class PathButtonScript : MonoBehaviour
             Debug.Log(gameObject.name + " double-clicked!");
             if (MovableAvatar.transform.position == gameObject.transform.position)
             {
-                SceneManager.LoadScene("ProfileScene");
+                SceneManager.LoadScene("LogBookScene");
             }
         }
         lastClickTime = Time.time; // Update last click time

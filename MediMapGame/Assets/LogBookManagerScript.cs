@@ -1,13 +1,12 @@
 using Assets.Scripts.SessionManager;
-using Unity.Mathematics;
 using UnityEngine;
 
-public class HomeScreenScript : MonoBehaviour
+public class LogBookManagerScript : MonoBehaviour
 {
-
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //SessionManager.Instance.LoadHeader();
+
     }
 
     // Update is called once per frame

@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class CreatePanelScene : MonoBehaviour
 {
+    
+
     public GameObject createPanel;
     public GameObject logPanel;
 

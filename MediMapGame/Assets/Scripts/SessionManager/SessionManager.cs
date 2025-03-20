@@ -11,6 +11,7 @@ namespace Assets.Scripts.SessionManager
     {
         public static SessionManager Instance { get; private set; }
         public string Token { get; private set; }
+        public bool isLogedIn = false;
 
         private void Awake()
         {

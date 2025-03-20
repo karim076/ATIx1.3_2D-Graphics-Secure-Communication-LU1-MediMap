@@ -1,8 +1,13 @@
+using Assets.Scripts.SessionManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ProfileSceneScript : MonoBehaviour
 {
+    void Start()
+    {
+        //SessionManager.Instance.LoadHeader();
+    }
     public void OnBackButtonClicked()
     {
         SceneManager.LoadScene("HomeScreenScene");
