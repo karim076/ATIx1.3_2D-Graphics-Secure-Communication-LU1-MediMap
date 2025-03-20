@@ -5,14 +5,14 @@ public class ProfileSceneScript : MonoBehaviour
 {
     public void OnBackButtonClicked()
     {
-        SceneManager.LoadScene("HomeScreenScene");
+        SceneManager.LoadScene("HomeScreenScene", LoadSceneMode.Single);
     }
     public void OnInfoSceneClicked()
     {
-        SceneManager.LoadSceneAsync("InfoScene");
+        SceneManager.LoadSceneAsync("InfoScene", LoadSceneMode.Single);
     }
     public void OnExitSceneClicked()
     {
-        SceneManager.LoadSceneAsync("LoginScene");
+        SceneManager.LoadSceneAsync("LoginScene", LoadSceneMode.Single);
     }
 }
