@@ -28,6 +28,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         builder.Entity<ApplicationRoleClaim>(entity => entity.ToTable("RoleClaims").HasKey(pk => pk.Id));
         builder.Entity<ApplicationUserToken>(entity => entity.ToTable("UserTokens").HasKey(e => new { e.UserId, e.LoginProvider, e.Name }));
 
+        builder.Entity<ApplicationUser>(entity =>
+        {
+            entity.Ignore(u => u.EmailConfirmed);
+            entity.Ignore(u => u.PhoneNumberConfirmed);
+            entity.Ignore(u => u.TwoFactorEnabled);
+            entity.Ignore(u => u.LockoutEnd);
+            entity.Ignore(u => u.LockoutEnabled);
+            entity.Ignore(u => u.AccessFailedCount);
+            entity.Ignore(u => u.NormalizedEmail);
+        });
+
         builder.Entity<ApplicationUser>(b =>
         {
             b.Property(u => u.Name).HasMaxLength(128);
@@ -40,21 +51,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         {
             b.Property(u => u.LoginProvider).HasMaxLength(128);
             b.Property(u => u.Name).HasMaxLength(128);
-        });
-
-        builder.Entity<ApplicationUser>(entity =>
-        {
-            entity.Ignore(u => u.Email);
-            entity.Ignore(u => u.EmailConfirmed);
-            entity.Ignore(u => u.PhoneNumber);
-            entity.Ignore(u => u.PhoneNumberConfirmed);
-            entity.Ignore(u => u.TwoFactorEnabled);
-            entity.Ignore(u => u.LockoutEnd);
-            entity.Ignore(u => u.LockoutEnabled);
-            entity.Ignore(u => u.AccessFailedCount);
-            entity.Ignore(u => u.NormalizedEmail);
-            entity.Ignore(u => u.SecurityStamp);
-            entity.Ignore(u => u.ConcurrencyStamp);
         });
 
         builder.Entity<ApplicationUser>(b =>
