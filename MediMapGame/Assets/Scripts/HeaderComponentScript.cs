@@ -1,3 +1,4 @@
+using Assets.Scripts.SessionManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,11 +22,17 @@ public class HeaderComponentScript : MonoBehaviour
     }
     public void LoadProfile()
     {
-
-        SceneManager.LoadScene("LoginScene");
+        if (SessionManager.Instance.isLogedIn)
+        {
+            SceneManager.LoadScene("ProfileScene");
+        }
+        else
+        {
+            SceneManager.LoadScene("LoginScene");
+        }
     }
     public void LoadLogBook()
     {
-
+        SceneManager.LoadScene("LogBookScene");
     }
 }
