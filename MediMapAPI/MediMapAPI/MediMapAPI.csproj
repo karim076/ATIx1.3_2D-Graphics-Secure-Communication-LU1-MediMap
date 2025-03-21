@@ -4,6 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aace973c-0c71-43ab-b111-e2891e505c3f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,13 +13,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="MySql.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="7.3.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="7.3.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="7.3.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
   <ItemGroup>
