@@ -1,3 +1,4 @@
+using Assets.Scripts.SessionManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,8 +18,11 @@ public class LoginManager : MonoBehaviour
 
     public void OnLoginClick()
     {
+        SessionManager.Instance.isLogedIn = true;
         // Go to Home Scene
+
         SceneManager.LoadScene("HomeScreenScene", LoadSceneMode.Single);
+        
     }
     public void OnRegisterClick()
     {

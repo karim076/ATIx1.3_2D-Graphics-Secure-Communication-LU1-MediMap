@@ -11,6 +11,9 @@ namespace Assets.Scripts.SessionManager
     {
         public static SessionManager Instance { get; private set; }
         public string Token { get; private set; }
+        public bool isLogedIn = false;
+
+        public string AvatarName { get; private set; }
 
         private void Awake()
         {
@@ -31,6 +34,10 @@ namespace Assets.Scripts.SessionManager
         public void ClearToken()
         {
             Token = string.Empty;
+        }
+        public void SetAvatarName(string avatarName)
+        {
+            this.AvatarName = avatarName;
         }
     }
 }
