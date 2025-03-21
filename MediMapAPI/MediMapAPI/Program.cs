@@ -1,9 +1,13 @@
 using DataAccess.DbContext;
 using DataAccess.Repository;
 using DataAccess.Repository.iUnitOfWork;
+using MediMapAPI.Service;
+using MediMapAPI.Service.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Models;
+using Models.Model;
+using MediMapAPI.Models;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,9 +19,23 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
+// dependency injection
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<UserService>();
+
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    // ?? throw new InvalidOperationException("Database connection string is missing!");
+
+// Configure TokenSettings
+builder.Services.Configure<TokenSettings>(options =>
+{
+    //options.Key = jwtKey;
+    options.Audience = "MediMapAPI"; // Set audience
+    options.Issuer = "MediMapAPI"; // Set issuer
+});
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -41,12 +59,10 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwagger();
-    app.UseSwaggerUI(option =>
-    {
-        option.SwaggerEndpoint("/swagger/v1/swagger.json", "MediMapAPI");
-        option.RoutePrefix = string.Empty;
-    });
+    app.UseSwaggerUI();
+
 }
+
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
