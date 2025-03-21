@@ -1,5 +1,6 @@
 ﻿using DataAccess.Repository.IGenericRepository;
 using Models;
+using Models.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

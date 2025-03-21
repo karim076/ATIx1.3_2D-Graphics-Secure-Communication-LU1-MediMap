@@ -7,6 +7,7 @@ using DataAccess.Repository.iUnitOfWork;
 using DataAccess.Repository.IGenericRepository;
 using Models;
 using DataAccess.DbContext;
+using Models.Model;
 
 namespace DataAccess.Repository;
 
