@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.Model;
+namespace Models;
 
 public class ApplicationRole : IdentityRole<int>
 {

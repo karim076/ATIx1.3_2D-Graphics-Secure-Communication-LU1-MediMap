@@ -1,7 +1,7 @@
 ﻿using MediMapAPI.Models;
 using MediMapAPI.Service.Interface;
 using Microsoft.AspNetCore.Identity;
-using Models.Model;
+using Models;
 using Models.Model.Dto;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

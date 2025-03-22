@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace Models.Model;
+namespace Models;
 
 public class ApplicationUser : IdentityUser<int>
 {

@@ -1,9 +1,9 @@
 ﻿namespace MediMapAPI.Service
 {
-    using global::Models.Model;
     using MediMapAPI.Models;
     using Microsoft.AspNetCore.Identity;
     using System.Threading.Tasks;
+    using global::Models;
 
     public class UserService
     {

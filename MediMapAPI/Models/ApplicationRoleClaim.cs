@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.Model
+namespace Models
 {
-    public class ApplicationUserClaim : IdentityUserClaim<int>
+    public class ApplicationRoleClaim : IdentityRoleClaim<int>
     {
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationRole Role { get; set; }
     }
 }

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.Model
+namespace Models
 {
-    public class ApplicationUserToken : IdentityUserToken<int>
+    public class ApplicationUserClaim : IdentityUserClaim<int>
     {
         public virtual ApplicationUser User { get; set; }
     }

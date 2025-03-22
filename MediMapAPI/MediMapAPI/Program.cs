@@ -5,8 +5,8 @@ using MediMapAPI.Service;
 using MediMapAPI.Service.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Models.Model;
 using MediMapAPI.Models;
+using Models;
 
 
 
