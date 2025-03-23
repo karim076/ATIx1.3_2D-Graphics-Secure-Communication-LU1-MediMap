@@ -1,4 +1,5 @@
 using Assets.Scripts.SessionManager;
+using MediMap.Scripts.Api;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -22,7 +23,7 @@ public class HeaderComponentScript : MonoBehaviour
     }
     public void LoadProfile()
     {
-        if (SessionManager.Instance.isLogedIn)
+        if (APIManager.Instance.isLogedIn)
         {
             SceneManager.LoadScene("ProfileScene");
         }

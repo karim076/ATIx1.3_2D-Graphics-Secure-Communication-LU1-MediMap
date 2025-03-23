@@ -10,10 +10,10 @@ namespace Assets.Scripts.SessionManager
     public class SessionManager : MonoBehaviour
     {
         public static SessionManager Instance { get; private set; }
-        public string Token { get; private set; }
-        public bool isLogedIn = false;
+        
 
         public string AvatarName { get; private set; }
+
 
         private void Awake()
         {
@@ -26,14 +26,6 @@ namespace Assets.Scripts.SessionManager
             {
                 Destroy(gameObject);
             }
-        }
-        public void SetJwtToken(string token)
-        {
-            this.Token = token;
-        }
-        public void ClearToken()
-        {
-            Token = string.Empty;
         }
         public void SetAvatarName(string avatarName)
         {
