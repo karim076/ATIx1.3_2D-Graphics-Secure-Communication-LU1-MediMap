@@ -18,7 +18,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<LogBook> LogBooks { get; set; }
     public DbSet<Patient> Patient { get; set; }
     public DbSet<Arts> Arts { get; set; }
-    public DbSet<Avatar> Avatars { get; set; }
     public DbSet<OuderVoogd> OuderVoogd { get; set; }
     public DbSet<Traject> Traject { get; set; }
     public DbSet<ZorgMoment> ZorgMomnet { get; set; }
