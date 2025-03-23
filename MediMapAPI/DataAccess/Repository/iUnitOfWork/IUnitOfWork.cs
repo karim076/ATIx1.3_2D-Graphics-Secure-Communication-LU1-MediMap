@@ -17,7 +17,6 @@ namespace DataAccess.Repository.iUnitOfWork
         IGenericRepository<Patient> PatientRepository { get; }
         IGenericRepository<OuderVoogd> OuderVoogdRepository { get; }
         IGenericRepository<ZorgMoment> ZorgMomentRepository { get; }
-        IGenericRepository<Avatar> AvatarRepository { get; }
         IGenericRepository<LogBook> LogBookRepository { get; }
         IGenericRepository<ProfileInformation> ProfileInformationRepository { get; }
         Task SaveAsync();

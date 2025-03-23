@@ -19,6 +19,8 @@ namespace Models.Model
         [StringLength(50)]
         public string VoorNaam { get; set; } = string.Empty;
 
+        public string AvatarNaam { get; set; } = string.Empty;
+
         [Required]
         [StringLength(50)]
         public string AchterNaam { get; set; } = string.Empty;

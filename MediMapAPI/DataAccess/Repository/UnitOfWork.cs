@@ -20,7 +20,6 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     private IGenericRepository<Patient>? _patient;
     private IGenericRepository<OuderVoogd>? _ouderVoogd;
     private IGenericRepository<ZorgMoment>? _zorgMoment;
-    private IGenericRepository<Avatar>? _avatar;
     private IGenericRepository<LogBook>? _logBook;
     private IGenericRepository<ProfileInformation>? _profileInformation;
     public UnitOfWork(ApplicationDbContext db)
@@ -75,14 +74,6 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         {
             _zorgMoment ??= new GenericRepository<ZorgMoment>(_db);
             return _zorgMoment;
-        }
-    }
-    public IGenericRepository<Avatar> AvatarRepository
-    {
-        get
-        {
-            _avatar ??= new GenericRepository<Avatar>(_db);
-            return _avatar;
         }
     }
     public IGenericRepository<LogBook> LogBookRepository
