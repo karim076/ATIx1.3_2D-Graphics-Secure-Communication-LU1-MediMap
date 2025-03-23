@@ -75,7 +75,11 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(option =>
+    {
+        option.SwaggerEndpoint("/swagger/v1/swagger.json", "MediMapAPI");
+        option.RoutePrefix = string.Empty;
+    });
 }
 
 
