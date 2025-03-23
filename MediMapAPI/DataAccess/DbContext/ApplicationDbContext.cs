@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.Model;
 
 namespace DataAccess.DbContext;
 
@@ -14,6 +15,16 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     public DbSet<ApplicationRole> ApplicationRoles { get; set; }
+    public DbSet<LogBook> LogBooks { get; set; }
+    public DbSet<Patient> Patient { get; set; }
+    public DbSet<Arts> Arts { get; set; }
+    public DbSet<Avatar> Avatars { get; set; }
+    public DbSet<OuderVoogd> OuderVoogd { get; set; }
+    public DbSet<Traject> Traject { get; set; }
+    public DbSet<ZorgMoment> ZorgMomnet { get; set; }
+    public DbSet<ProfileInformation> ProfileInformation { get; set; }
+
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -27,6 +38,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         builder.Entity<ApplicationUserLogin>(entity => entity.ToTable("UserLogins").HasKey(pk => new { pk.LoginProvider, pk.ProviderKey }));
         builder.Entity<ApplicationRoleClaim>(entity => entity.ToTable("RoleClaims").HasKey(pk => pk.Id));
         builder.Entity<ApplicationUserToken>(entity => entity.ToTable("UserTokens").HasKey(e => new { e.UserId, e.LoginProvider, e.Name }));
+
+        builder.Entity<TrajectZorgMoment>(entity => entity.ToTable("TrajectZorgMoment").HasKey(k => new { k.TrajectID, k.ZorgMomentID }));  
 
         builder.Entity<ApplicationUser>(entity =>
         {
@@ -100,6 +113,39 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .WithMany(r => r.UserRoles)
             .HasForeignKey(e => e.UserId)
             .IsRequired().OnDelete(DeleteBehavior.Cascade);
+        });
+
+
+        // mijn eigen entiteiten hieronder toevoegen met de juiste relaties
+        builder.Entity<TrajectZorgMoment>(entity =>
+        {
+            entity.HasOne(tzm => tzm.Traject)
+            .WithMany(t => t.TrajectZorgMomenten)
+            .HasForeignKey(tzm => tzm.TrajectID)
+            .IsRequired().OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(tzm => tzm.ZorgMoment)
+            .WithMany(zm => zm.TrajectZorgMomenten)
+            .HasForeignKey(tzm => tzm.ZorgMomentID)
+            .IsRequired().OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<Patient>(entity =>
+        {
+            entity.HasOne(p => p.OuderVoogd)
+            .WithMany(o => o.Patients)
+            .HasForeignKey(p => p.OuderVoogdId)
+            .IsRequired().OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(p => p.Traject)
+            .WithMany(t => t.Patients)
+            .HasForeignKey(p => p.TrajectId)
+            .IsRequired().OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(p => p.Arts)
+            .WithMany(a => a.Patients)
+            .HasForeignKey(p => p.ArtsId)
+            .IsRequired(false).OnDelete(DeleteBehavior.SetNull);
         });
     }
 }
