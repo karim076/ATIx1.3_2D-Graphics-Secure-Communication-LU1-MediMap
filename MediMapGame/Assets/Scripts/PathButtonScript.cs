@@ -3,6 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class PathButtonScript : MonoBehaviour
 {
+    public int Id;
+    public int Route;
+    //public Transform position;
+
     public GameObject MovableAvatar;
 
     private float lastClickTime = 0f;
@@ -10,8 +14,8 @@ public class PathButtonScript : MonoBehaviour
 
     void OnMouseDown()
     {
-        MovableAvatar.GetComponent<MovableAvatarScript>().MoveAvatarToLocation(gameObject.transform);
-        
+        MovableAvatar.GetComponent<MovableAvatarScript>().MoveAvatar(Id, Route, gameObject.transform);
+
 
         if (Time.time - lastClickTime < doubleClickThreshold)
         {
@@ -28,4 +32,9 @@ public class PathButtonScript : MonoBehaviour
     {
         MovableAvatar = GameObject.Find("MovableAvatar");
     }
+
+    //public class RoadPathClass
+    //{
+        
+    //}
 }

@@ -8,14 +8,16 @@ using UnityEngine.Experimental.GlobalIllumination;
 public class HomeScreenScript : MonoBehaviour
 {
     public List<GameObject> RoadTiles;
-    private GameObject roadTilePrefab;
+    //private GameObject roadTilePrefab;
 
     private LineRenderer lineRenderer;
 
     void Start()
     {
         //SessionManager.Instance.LoadHeader();
-        roadTilePrefab = Resources.Load<GameObject>("RoadButtonPrefab");
+        //roadTilePrefab = Resources.Load<GameObject>("RoadButtonPrefab");
+
+        
 
         LoadPathWay();
     }
