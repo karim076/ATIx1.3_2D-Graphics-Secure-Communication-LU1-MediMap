@@ -14,22 +14,7 @@ public class MovableAvatarScript : MonoBehaviour
     {
         homeScreenScript = GameObject.Find("EventSystem").GetComponent<HomeScreenScript>();
         ResetAvatarPosition();
-        SetPathPosition(1);
-
-        //for (int i = pathPosition; i >= 3; i++)
-        //{
-        //    Debug.Log("I value: " + i);
-
-        //    // Get the next position the avatar should move to
-        //    Vector3 moveToLocation = homeScreenScript.RoadTiles[i].transform.position;
-
-        //    // Animate the avatar to the new location
-        //    AnimatePostion(moveToLocation, _duration);
-
-        //    // Update the path position (move to the next point)
-        //    pathPosition += 1;
-        //    Debug.Log("path position" + pathPosition);
-        //}
+        SetPathPosition(0);
     }
 
     public void MoveAvatar(int newPosition, int route, Transform newLocation)
@@ -62,32 +47,7 @@ public class MovableAvatarScript : MonoBehaviour
     }
     public void MoveAvatarToLocation(Transform location)
     {
-        //int multiplier = 0;
-
-        //// Find the path object that matches the target location
-        //GameObject pathGameObject = homeScreenScript.RoadTiles.Find(obj => obj.transform == location);
-        //int pathObjectIndex = homeScreenScript.RoadTiles.IndexOf(pathGameObject);
-        //Debug.Log("current place: " + pathObjectIndex);
-
-        //// Determine the direction of movement (forward or backward)
-        //multiplier = (pathPosition > pathObjectIndex) ? -1 : 1;
-
-        //// Loop through all the intermediate points and move the avatar
-        //for (int i = pathPosition; (multiplier == 1) ? (i <= pathObjectIndex) : (i >= pathObjectIndex); i += multiplier)
-        //{
-        //    Debug.Log("I value: " + i);
-
-        //    // Get the next position the avatar should move to
-        //    Vector3 moveToLocation = homeScreenScript.RoadTiles[i].transform.position;
-
-        //    // Animate the avatar to the new location
-            AnimatePostion(location.position, _duration);
-
-        //    // Update the path position (move to the next point)
-        //    pathPosition += multiplier;
-        //    Debug.Log("path position" + pathPosition);
-        //}
-        //Debug.Log("DONNNEE");
+        AnimatePostion(location.position, _duration);
     }
 
 

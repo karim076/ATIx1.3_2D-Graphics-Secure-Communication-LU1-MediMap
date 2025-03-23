@@ -1,35 +1,62 @@
 using Assets.Scripts.SessionManager;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 
 public class HomeScreenScript : MonoBehaviour
 {
-    public List<GameObject> RoadTiles;
+    public GameObject[] RoadTiles;
+
     //private GameObject roadTilePrefab;
 
-    private LineRenderer lineRenderer;
+    private LineRenderer lineRendererRoad1;
+    private LineRenderer lineRendererRoad2;
 
     void Start()
     {
+        lineRendererRoad1 = GameObject.Find("RoadLine1").GetComponent<LineRenderer>();
+        lineRendererRoad2 = GameObject.Find("RoadLine2").GetComponent<LineRenderer>();
+
         //SessionManager.Instance.LoadHeader();
         //roadTilePrefab = Resources.Load<GameObject>("RoadButtonPrefab");
-
-        
+        RoadTiles = GameObject.FindGameObjectsWithTag("Pathway")
+                              .OrderBy(obj => obj.GetComponent<PathButtonScript>().Route)
+                              .ThenBy(obj => obj.GetComponent<PathButtonScript>().Id)
+                              .ToArray(); // Convert the List<GameObject> back to an array
 
         LoadPathWay();
     }
 
     void DrawLines()
     {
-        for (int i = 0; i < RoadTiles.Count; i++)
+        GameObject SplitTile;
+        for (int i = 0; i < RoadTiles.Length; i++)
         {
-            if (RoadTiles[i] != null)
+            int currentTileRouteId = RoadTiles[i].GetComponent<PathButtonScript>().Route;
+            int currentTileId = RoadTiles[i].GetComponent<PathButtonScript>().Id;
+
+            if (currentTileRouteId == 0)
             {
-                lineRenderer.SetPosition(i, RoadTiles[i].transform.position);
+                Debug.Log("renderd 0");
+                lineRendererRoad1.SetPosition(currentTileId, RoadTiles[i].transform.position);
+                lineRendererRoad2.SetPosition(currentTileId, RoadTiles[i].transform.position);
             }
+            if (currentTileRouteId == 1)
+            {
+                Debug.Log("renderd 1");
+
+                lineRendererRoad1.SetPosition(currentTileId, RoadTiles[i].transform.position);
+            }
+            if (currentTileRouteId == 2)
+            {
+                Debug.Log("renderd 2");
+
+                lineRendererRoad2.SetPosition(currentTileId, RoadTiles[i].transform.position);
+            }
+            
         }
     }
     // Update is called once per frame
@@ -40,34 +67,36 @@ public class HomeScreenScript : MonoBehaviour
 
     public void LoadPathWay()
     {
-        if (RoadTiles.Count < 2)
+        if (RoadTiles.Length < 2)
         {
             Debug.LogError("Need at least two objects to draw lines!");
             return;
         }
 
-        // Add LineRenderer if missing
-        lineRenderer = gameObject.AddComponent<LineRenderer>();
-
-        // LineRenderer settings
-        lineRenderer.startWidth = 0.5f; // Thickness of the line
-        lineRenderer.endWidth = 0.5f;
-        lineRenderer.material = new Material(Shader.Find("Sprites/Default")); // Default material
-
         Color lineColor = new Color(233f / 255f, 216f / 255f, 133f / 255f); // RGB (233, 216, 133)
-        // Set color
-        lineRenderer.startColor = lineColor;
-        lineRenderer.endColor = lineColor;
 
-        lineRenderer.positionCount = RoadTiles.Count;
+        lineRendererRoad1.startWidth = 0.5f;
+        lineRendererRoad1.endWidth = 0.5f;
+        lineRendererRoad1.material = new Material(Shader.Find("Sprites/Default"));
+        lineRendererRoad1.startColor = lineColor;
+        lineRendererRoad1.endColor = lineColor;
+        lineRendererRoad1.positionCount = RoadTiles.Count(obj =>
+    obj.GetComponent<PathButtonScript>().Route == 0 ||
+    obj.GetComponent<PathButtonScript>().Route == 1);
+        Debug.Log("cuont 1: " + lineRendererRoad1.positionCount);
+
+
+        lineRendererRoad2.startWidth = 0.5f;
+        lineRendererRoad2.endWidth = 0.5f;
+        lineRendererRoad2.material = new Material(Shader.Find("Sprites/Default"));
+        lineRendererRoad2.startColor = lineColor;
+        lineRendererRoad2.endColor = lineColor;
+        lineRendererRoad2.positionCount = RoadTiles.Count(obj =>
+    obj.GetComponent<PathButtonScript>().Route == 0 ||
+    obj.GetComponent<PathButtonScript>().Route == 2);
+        Debug.Log("cuont 2: " + lineRendererRoad2.positionCount);
+
 
         DrawLines();
-        //foreach (GameObject roadTile in RoadTiles)
-        //{
-        //    if(roadTilePrefab != null)
-        //    {
-        //        Instantiate(roadTilePrefab, roadTile, quaternion.identity);
-        //    }
-        //}
     }
 }
