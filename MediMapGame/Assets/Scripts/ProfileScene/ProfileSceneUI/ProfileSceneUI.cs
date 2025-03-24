@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts;
+using Assets.Scripts.Models;
 
 namespace Assets.Scripts.ProfileScene.ProfileSceneUI
 {
@@ -20,6 +21,12 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
 
         [SerializeField] private GameObject _avatarPanel1;
         [SerializeField] private GameObject _avatarPanel2;
+
+        [SerializeField] private GameObject _editProfilePanel;
+        [SerializeField] private TMP_InputField _nameInputField;
+        [SerializeField] private TMP_InputField _birthDayInputField;
+
+        [SerializeField] private ProfileSceneScript ProfileSceneScript;
 
         private TMP_Text _userNameText;
         private TMP_Text _userBirthDayText;
@@ -36,8 +43,6 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
             CollectAvatarNames();
 
             MakeAvatarsClickble();
-
-            SetProfileData("John Doe", "01-01-2000", "Dentist", "Dr. Smith", "Treatment plan");
         }
         public void SetProfileData(string userName, string userBirthDay, string userAppointment, string doctorName, string treatmentPlan)
         {
@@ -117,12 +122,47 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
             Image image = button.GetComponent<Image>();
             if(image != null && image.sprite != null)
             {
-                SessionManager.SessionManager.Instance.SetAvatarName(image.sprite.name);
-                Debug.Log("Avatar name: " + image.sprite.name);
+                SessionManager.SessionManager.Instance.SetAvatarName(image.name);
+                Debug.Log("Avatar name: " + image.name);
+                button.GetComponent<Image>().sprite = image.sprite;
+                ProfileSceneScript.SaveAvatar();
             }
             else
             {
                 Debug.LogError("Geen image gevonden");
+            }
+        }
+
+        public void EditProfile()
+        {
+            _editProfilePanel.SetActive(true);
+            _nameInputField.text = _userNameText.text;
+            _birthDayInputField.text = _userBirthDayText.text;
+        }
+        public void CloseProfilePanel()
+        {
+            _editProfilePanel.SetActive(false);
+            _nameInputField.text = "";
+            _birthDayInputField.text = "";
+        }
+        public void SaveProfile()
+        {
+            ProfileInformation profileInformation = new ProfileInformation
+            {
+                naam = _nameInputField.text,
+                geboorteDatum = DateTime.Parse(_birthDayInputField.text),
+                afspraakDatum = DateTime.Parse(_userAppointmentText.text),
+                naamDokter = _doctorNameText.text,
+                behandelPlan = _treatmentPlanText.text
+            };
+            try
+            {
+                ProfileSceneScript.SaveProfileData(profileInformation);
+                CloseProfilePanel();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error bij het opslaan van gegevens: {e.Message}");
             }
         }
     }

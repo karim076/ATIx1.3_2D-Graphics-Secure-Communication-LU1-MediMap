@@ -52,7 +52,7 @@ namespace MediMap.Scripts.Api
             }
         }
 
-        private string apiBaseUrl = "https://localhost:7038/";
+        private string apiBaseUrl = "https://localhost:44340/";
 
         private void Awake()
         {
