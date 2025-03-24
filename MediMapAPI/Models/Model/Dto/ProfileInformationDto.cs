@@ -28,5 +28,6 @@ namespace Models.Model.Dto
         public DateTime AfspraakDatum { get; set; }
 
         public int PatientId { get; set; }
+        public int ArtsId { get; set; }
     }
 }

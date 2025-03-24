@@ -34,5 +34,12 @@ namespace Models.Model
         [ForeignKey("PatientId")]
         public Patient? Patient { get; set; }
 
+        [Required]
+        [ForeignKey("ArtsId")]
+        public Arts? Arts { get; set; }
+
+        [Required]
+        public int ArtsId { get; set; }
+
     }
 }
