@@ -14,18 +14,24 @@ public class PathButtonScript : MonoBehaviour
 
     void OnMouseDown()
     {
-        MovableAvatar.GetComponent<MovableAvatarScript>().MoveAvatar(Id, Route, gameObject.transform);
 
 
-        if (Time.time - lastClickTime < doubleClickThreshold)
+        if (MovableAvatar.GetComponent<MovableAvatarScript>().pathPosition == Id)
         {
-            Debug.Log(gameObject.name + " double-clicked!");
-            if (MovableAvatar.transform.position == gameObject.transform.position)
-            {
-                SceneManager.LoadScene("LogBookScene");
-            }
+            SceneManager.LoadScene("InfoScene");
         }
-        lastClickTime = Time.time; // Update last click time
+        else
+        {
+            MovableAvatar.GetComponent<MovableAvatarScript>().MoveAvatar(Id, Route, gameObject.transform);
+        }
+        //if (Time.time - lastClickTime < doubleClickThreshold)
+        //{
+        //    Debug.Log(gameObject.name + " double-clicked!");
+        //    if (MovableAvatar.transform.position == gameObject.transform.position)
+        //    {
+        //    }
+        //}
+        //lastClickTime = Time.time; // Update last click time
     }
 
     public void Start()

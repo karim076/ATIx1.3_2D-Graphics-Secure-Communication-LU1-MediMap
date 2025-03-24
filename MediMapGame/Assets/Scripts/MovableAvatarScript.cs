@@ -6,7 +6,7 @@ using static UnityEngine.Rendering.DebugUI;
 public class MovableAvatarScript : MonoBehaviour
 {
     public float _duration;
-    private int pathPosition;
+    public int pathPosition;
 
     private HomeScreenScript homeScreenScript;
 
