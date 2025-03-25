@@ -8,9 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
+using UnityEngine.UIElements;
 
 public class HomeScreenScript : MonoBehaviour
 {
@@ -22,8 +24,11 @@ public class HomeScreenScript : MonoBehaviour
 
     private List<Traject> trajectList;
 
+    private GameObject movableAvatar;
+
     void Start()
     {
+        movableAvatar = GameObject.Find("MovableAvatar");
         trajectTextList = GameObject.FindGameObjectsWithTag("TrajectText").OrderBy(obj => obj.name).ToArray();
 
         StartCoroutine(GetAllTraject());
@@ -38,6 +43,8 @@ public class HomeScreenScript : MonoBehaviour
                               .ThenBy(obj => obj.GetComponent<PathButtonScript>().Id)
                               .ToArray(); // Convert the List<GameObject> back to an array
         LoadPathWay();
+        LoadUserData();
+
     }
 
     void DrawLines()
@@ -49,25 +56,26 @@ public class HomeScreenScript : MonoBehaviour
 
             if (currentTileRouteId == 0)
             {
-                Debug.Log("renderd 0");
+                //Debug.Log("renderd 0");
                 lineRendererRoad1.SetPosition(currentTileId, RoadTiles[i].transform.position);
                 lineRendererRoad2.SetPosition(currentTileId, RoadTiles[i].transform.position);
             }
             if (currentTileRouteId == 1)
             {
-                Debug.Log("renderd 1");
+                //Debug.Log("renderd 1");
 
                 lineRendererRoad1.SetPosition(currentTileId, RoadTiles[i].transform.position);
             }
             if (currentTileRouteId == 2)
             {
-                Debug.Log("renderd 2");
+                //Debug.Log("renderd 2");
 
                 lineRendererRoad2.SetPosition(currentTileId, RoadTiles[i].transform.position);
             }
             
         }
     }
+
     public void LoadPathWay()
     {
         if (RoadTiles.Length < 2)
@@ -86,7 +94,7 @@ public class HomeScreenScript : MonoBehaviour
         lineRendererRoad1.positionCount = RoadTiles.Count(obj =>
         obj.GetComponent<PathButtonScript>().Route == 0 ||
         obj.GetComponent<PathButtonScript>().Route == 1);
-        Debug.Log("cuont 1: " + lineRendererRoad1.positionCount);
+        //Debug.Log("cuont 1: " + lineRendererRoad1.positionCount);
 
         lineRendererRoad2.startWidth = 0.5f;
         lineRendererRoad2.endWidth = 0.5f;
@@ -96,9 +104,41 @@ public class HomeScreenScript : MonoBehaviour
         lineRendererRoad2.positionCount = RoadTiles.Count(obj =>
         obj.GetComponent<PathButtonScript>().Route == 0 ||
         obj.GetComponent<PathButtonScript>().Route == 2);
-        Debug.Log("cuont 2: " + lineRendererRoad2.positionCount);
+        //Debug.Log("cuont 2: " + lineRendererRoad2.positionCount);
 
         DrawLines();
+    }
+
+    public void LoadUserData()
+    {
+        if (APIManager.Instance.isLogedIn)
+        {
+            int userRouteFromDatabase = 2;
+            int userPlaceFromDatabase = 7;
+            Debug.Log("user is logged in");
+            GameObject foundTile = RoadTiles
+            .FirstOrDefault(tile =>
+            {
+                PathButtonScript script = tile.GetComponent<PathButtonScript>();
+                return script != null && script.Route == userRouteFromDatabase - 1 && script.Id == userPlaceFromDatabase;
+            });
+            if(foundTile != null)
+            {
+                Vector3 location = foundTile.transform.position;
+
+                movableAvatar.GetComponent<MovableAvatarScript>().SetAvatarFromDataBase(location);
+                movableAvatar.GetComponent<MovableAvatarScript>().SetLocation(foundTile.GetComponent<PathButtonScript>().Id, foundTile.GetComponent<PathButtonScript>().Route);
+            }
+            else
+            {
+                movableAvatar.GetComponent<MovableAvatarScript>().SetLocation(0,0);
+            }
+        }
+        else
+        {
+            movableAvatar.GetComponent<MovableAvatarScript>().SetLocation(0,0);
+
+        }
     }
 
 
