@@ -23,8 +23,8 @@ namespace Models.Model
         [ForeignKey("PatientID")]
         public int PatientID { get; set; }
 
-        [Required]
-        public Patient? Patient { get; set; }
+        //[Required]
+        //public Patient? Patient { get; set; }
 
         [Required]
         public DateTime? Date { get; set; }

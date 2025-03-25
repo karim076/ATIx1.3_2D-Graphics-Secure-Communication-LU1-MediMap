@@ -10,8 +10,8 @@ using Models.Model.Dto;
 
 namespace MediMapAPI.Controllers
 {
-    [Authorize]
-    [Route("LogBook/[controller]")]
+    //[Authorize]
+    [Route("/[controller]")]
     [ApiController]
     public class LogBookController : ControllerBase
     {
@@ -66,9 +66,9 @@ namespace MediMapAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLog([FromBody] LogBook id)
+        public async Task<IActionResult> DeleteLog(LogBook id)
         {
-            if (_unitOfWork.LogBookRepository.GetById == null)
+            if (id == null)
             {
                 return BadRequest("Could not find id.");
             }
