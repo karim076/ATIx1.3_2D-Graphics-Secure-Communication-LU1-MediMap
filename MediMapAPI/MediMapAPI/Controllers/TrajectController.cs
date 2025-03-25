@@ -27,15 +27,15 @@ public class TrajectController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<string>> GetTrajectByIdAsync(int id)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
+        //if (!ModelState.IsValid)
+        //{
+        //    return BadRequest(ModelState);
+        //}
 
-        try
-        {
-            //var traject = await _unitOfWork.
-        }
+        //try
+        //{
+        //    //var traject = await _unitOfWork.
+        //}
         return "value";
     }
 
