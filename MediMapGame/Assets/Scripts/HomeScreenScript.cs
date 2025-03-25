@@ -27,7 +27,7 @@ public class HomeScreenScript : MonoBehaviour
                               .ThenBy(obj => obj.GetComponent<PathButtonScript>().Id)
                               .ToArray(); // Convert the List<GameObject> back to an array
 
-        //LoadPathWay();
+        LoadPathWay();
     }
 
     void DrawLines()
