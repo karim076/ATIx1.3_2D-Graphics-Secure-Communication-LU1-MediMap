@@ -7,32 +7,48 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MediMapAPI.Models;
 using Models;
+using DataAccess.Repository.IRepository;
+using MediMap.Repositories;
 
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add logging for debugging
+builder.Services.AddHttpLogging(o => { });
 
+// Add services to the container.
 builder.Services.AddControllers();
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
-// dependency injection
+// Configure database connection
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// ?? throw new InvalidOperationException("Database connection string is missing!");
+
+// Configure JWT settings
+string jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("JWT Key is missing in the configuration!");
+
+//  dependency injection
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<UserService>();
+// Repositories
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(Repository<>)); // Ensure generic base repository is also registered
 
+// services
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    // ?? throw new InvalidOperationException("Database connection string is missing!");
 
 // Configure TokenSettings
 builder.Services.Configure<TokenSettings>(options =>
 {
-    //options.Key = jwtKey;
+    options.Key = jwtKey;
     options.Audience = "MediMapAPI"; // Set audience
     options.Issuer = "MediMapAPI"; // Set issuer
 });
