@@ -1,3 +1,4 @@
+using Assets.Scripts.SessionManager;
 using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -14,6 +15,12 @@ public class MovableAvatarScript : MonoBehaviour
     private void Start()
     {
         homeScreenScript = GameObject.Find("EventSystem").GetComponent<HomeScreenScript>();
+
+        if (SessionManager.Instance.AvatarName != null)
+        {
+            GameObject.Find("MovableAvatar").GetComponent<SpriteRenderer>().sprite = SessionManager.Instance.AvatarName;
+        }
+
         ResetAvatarPosition();
         SetLocation(0, 0);
     }

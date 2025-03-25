@@ -66,6 +66,8 @@ public class LoginManager : MonoBehaviour
             RefreshTokenResponse responseData = JsonConvert.DeserializeObject<RefreshTokenResponse>(response);
             Debug.Log("Token: " + responseData.Token);
             APIManager.Instance.SaveTokens(responseData);
+            Sprite sprite = Resources.Load<Sprite>("Art/Monster1 1_0");
+            SessionManager.Instance.SetAvatarName(sprite);
             APIManager.Instance.userName = username;
             APIManager.Instance.isLogedIn = true;
             Debug.Log("Token succesfully created: " + APIManager.Instance.authTokens.Token);

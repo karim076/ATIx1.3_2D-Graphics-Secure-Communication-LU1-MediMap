@@ -1116,6 +1116,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _duration: 1.5
+  pathPosition: 0
+  routePosition: 0
 --- !u!4 &917551044 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2549633581814113892, guid: 0a3b93e59f4a9f34ab0f4663e10395fe, type: 3}
@@ -1615,7 +1617,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ae3ea5ecb9e7ec40b26da8060523abf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isLogedIn: 0
 --- !u!4 &1800346107
 Transform:
   m_ObjectHideFlags: 0
