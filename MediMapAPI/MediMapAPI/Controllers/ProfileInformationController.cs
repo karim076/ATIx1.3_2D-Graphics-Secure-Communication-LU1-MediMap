@@ -20,7 +20,7 @@ public class ProfileInformationController : ControllerBase
 
     // GET: api/<ProfileInformationController>
     [HttpGet("{id}")]
-    public async Task<ActionResult<ProfileInformationDto>> GetProfileInformationByIdAsync(int id)
+    public async Task<ActionResult<IEnumerable<TrajectDto>>> GetProfileInformationByIdAsync(int id)
     {
         if (!ModelState.IsValid)
         {
