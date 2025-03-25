@@ -595,6 +595,7 @@ MonoBehaviour:
   videoPlayer: {fileID: 547098301}
   videoScreen: {fileID: 1536527829}
   autoplay: 1
+  _avatar: {fileID: 1015094025}
   renderTexture: {fileID: 8400000, guid: 8d30e7e83453d9d43b1daec99bc68979, type: 2}
 --- !u!4 &1070487195
 Transform:
@@ -1197,6 +1198,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1711964548}
+  - {fileID: 1785096084}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

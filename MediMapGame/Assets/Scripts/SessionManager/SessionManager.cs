@@ -10,7 +10,6 @@ namespace Assets.Scripts.SessionManager
     public class SessionManager : MonoBehaviour
     {
         public static SessionManager Instance { get; private set; }
-        
 
         public Sprite AvatarName { get; private set; }
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.UI;
+using Assets.Scripts.SessionManager;
 
 public class InfoVideoPlayer : MonoBehaviour
 {
@@ -13,11 +14,17 @@ public class InfoVideoPlayer : MonoBehaviour
     private Slider timeSlider; // Tijdlijn-slider voor vooruitspoelen
     private Text timeText; // Tekst die de huidige tijd van de video weergeeft
 
+    [SerializeField] private Image _avatar;
+
     // RenderTexture voor het weergeven van de video op de RawImage
     public RenderTexture renderTexture;
 
     void Start()
     {
+        if (SessionManager.Instance.AvatarName != null)
+        {
+            _avatar.GetComponent<Image>().sprite = SessionManager.Instance.AvatarName;
+        }
         // Initialisatie van de video-player
         videoPlayer.loopPointReached += OnVideoEnd; // Event voor het einde van de video
         videoPlayer.playOnAwake = false; // Zet autoplay uit bij opstarten, tenzij expliciet aangevinkt
