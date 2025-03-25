@@ -42,7 +42,6 @@ public class HomeScreenScript : MonoBehaviour
 
     void DrawLines()
     {
-        GameObject SplitTile;
         for (int i = 0; i < RoadTiles.Length; i++)
         {
             int currentTileRouteId = RoadTiles[i].GetComponent<PathButtonScript>().Route;
@@ -69,12 +68,6 @@ public class HomeScreenScript : MonoBehaviour
             
         }
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void LoadPathWay()
     {
         if (RoadTiles.Length < 2)
@@ -91,10 +84,9 @@ public class HomeScreenScript : MonoBehaviour
         lineRendererRoad1.startColor = lineColor;
         lineRendererRoad1.endColor = lineColor;
         lineRendererRoad1.positionCount = RoadTiles.Count(obj =>
-    obj.GetComponent<PathButtonScript>().Route == 0 ||
-    obj.GetComponent<PathButtonScript>().Route == 1);
+        obj.GetComponent<PathButtonScript>().Route == 0 ||
+        obj.GetComponent<PathButtonScript>().Route == 1);
         Debug.Log("cuont 1: " + lineRendererRoad1.positionCount);
-
 
         lineRendererRoad2.startWidth = 0.5f;
         lineRendererRoad2.endWidth = 0.5f;
@@ -102,10 +94,9 @@ public class HomeScreenScript : MonoBehaviour
         lineRendererRoad2.startColor = lineColor;
         lineRendererRoad2.endColor = lineColor;
         lineRendererRoad2.positionCount = RoadTiles.Count(obj =>
-    obj.GetComponent<PathButtonScript>().Route == 0 ||
-    obj.GetComponent<PathButtonScript>().Route == 2);
+        obj.GetComponent<PathButtonScript>().Route == 0 ||
+        obj.GetComponent<PathButtonScript>().Route == 2);
         Debug.Log("cuont 2: " + lineRendererRoad2.positionCount);
-
 
         DrawLines();
     }
@@ -125,16 +116,16 @@ public class HomeScreenScript : MonoBehaviour
                 {
                     trajectTextList[i].GetComponent<TextMeshPro>().text = trajectList[i].Naam;
                 }
+                else
+                {
+                    trajectTextList[i].GetComponent<TextMeshPro>().text = "";
+                }
             }
 
-            foreach (var traject in trajectList)
-            {
+            //foreach (var traject in trajectList)
+            //{
                 
-                //Debug.Log("id " + traject.Id + "naam " + traject.Naam);
-            }
-            // loadingScreenCanvas.gameObject.SetActive(false);
-            //LoginPage();
-            //SuccessTextLog("Registration successful! You can now log in.");
+            //}
         }, error =>
         {
 
