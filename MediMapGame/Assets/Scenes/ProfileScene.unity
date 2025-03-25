@@ -1534,7 +1534,6 @@ GameObject:
   m_Component:
   - component: {fileID: 470556493}
   - component: {fileID: 470556492}
-  - component: {fileID: 470556494}
   m_Layer: 0
   m_Name: ProfileSceneScript
   m_TagString: Untagged
@@ -1554,6 +1553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a305fc18e641a994583525148c65f3bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _profileSceneUI: {fileID: 1201550249}
 --- !u!4 &470556493
 Transform:
   m_ObjectHideFlags: 0
@@ -1569,25 +1569,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &470556494
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 470556491}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7d648b5a2e286e408f09dcadea748b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _userName: {fileID: 1365424528}
-  _userBirthDay: {fileID: 843719125}
-  _userAppointment: {fileID: 2027422164}
-  _doctorName: {fileID: 1818655473}
-  _treatmentPlan: {fileID: 574886240}
-  _avatarPanel1: {fileID: 777089377}
-  _avatarPanel2: {fileID: 447844465}
 --- !u!1 &483706718
 GameObject:
   m_ObjectHideFlags: 0
@@ -1988,7 +1969,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 586218273}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1201550249}
+        m_TargetAssemblyTypeName: Assets.Scripts.ProfileScene.ProfileSceneUI.ProfileSceneUI,
+          Assembly-CSharp
+        m_MethodName: CloseProfilePanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &586218273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2168,7 +2162,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Eerste afspraak
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2569,8 +2563,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3304,7 +3298,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1190884199}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1201550249}
+        m_TargetAssemblyTypeName: Assets.Scripts.ProfileScene.ProfileSceneUI.ProfileSceneUI,
+          Assembly-CSharp
+        m_MethodName: SaveProfile
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1190884199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3343,6 +3350,61 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1190884196}
   m_CullTransparentMesh: 1
+--- !u!1 &1201550248
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1201550250}
+  - component: {fileID: 1201550249}
+  m_Layer: 0
+  m_Name: ProfileSceneUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1201550249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201550248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7d648b5a2e286e408f09dcadea748b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _userName: {fileID: 1365424528}
+  _userBirthDay: {fileID: 843719125}
+  _userAppointment: {fileID: 2027422164}
+  _doctorName: {fileID: 1818655473}
+  _treatmentPlan: {fileID: 574886240}
+  _avatarPanel1: {fileID: 777089377}
+  _avatarPanel2: {fileID: 447844465}
+  _editProfilePanel: {fileID: 2005840852}
+  _nameInputField: {fileID: 1257020756}
+  _birthDayInputField: {fileID: 1544231619}
+  ProfileSceneScript: {fileID: 470556492}
+--- !u!4 &1201550250
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1201550248}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 797.8091, y: 534.2114, z: -7.0227942}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1206456037
 GameObject:
   m_ObjectHideFlags: 0
@@ -4366,8 +4428,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4844,7 +4906,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1593604612}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1201550249}
+        m_TargetAssemblyTypeName: Assets.Scripts.ProfileScene.ProfileSceneUI.ProfileSceneUI,
+          Assembly-CSharp
+        m_MethodName: EditProfile
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1593604612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5314,7 +5389,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Naam
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5526,9 +5601,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Geboortedatum
-
-'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5716,7 +5789,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Naam arts
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5847,7 +5920,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.6039216}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.92156863}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6005,7 +6078,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Behandel plan
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6093,3 +6166,4 @@ SceneRoots:
   - {fileID: 351219931}
   - {fileID: 140416820}
   - {fileID: 470556493}
+  - {fileID: 1201550250}

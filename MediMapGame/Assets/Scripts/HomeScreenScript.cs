@@ -17,7 +17,7 @@ public class HomeScreenScript : MonoBehaviour
         //SessionManager.Instance.LoadHeader();
         roadTilePrefab = Resources.Load<GameObject>("RoadButtonPrefab");
 
-        LoadPathWay();
+        //LoadPathWay();
     }
 
     void DrawLines()
