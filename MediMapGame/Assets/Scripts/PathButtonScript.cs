@@ -16,7 +16,7 @@ public class PathButtonScript : MonoBehaviour
     {
 
 
-        if (MovableAvatar.GetComponent<MovableAvatarScript>().pathPosition == Id)
+        if (MovableAvatar.GetComponent<MovableAvatarScript>().pathPosition == Id && MovableAvatar.GetComponent<MovableAvatarScript>().routePosition == Route)
         {
             SceneManager.LoadScene("InfoScene");
         }

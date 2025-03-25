@@ -7,6 +7,7 @@ public class MovableAvatarScript : MonoBehaviour
 {
     public float _duration;
     public int pathPosition;
+    public int routePosition;
 
     private HomeScreenScript homeScreenScript;
 
@@ -14,7 +15,7 @@ public class MovableAvatarScript : MonoBehaviour
     {
         homeScreenScript = GameObject.Find("EventSystem").GetComponent<HomeScreenScript>();
         ResetAvatarPosition();
-        SetPathPosition(0);
+        SetLocation(0, 0);
     }
 
     public void MoveAvatar(int newPosition, int route, Transform newLocation)
@@ -24,14 +25,15 @@ public class MovableAvatarScript : MonoBehaviour
             Debug.Log("not good");
             return;
         }
-        SetPathPosition(newPosition);
+        SetLocation(newPosition, route);
         MoveAvatarToLocation(newLocation);
         Debug.Log("avatar moved");
     }
 
-    public void SetPathPosition(int position)
+    public void SetLocation(int position, int route)
     {
         pathPosition = position;
+        routePosition = route;
     }
 
     public bool CheckIfCanMoveToPostition(int moveToPostion)
