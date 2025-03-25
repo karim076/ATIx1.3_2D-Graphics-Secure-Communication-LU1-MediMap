@@ -18,6 +18,6 @@ namespace Models.Model.Dto
 
         public ICollection<TrajectZorgMoment>? TrajectZorgMomenten { get; set; }
 
-        public ICollection<Patient>? Patients { get; set; }
+        //public ICollection<Patient>? Patients { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using Models.Model.Dto;
 
 namespace MediMapAPI.Controllers;
 
+
 [Route("api/[controller]")]
 [ApiController]
 
@@ -112,7 +113,7 @@ public class TrajectController : ControllerBase
         {
             Id = traject.Id,
             Naam = traject.Naam,
-            Patients = traject.Patients,
+            //Patients = traject.Patients,
             TrajectZorgMomenten = traject.TrajectZorgMomenten
         };
     }
