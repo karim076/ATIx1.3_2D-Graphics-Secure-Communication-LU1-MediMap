@@ -20,7 +20,7 @@ public class MovableAvatarScript : MonoBehaviour
 
     public void MoveAvatar(int newPosition, int route, Transform newLocation)
     {
-        if (!CheckIfCanMoveToPostition(newPosition))
+        if (!CheckIfCanMoveToPostition(newPosition, route))
         {
             Debug.Log("not good");
             return;
@@ -36,10 +36,22 @@ public class MovableAvatarScript : MonoBehaviour
         routePosition = route;
     }
 
-    public bool CheckIfCanMoveToPostition(int moveToPostion)
+    public bool CheckIfCanMoveToPostition(int moveToPostion, int moveToRoute)
     {
         Debug.Log("current postition:" + pathPosition + "movepotiton:" + moveToPostion);
-        return (pathPosition == moveToPostion + 1 || pathPosition == moveToPostion - 1) ? true : false;
+        if (pathPosition == moveToPostion + 1 || pathPosition == moveToPostion - 1)
+        {
+            if (routePosition == moveToRoute || (routePosition == 0 && moveToRoute != 0) || (routePosition != 0 && moveToRoute == 0))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        return false;
+
     }
 
     public void ResetAvatarPosition()
