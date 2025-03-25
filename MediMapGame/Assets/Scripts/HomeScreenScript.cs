@@ -1,22 +1,33 @@
+using Assets.Scripts.Models;
 using Assets.Scripts.SessionManager;
+using MediMap.Scripts.Api;
+using Newtonsoft.Json;
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.Mathematics;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 
 public class HomeScreenScript : MonoBehaviour
 {
     public GameObject[] RoadTiles;
-
-    //private GameObject roadTilePrefab;
-
     private LineRenderer lineRendererRoad1;
     private LineRenderer lineRendererRoad2;
 
+    private GameObject[] trajectTextList;
+
+    private List<Traject> trajectList;
+
     void Start()
     {
+        trajectTextList = GameObject.FindGameObjectsWithTag("TrajectText").OrderBy(obj => obj.name).ToArray();
+
+        StartCoroutine(GetAllTraject());
+        
         lineRendererRoad1 = GameObject.Find("RoadLine1").GetComponent<LineRenderer>();
         lineRendererRoad2 = GameObject.Find("RoadLine2").GetComponent<LineRenderer>();
 
@@ -26,7 +37,6 @@ public class HomeScreenScript : MonoBehaviour
                               .OrderBy(obj => obj.GetComponent<PathButtonScript>().Route)
                               .ThenBy(obj => obj.GetComponent<PathButtonScript>().Id)
                               .ToArray(); // Convert the List<GameObject> back to an array
-
         LoadPathWay();
     }
 
@@ -98,5 +108,54 @@ public class HomeScreenScript : MonoBehaviour
 
 
         DrawLines();
+    }
+
+
+    private IEnumerator GetAllTraject()
+    {
+        yield return APIManager.Instance.SendRequest("Api/Traject/All", "GET", null, response =>
+        {
+            //Debug.Log("before parse" + response);
+            List<Traject> responceParsed = JsonConvert.DeserializeObject<List<Traject>>(response);
+            trajectList = responceParsed;
+
+            for (int i = 0; i < trajectList.Count(); i++)
+            {
+                if (trajectList[i] != null || trajectTextList[i] != null)
+                {
+                    trajectTextList[i].GetComponent<TextMeshPro>().text = trajectList[i].Naam;
+                }
+            }
+
+            foreach (var traject in trajectList)
+            {
+                
+                //Debug.Log("id " + traject.Id + "naam " + traject.Naam);
+            }
+            // loadingScreenCanvas.gameObject.SetActive(false);
+            //LoginPage();
+            //SuccessTextLog("Registration successful! You can now log in.");
+        }, error =>
+        {
+
+            // Parse the error response from the API
+            try
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ErrorMessage>(error);
+                if (!string.IsNullOrEmpty(errorResponse?.message))
+                {
+                    // ErrorText("Registration failed: " + errorResponse.message); // Use the API's error message
+                }
+                else
+                {
+                    // ErrorText("Registration failed: " + error); // Fallback to the generic error message
+                }
+            }
+            catch
+            {
+                // If deserialization fails, use the generic error message
+                // ErrorText("Registration failed: " + error);
+            }
+        });
     }
 }
