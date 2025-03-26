@@ -19,6 +19,13 @@ public class LoginManager : MonoBehaviour
     public TMP_InputField usernameInputRegister;
     public TMP_InputField passwordInputRegister;
     public TMP_InputField emailInputRegister;
+    [Header("Logging")]
+    public TMP_Text errorText;
+    public TMP_Text successText;
+
+    [Header("Canvas")]
+    public Canvas canvasError;
+    public Canvas canvasSuccess;
 
     public void OnRegisterClick()
     {
@@ -45,7 +52,7 @@ public class LoginManager : MonoBehaviour
 
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
-            //ErrorText("Username and password cannot be empty.");
+            ErrorText("Gebruikersnaam and wachtwoord mag niet leeg zijn.");
             return;
         }
 
@@ -75,8 +82,7 @@ public class LoginManager : MonoBehaviour
         {
             // Show error message
             // loadingScreenCanvas.gameObject.SetActive(false);
-            // ErrorText("Login Failed: " + error); // Use the error message returned by APIManager
-            Debug.LogError("Login Failed: " + error);
+            ErrorText("Login Failed: " + error); // Use the error message returned by APIManager
         });
     }
 
@@ -87,7 +93,7 @@ public class LoginManager : MonoBehaviour
         string email = emailInputRegister.text;
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(email))
         {
-            //ErrorText("Username, password and email cannot be empty.");
+            ErrorText("Gebruikersnaam, Wachtwoord en email mag niet leeg zijn.");
             return;
         }
         StartCoroutine(RegisterAuthentication(username, password, email));
@@ -104,7 +110,7 @@ public class LoginManager : MonoBehaviour
         {
             // loadingScreenCanvas.gameObject.SetActive(false);
             LoginPage();
-            //SuccessTextLog("Registration successful! You can now log in.");
+            SuccessTextLog("Registration successful! You can now log in.");
         }, error =>
         {
             // loadingScreenCanvas.gameObject.SetActive(false);
@@ -115,17 +121,17 @@ public class LoginManager : MonoBehaviour
                 var errorResponse = JsonConvert.DeserializeObject<ErrorMessage>(error);
                 if (!string.IsNullOrEmpty(errorResponse?.message))
                 {
-                    // ErrorText("Registration failed: " + errorResponse.message); // Use the API's error message
+                    ErrorText("Registratie mislukt: " + errorResponse.message); // Use the API's error message
                 }
                 else
                 {
-                    // ErrorText("Registration failed: " + error); // Fallback to the generic error message
+                    ErrorText("Registratie mislukt: " + error); // Fallback to the generic error message
                 }
             }
             catch
             {
                 // If deserialization fails, use the generic error message
-                // ErrorText("Registration failed: " + error);
+                ErrorText("Registratie mislukt: " + error);
             }
         });
     }
@@ -154,6 +160,19 @@ public class LoginManager : MonoBehaviour
         if (!Regex.IsMatch(password, @"[^a-zA-Z0-9]")) return "Wachtwoord moet minimaal één speciaal teken bevatten.";
 
         return null;
+    }
+    public void ErrorText(string message)
+    {
+        canvasSuccess.gameObject.SetActive(false);
+        canvasError.gameObject.SetActive(true);
+        errorText.text = message;
+    }
+
+    public void SuccessTextLog(string message)
+    {
+        canvasError.gameObject.SetActive(false);
+        canvasSuccess.gameObject.SetActive(true);
+        successText.text = message;
     }
     public class CreateUserDto
     {
