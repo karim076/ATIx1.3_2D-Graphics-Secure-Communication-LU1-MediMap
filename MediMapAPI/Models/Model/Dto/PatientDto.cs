@@ -11,17 +11,14 @@ namespace Models.Model.Dto
     public class PatientDto
     {
         public int Id { get; set; }
-
-        [Required]
-        [StringLength(50)]
-        public string VoorNaam { get; set; } = string.Empty;
-        public string AvatarNaam { get; set; } = string.Empty;
-        public ICollection<LogBook>? logbook { get; set; }
-        [Required]
-        [StringLength(50)]
-        public string AchterNaam { get; set; } = string.Empty;
-        public string ArtsNaam { get; set; } = string.Empty;
-        public string TrajectNaam { get; set; } = string.Empty;
-        public string OuderVoogdNaam { get; set; } = string.Empty;
+        [Required] public string VoorNaam { get; set; }
+        [Required] public string AchterNaam { get; set; }
+        public string AvatarNaam { get; set; }
+        public string OuderVoogdNaam { get; set; }
+        public string ArtsNaam { get; set; }
+        public string TrajectNaam { get; set; }
+        public DateTime GeboorteDatum { get; set; }
+        public DateTime Afspraakatum { get; set; }
     }
+
 }
