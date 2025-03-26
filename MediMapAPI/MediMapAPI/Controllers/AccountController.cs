@@ -94,7 +94,8 @@ namespace MediMapAPI.Controllers
                     NormalizedEmail = user.Email?.ToUpper(),
                     PasswordHash = SecureHash.Hash(user.Password), // Hash the password
                     RefreshToken = "", // Explicitly set to null = ""
-                    RefreshTokenExpiry = null // Explicitly set to NULL
+                    RefreshTokenExpiry = null, // Explicitly set to NULL
+                    PatienId = null // Tijdelijk
                 };
 
                 await _userManager.CreateAsync(newUser);
