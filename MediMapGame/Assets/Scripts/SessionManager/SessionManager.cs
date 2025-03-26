@@ -10,9 +10,8 @@ namespace Assets.Scripts.SessionManager
     public class SessionManager : MonoBehaviour
     {
         public static SessionManager Instance { get; private set; }
-        
 
-        public string AvatarName { get; private set; }
+        public Sprite AvatarName { get; private set; }
 
 
         private void Awake()
@@ -27,7 +26,7 @@ namespace Assets.Scripts.SessionManager
                 Destroy(gameObject);
             }
         }
-        public void SetAvatarName(string avatarName)
+        public void SetAvatarName(Sprite avatarName)
         {
             this.AvatarName = avatarName;
         }

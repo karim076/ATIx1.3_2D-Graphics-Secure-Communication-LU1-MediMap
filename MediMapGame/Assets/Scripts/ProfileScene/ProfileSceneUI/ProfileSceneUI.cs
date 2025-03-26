@@ -22,6 +22,8 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
         [SerializeField] private GameObject _avatarPanel1;
         [SerializeField] private GameObject _avatarPanel2;
 
+        [SerializeField] private Button _avatarbutton;
+
         [SerializeField] private GameObject _editProfilePanel;
         [SerializeField] private TMP_InputField _nameInputField;
         [SerializeField] private TMP_InputField _birthDayInputField;
@@ -122,9 +124,9 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
             Image image = button.GetComponent<Image>();
             if(image != null && image.sprite != null)
             {
-                SessionManager.SessionManager.Instance.SetAvatarName(image.name);
+                SessionManager.SessionManager.Instance.SetAvatarName(image.sprite);
                 Debug.Log("Avatar name: " + image.name);
-                button.GetComponent<Image>().sprite = image.sprite;
+                _avatarbutton.GetComponent<Image>().sprite = SessionManager.SessionManager.Instance.AvatarName;
                 ProfileSceneScript.SaveAvatar();
             }
             else

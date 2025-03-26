@@ -3641,6 +3641,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   createPanel: {fileID: 874109013}
   logPanel: {fileID: 2077605855}
+  _avatar: {fileID: 1834780052}
 --- !u!4 &2054166951
 Transform:
   m_ObjectHideFlags: 0
