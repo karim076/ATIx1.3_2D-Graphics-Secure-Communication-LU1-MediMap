@@ -19,6 +19,7 @@ public class HomeScreenScript : MonoBehaviour
     public GameObject[] RoadTiles;
     private LineRenderer lineRendererRoad1;
     private LineRenderer lineRendererRoad2;
+    private LineRenderer userProgressLineRenderer;
 
     private GameObject[] trajectTextList;
 
@@ -29,12 +30,18 @@ public class HomeScreenScript : MonoBehaviour
     void Start()
     {
         movableAvatar = GameObject.Find("MovableAvatar");
+        movableAvatar.GetComponent<SpriteRenderer>().sortingOrder = 10;
         trajectTextList = GameObject.FindGameObjectsWithTag("TrajectText").OrderBy(obj => obj.name).ToArray();
 
         StartCoroutine(GetAllTraject());
         
         lineRendererRoad1 = GameObject.Find("RoadLine1").GetComponent<LineRenderer>();
         lineRendererRoad2 = GameObject.Find("RoadLine2").GetComponent<LineRenderer>();
+        userProgressLineRenderer = GameObject.Find("UserLine").GetComponent<LineRenderer>();
+
+        lineRendererRoad1.sortingOrder = 1;
+        lineRendererRoad2.sortingOrder = 1;
+        userProgressLineRenderer.sortingOrder = 2;
 
         //SessionManager.Instance.LoadHeader();
         //roadTilePrefab = Resources.Load<GameObject>("RoadButtonPrefab");
@@ -109,12 +116,34 @@ public class HomeScreenScript : MonoBehaviour
         DrawLines();
     }
 
+    private void CreateUserProgressLine(GameObject[] userProgressionPathWays)
+    {
+        Color lineColorUserProgress = new Color(146f / 255f, 138f / 255f, 92f / 255f);
+
+        userProgressLineRenderer.startWidth = 0.6f;
+        userProgressLineRenderer.endWidth = 0.6f;
+        userProgressLineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        userProgressLineRenderer.startColor = lineColorUserProgress;
+        userProgressLineRenderer.endColor = lineColorUserProgress;
+        userProgressLineRenderer.positionCount = userProgressionPathWays.Length;
+
+        for (int i = 0; i < userProgressionPathWays.Length; i++)
+        {
+            Debug.Log(userProgressionPathWays[i].GetComponent<PathButtonScript>().Id);
+            //var gameObjectScript = ;
+            userProgressLineRenderer.SetPosition(userProgressionPathWays[i].GetComponent<PathButtonScript>().Id, userProgressionPathWays[i].transform.position);
+            userProgressionPathWays[i].GetComponent<SpriteRenderer>().color = lineColorUserProgress;
+
+        }
+    }
+
     public void LoadUserData()
     {
         if (APIManager.Instance.isLogedIn)
         {
-            int userRouteFromDatabase = 2;
-            int userPlaceFromDatabase = 7;
+            
+            int userRouteFromDatabase = 1;
+            int userPlaceFromDatabase = 3;
             Debug.Log("user is logged in");
             GameObject foundTile = RoadTiles
             .FirstOrDefault(tile =>
@@ -128,6 +157,21 @@ public class HomeScreenScript : MonoBehaviour
 
                 movableAvatar.GetComponent<MovableAvatarScript>().SetAvatarFromDataBase(location);
                 movableAvatar.GetComponent<MovableAvatarScript>().SetLocation(foundTile.GetComponent<PathButtonScript>().Id, foundTile.GetComponent<PathButtonScript>().Route);
+
+
+                GameObject[] userpathWayList = RoadTiles
+                                            .Where(obj =>
+                                            {
+                                                PathButtonScript script = obj.GetComponent<PathButtonScript>();
+                                                return script != null &&
+                                                       (script.Route == 0 || script.Route == userRouteFromDatabase - 1 ) &&
+                                                       script.Id <= userPlaceFromDatabase;
+                                            })
+                                            .OrderBy(obj => obj.GetComponent<PathButtonScript>().Route)
+                                            .ThenBy(obj => obj.GetComponent<PathButtonScript>().Id)
+                                            .ToArray(); 
+
+                CreateUserProgressLine(userpathWayList);
             }
             else
             {
