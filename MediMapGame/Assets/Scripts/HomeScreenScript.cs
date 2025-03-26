@@ -27,6 +27,10 @@ public class HomeScreenScript : MonoBehaviour
 
     private GameObject movableAvatar;
 
+
+    public int userPathLocation;
+    public int userRoute;
+
     void Start()
     {
         movableAvatar = GameObject.Find("MovableAvatar");
@@ -34,7 +38,9 @@ public class HomeScreenScript : MonoBehaviour
         trajectTextList = GameObject.FindGameObjectsWithTag("TrajectText").OrderBy(obj => obj.name).ToArray();
 
         StartCoroutine(GetAllTraject());
-        
+        StartCoroutine(GetUserLocation());
+
+
 
         if (SessionManager.Instance.AvatarName == null)
         {
@@ -56,8 +62,9 @@ public class HomeScreenScript : MonoBehaviour
                               .OrderBy(obj => obj.GetComponent<PathButtonScript>().Route)
                               .ThenBy(obj => obj.GetComponent<PathButtonScript>().Id)
                               .ToArray(); // Convert the List<GameObject> back to an array
+
         LoadPathWay();
-        LoadUserData();
+        //LoadUserData();
 
     }
 
@@ -149,16 +156,19 @@ public class HomeScreenScript : MonoBehaviour
     {
         if (APIManager.Instance.isLogedIn)
         {
-            
-            int userRouteFromDatabase = 1;
-            int userPlaceFromDatabase = 3;
+
+            Debug.Log(userPathLocation);
+            Debug.Log(userRoute);
+            //int userRouteFromDatabase = 1;
+            //int userPlaceFromDatabase = 3;
             Debug.Log("user is logged in");
             GameObject foundTile = RoadTiles
             .FirstOrDefault(tile =>
             {
                 PathButtonScript script = tile.GetComponent<PathButtonScript>();
-                return script != null && script.Route == userRouteFromDatabase - 1 && script.Id == userPlaceFromDatabase;
+                return script != null && script.Route == userRoute - 1 && script.Id == userPathLocation;
             });
+
             if(foundTile != null)
             {
                 Vector3 location = foundTile.transform.position;
@@ -172,8 +182,8 @@ public class HomeScreenScript : MonoBehaviour
                                             {
                                                 PathButtonScript script = obj.GetComponent<PathButtonScript>();
                                                 return script != null &&
-                                                       (script.Route == 0 || script.Route == userRouteFromDatabase - 1 ) &&
-                                                       script.Id <= userPlaceFromDatabase;
+                                                       (script.Route == 0 || script.Route == userRoute - 1 ) &&
+                                                       script.Id <= userPathLocation;
                                             })
                                             .OrderBy(obj => obj.GetComponent<PathButtonScript>().Route)
                                             .ThenBy(obj => obj.GetComponent<PathButtonScript>().Id)
@@ -183,6 +193,7 @@ public class HomeScreenScript : MonoBehaviour
             }
             else
             {
+                Debug.Log("nog found");
                 movableAvatar.GetComponent<MovableAvatarScript>().SetLocation(0,0);
             }
         }
@@ -191,6 +202,45 @@ public class HomeScreenScript : MonoBehaviour
             movableAvatar.GetComponent<MovableAvatarScript>().SetLocation(0,0);
 
         }
+    }
+
+    private IEnumerator GetUserLocation()
+    {
+        Debug.Log("userid" + APIManager.Instance.userId);
+        yield return APIManager.Instance.SendRequest("api/User/" + APIManager.Instance.userId, "GET", null, response =>
+        {
+            //Debug.Log("before parse" + response);
+            UserDto responceParsed = JsonConvert.DeserializeObject<UserDto>(response);
+            Debug.Log("response getlocation" + response);
+            userPathLocation = responceParsed.PatientPathLocation;
+            userRoute = responceParsed.TrajectId ?? 0;
+
+            Debug.Log("setuoasf" + userRoute + " " + userPathLocation);
+
+        }, error =>
+        {
+
+            // Parse the error response from the API
+            try
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ErrorMessage>(error);
+                if (!string.IsNullOrEmpty(errorResponse?.message))
+                {
+                    // ErrorText("Registration failed: " + errorResponse.message); // Use the API's error message
+                }
+                else
+                {
+                    // ErrorText("Registration failed: " + error); // Fallback to the generic error message
+                }
+            }
+            catch
+            {
+                // If deserialization fails, use the generic error message
+                // ErrorText("Registration failed: " + error);
+            }
+        });
+        LoadUserData();
+
     }
 
 

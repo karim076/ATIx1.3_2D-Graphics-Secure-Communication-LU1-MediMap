@@ -34,6 +34,7 @@ namespace MediMap.Scripts.Api
             }
         }
         public string userName { get; set; }
+        public int userId { get; set; }
         public bool isLogedIn = false;
         public static APIManager Instance
         {

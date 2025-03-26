@@ -19,6 +19,7 @@ namespace DataAccess.Repository.iUnitOfWork
         IGenericRepository<ZorgMoment> ZorgMomentRepository { get; }
         IGenericRepository<LogBook> LogBookRepository { get; }
         IGenericRepository<ProfileInformation> ProfileInformationRepository { get; }
+        //IGenericRepository<ApplicationUser> ProfileInformationRepository { get; }
         Task SaveAsync();
     }
 }

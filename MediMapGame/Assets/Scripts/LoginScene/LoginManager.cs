@@ -70,6 +70,7 @@ public class LoginManager : MonoBehaviour
             SessionManager.Instance.SetAvatarName(sprite);
             APIManager.Instance.userName = username;
             APIManager.Instance.isLogedIn = true;
+            APIManager.Instance.userId = responseData.UserId;
             Debug.Log("Token succesfully created: " + APIManager.Instance.authTokens.Token);
             // Go to Home Scene
             SceneManager.LoadScene("HomeScreenScene", LoadSceneMode.Single);

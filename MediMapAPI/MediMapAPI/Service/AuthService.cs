@@ -58,7 +58,7 @@ namespace MediMapAPI.Service
             user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7); // Set refresh token expiry
             await _userManager.UpdateAsync(user);
             // create refresh token response
-            var response = new RefreshTokenResponse(token, refreshToken);
+            var response = new RefreshTokenResponse(token, refreshToken, user.Id);
             return (response);
         }
 
@@ -109,11 +109,14 @@ namespace MediMapAPI.Service
             }
 
             // Create refresh token response
-            var response = new RefreshTokenResponse(token, refreshToken);
+            var response = new RefreshTokenResponse(token, refreshToken, user.Id);
 
             return response;
         }
 
+        private class loginResponse{
+            
+        }
         public async Task SignOutAsync()
         {
             await _signInManager.SignOutAsync();

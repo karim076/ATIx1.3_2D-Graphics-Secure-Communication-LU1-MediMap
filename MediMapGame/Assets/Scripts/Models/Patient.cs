@@ -18,4 +18,5 @@ namespace Assets.Scripts.Models
         public string TrajectNaam;
         public string OuderVoogdNaam;
     }
+
 }
