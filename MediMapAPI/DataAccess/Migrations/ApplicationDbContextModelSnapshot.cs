@@ -108,6 +108,9 @@ namespace DataAccess.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PatienId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -130,6 +133,8 @@ namespace DataAccess.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("PatienId");
 
                     b.ToTable("User", "MediMap");
                 });
@@ -310,6 +315,9 @@ namespace DataAccess.Migrations
                     b.Property<int>("OuderVoogdId")
                         .HasColumnType("int");
 
+                    b.Property<int>("PathLocation")
+                        .HasColumnType("int");
+
                     b.Property<int>("TrajectId")
                         .HasColumnType("int");
 
@@ -444,6 +452,17 @@ namespace DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Models.ApplicationUser", b =>
+                {
+                    b.HasOne("Models.Model.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatienId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("Models.ApplicationUserClaim", b =>
