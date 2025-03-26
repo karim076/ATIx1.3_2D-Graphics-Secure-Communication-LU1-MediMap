@@ -12,10 +12,12 @@ namespace Assets.Scripts.Models
         public int Id;
         public string VoorNaam;
         public string AvatarNaam;
-        public ICollection<LogBook>? logbook;
+        //public ICollection<LogBook>? logbook;
         public string AchterNaam;
         public string ArtsNaam;
         public string TrajectNaam;
         public string OuderVoogdNaam;
+        public DateTime GeboorteDatum;
+        public DateTime Afspraakatum;
     }
 }

@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Assets.Scripts.Models;
+using MediMap.Scripts.Api;
+using Newtonsoft.Json;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +14,9 @@ namespace Assets.Scripts.SessionManager
     public class SessionManager : MonoBehaviour
     {
         public static SessionManager Instance { get; private set; }
-
         public Sprite AvatarName { get; private set; }
-
+        public int UserId { get; private set; }
+        public int PatientId { get; private set; }
 
         private void Awake()
         {
@@ -30,5 +34,38 @@ namespace Assets.Scripts.SessionManager
         {
             this.AvatarName = avatarName;
         }
+        public void SetUserId(int userId)
+        {
+            UserId = userId;
+        }
+        public void SetPatientId(int patientId)
+        {
+            PatientId = patientId;
+        }
+
+        public void CheckAndLoadAvatar(int patientId)
+        {
+            StartCoroutine(LoadAvatar(patientId));
+        }
+
+        private IEnumerator LoadAvatar(int patientId)
+        {
+            yield return APIManager.Instance.SendRequest($"api/Patient/avatar/{patientId}", "GET", null, (response) =>
+            {
+                var avatarName = JsonConvert.DeserializeObject<AvatarName>(response);
+                if (avatarName != null)
+                {
+                    Sprite sprite = Resources.Load<Sprite>($"Art/{avatarName.avatar}");
+                    SetAvatarName(sprite);
+                }
+            }, (error) =>
+            {
+                if (error != null)
+                {
+                    Debug.Log(error);
+                }
+            });
+        }
+
     }
 }
