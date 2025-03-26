@@ -58,6 +58,7 @@ public class HomeScreenScript : MonoBehaviour
     {
         for (int i = 0; i < RoadTiles.Length; i++)
         {
+            RoadTiles[i].GetComponent<SpriteRenderer>().sortingOrder = 2;
             int currentTileRouteId = RoadTiles[i].GetComponent<PathButtonScript>().Route;
             int currentTileId = RoadTiles[i].GetComponent<PathButtonScript>().Id;
 
