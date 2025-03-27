@@ -1,4 +1,5 @@
 using Assets.models;
+using Assets.Scripts.Api.LogBookControllerConnection;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -11,6 +12,7 @@ public class CreatePanelScene : MonoBehaviour
     [Header("Panels")]
     public GameObject createPanel;
     public GameObject logPanel;
+    public GameObject errorPanel;
 
     [Header("Prefabs")]
     public GameObject prefab;
@@ -27,13 +29,26 @@ public class CreatePanelScene : MonoBehaviour
     [Header("Objects")]
     public GameObject scrollbar;
 
+    public LogbookControllerConnection logbookControllerConnection;
+
     public List<LogModel> models = new List<LogModel>();
+
+    public void Start()
+    {
+        createPanel.SetActive(false);
+        errorPanel.SetActive(false);
+        logPanel.SetActive(true);
+        scrollbar.SetActive(true);
+    }
+
+    
 
     public void OpenCreatePanel()
     {
         createPanel.SetActive(true);
         logPanel.SetActive(false);
         scrollbar.SetActive(false);
+        errorPanel.SetActive(false);
     }
 
 
@@ -46,13 +61,23 @@ public class CreatePanelScene : MonoBehaviour
 
     public void CreateNewLog()
     {
+        if (!DateTime.TryParse(date.text, out DateTime datee))
+        {
+            Debug.Log("Voer een geldige datum in");
+            errorPanel.SetActive(true);
+            return;
+        }
+
         var newModel = new LogModel
         {
-            Date = date.text,
-            Place = place.text,
-            Note = note.text
+            PatientId = 1,
+            place = place.text,
+            note = note.text,
+            date = datee
         };
 
+        //logbookControllerConnection.createPanelScene = this;
+        logbookControllerConnection.SaveLogData(newModel);
         models.Add(newModel);
         LoadLogs(models);
     }
@@ -72,9 +97,15 @@ public class CreatePanelScene : MonoBehaviour
             TMP_Text placeText = modelItem.transform.Find("Place").GetComponent<TMP_Text>();
             TMP_Text noteText = modelItem.transform.Find("Note").GetComponent<TMP_Text>();
 
-            dateText.text = model.Date;
-            placeText.text = model.Place;
-            noteText.text = model.Note;
+            dateText.text = model.date?.ToString("dd/MM/yyyy");
+            placeText.text = model.place;
+            noteText.text = model.note;
         }
     }
+
+    //public void SaveLogData()
+    //{
+    //    logbookControllerConnection.createPanelScene = this;
+    //    logbookControllerConnection.SaveLogData();
+    //}
 }

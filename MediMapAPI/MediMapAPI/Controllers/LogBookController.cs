@@ -11,7 +11,7 @@ using Models.Model.Dto;
 namespace MediMapAPI.Controllers
 {
     //[Authorize]
-    [Route("/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class LogBookController : ControllerBase
     {
@@ -23,12 +23,12 @@ namespace MediMapAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddLog([FromBody] LogBook log)
+        public async Task<IActionResult> AddLog(LogBook log)
         {
             if (log == null) {
                 return BadRequest("Log is null.");
             }
-
+            
             await _unitOfWork.LogBookRepository.AddAsync(log);
             await _unitOfWork.SaveAsync();
             return Ok($"New log added: {log}");
@@ -57,7 +57,7 @@ namespace MediMapAPI.Controllers
                 {
                     Place = log.Place,
                     Date = log.Date,
-                    Log = log.Log
+                    Log = log.Note
                 });
             }
 

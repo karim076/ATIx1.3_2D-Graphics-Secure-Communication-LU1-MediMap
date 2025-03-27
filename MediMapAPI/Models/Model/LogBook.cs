@@ -15,7 +15,7 @@ namespace Models.Model
         public int Id { get; set; }
 
         [Required]
-        public string Log { get; set; } = string.Empty;
+        public string Note { get; set; } = string.Empty;
 
         [Required]
         public string Place { get; set; } = string.Empty;
