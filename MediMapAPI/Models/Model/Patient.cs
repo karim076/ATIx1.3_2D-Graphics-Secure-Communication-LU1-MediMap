@@ -25,6 +25,10 @@ namespace Models.Model
         [StringLength(50)]
         public string AchterNaam { get; set; } = string.Empty;
 
+        public DateTime GeboorteDatum { get; set; } =default;
+
+        public DateTime AfspraakDatum { get; set; } = default;
+
         [Required]
         public int PathLocation { get; set; } = default;
 

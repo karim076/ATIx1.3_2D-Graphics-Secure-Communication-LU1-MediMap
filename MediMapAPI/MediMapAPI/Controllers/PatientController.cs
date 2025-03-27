@@ -29,8 +29,9 @@ namespace MediMapAPI.Controllers
                 return BadRequest(ModelState);
             }
             try
-            {
+            {               
                 var patient = await _unitOfWork.PatientRepository.GetAsync(p => p.Id == id, includeProperty:"Arts,OuderVoogd,Traject");
+
                 if (patient == null)
                 {
                     return NotFound(new { message = "Geen patient gevonden." });
@@ -56,15 +57,99 @@ namespace MediMapAPI.Controllers
 
         // PUT api/<PatientController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<ActionResult<PatientDto>> Put(int id, PatientDto patientDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var patient = await _unitOfWork.PatientRepository.GetAsync(p => p.Id == id, includeProperty:"Arts,Traject,OuderVoogd");
+                if (patient == null)
+                {
+                    return NotFound(new { message = "Geen patient gevonden." });
+                }
+ 
+                patient.VoorNaam = patientDTO.VoorNaam;
+                patient.AchterNaam = patientDTO.AchterNaam;
+                patient.GeboorteDatum = patientDTO.GeboorteDatum;
+
+                var patientDto = ConvertToPatientDto(patient);
+
+                if (patientDto == null)
+                {
+                    return BadRequest(new { message = "Fout bij het ophalen van patient." });
+                }
+
+                _unitOfWork.PatientRepository.Update(patient);
+                await _unitOfWork.SaveAsync();
+
+                return Ok(patientDto);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
         }
 
-        // DELETE api/<PatientController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPut("avatar/{Id}")]
+        public async Task<ActionResult<AvatarName>> UpdateAvatar(int Id, AvatarName avatarName)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var patient = await _unitOfWork.PatientRepository.GetAsync(p => p.Id == Id);
+                if (patient == null)
+                {
+                    return NotFound(new { message = "Geen patient gevonden." });
+                }
+
+                patient.AvatarNaam = avatarName.Avatar;
+
+                _unitOfWork.PatientRepository.Update(patient);
+
+                await _unitOfWork.SaveAsync();
+
+                return Ok(new { avatar = patient.AvatarNaam});
+
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
         }
+
+        [HttpGet("avatar/{Id}")]
+        public async Task<ActionResult<AvatarName>> GetAvatar(int Id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var patient = await _unitOfWork.PatientRepository.GetAsync(p => p.Id == Id);
+                if (patient == null)
+                {
+                    return NotFound(new { message = "Geen patient gevonden." });
+                }
+                return Ok(new { avatar = patient.AvatarNaam });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+        }
+        //// DELETE api/<PatientController>/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
 
         private PatientDto ConvertToPatientDto(Patient patient)
         {
@@ -77,6 +162,8 @@ namespace MediMapAPI.Controllers
                 ArtsNaam = patient.Arts.Naam,
                 TrajectNaam = patient.Traject.Naam,
                 OuderVoogdNaam = $"{patient.OuderVoogd.VoorNaam} {patient.OuderVoogd.AchterNaam}",
+                Afspraakatum = patient.AfspraakDatum,
+                GeboorteDatum = patient.GeboorteDatum,
                 //logbook = patient.LogBooks.Select(l => new LogBookDto
                 //{
                 //    Id = l.Id,
@@ -85,6 +172,11 @@ namespace MediMapAPI.Controllers
                 //    PatientId = l.PatientID
                 //}).ToList() ?? new List<LogBookDto>()
             };
+        }
+
+        public class AvatarName
+        {
+            public string Avatar { get; set; }
         }
     }
 }

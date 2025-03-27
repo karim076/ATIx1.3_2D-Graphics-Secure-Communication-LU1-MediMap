@@ -97,7 +97,7 @@ namespace MediMapAPI.Controllers
                     PasswordHash = SecureHash.Hash(user.Password), // Hash the password
                     RefreshToken = "", // Explicitly set to null = ""
                     RefreshTokenExpiry = null, // Explicitly set to NULL
-                    PatienId = null // Tijdelijk
+                    PatienId = 0 // Tijdelijk
                 };
 
                 await _userManager.CreateAsync(newUser);
