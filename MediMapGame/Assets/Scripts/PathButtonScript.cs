@@ -25,7 +25,7 @@ public class PathButtonScript : MonoBehaviour
             {
                 StartCoroutine(UpdatePatientLocation());
             }
-            //SceneManager.LoadScene("InfoScene");
+            SceneManager.LoadScene("InfoScene");
         }
         else
         {
