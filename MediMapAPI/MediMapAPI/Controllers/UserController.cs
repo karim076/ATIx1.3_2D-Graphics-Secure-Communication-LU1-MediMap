@@ -34,10 +34,6 @@ public class UserController : ControllerBase
                 return NotFound(new { message = "Geen user gevonden." });
             }
 
-            var traject = await _unitOfWork.TrajectRepository.GetAsync(t => t.Id == user.Patient.TrajectId);
-            //user.Patient.Traject = traject;
-
-
             var userDto = UserDto(user);
 
             if (userDto == null)
@@ -77,8 +73,10 @@ public class UserController : ControllerBase
 
             var patient = await _unitOfWork.PatientRepository.GetAsync(p => p.Id == user.PatienId);
 
-
-            //var userDto = UserDto(user);
+            if(patient == null)
+            {
+                return NotFound(new { message = "Geen patient om te updaten" });
+            }
 
             if (user.Patient != null)
             {
