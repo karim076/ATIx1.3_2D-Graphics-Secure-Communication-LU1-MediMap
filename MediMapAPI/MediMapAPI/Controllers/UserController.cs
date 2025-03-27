@@ -75,27 +75,23 @@ public class UserController : ControllerBase
                 return NotFound(new { message = "Onbekende user." });
             }
 
+            var patient = await _unitOfWork.PatientRepository.GetAsync(p => p.Id == user.PatienId);
+
+
             //var userDto = UserDto(user);
 
-            if(user.Patient != null)
+            if (user.Patient != null)
             {
-                user.Patient.TrajectId = updateUser.TrajectId ?? 0;
-                user.Patient.PathLocation = updateUser.PatientPathLocation;
+                patient.TrajectId = updateUser.TrajectId ?? 0;
+                patient.PathLocation = updateUser.PatientPathLocation;
             }
             
 
-
+            
             _unitOfWork.ApplicationUserRepository.Update(user);
-            //var traject = await _unitOfWork.TrajectRepository.GetAsync(t => t.Id == user.Patient.TrajectId);
-            //user.Patient.Traject = traject;
+            _unitOfWork.PatientRepository.Update(patient);
 
-
-
-            //if (userDto == null)
-            //{
-            //    return BadRequest(new { message = "Fout bij het ophalen van traject." });
-            //}
-
+            await _unitOfWork.SaveAsync();
             return Ok(user);
         }
         catch (Exception e)
@@ -104,30 +100,6 @@ public class UserController : ControllerBase
         }
     }
 
-
-    //[HttpDelete("{id}")]
-    //public void Delete(int id)
-    //{
-
-    //}
-
-    private ApplicationUser CreateApplicationUser(CreateUserDto user)
-    {
-        if (user.Patient != null)
-        {
-            user.Patient.PathLocation = user.PatientPathLocation;
-            user.Patient.TrajectId = user.TrajectId ?? 0; // Fix: Ensure it's never null
-        }
-
-        return new ApplicationUser
-        {
-            Id = user.Id ?? 0,
-            UserName = user.Username,
-            Email = user.Username,
-            PatienId = user.PatienId,
-            Patient = user.Patient,
-        };
-    }
     private CreateUserDto UserDto(ApplicationUser user)
     {
         return new CreateUserDto
