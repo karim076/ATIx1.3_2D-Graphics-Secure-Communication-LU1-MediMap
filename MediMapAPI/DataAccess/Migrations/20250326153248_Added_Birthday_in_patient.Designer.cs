@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250323215156_ProfileInformation_FK_Optineel")]
-    partial class ProfileInformation_FK_Optineel
+    [Migration("20250326153248_Added_Birthday_in_patient")]
+    partial class Added_Birthday_in_patient
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,6 +111,9 @@ namespace DataAccess.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PatienId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -133,6 +136,8 @@ namespace DataAccess.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("PatienId");
 
                     b.ToTable("User", "MediMap");
                 });
@@ -310,7 +315,13 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("GeboorteDatum")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("OuderVoogdId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PathLocation")
                         .HasColumnType("int");
 
                     b.Property<int>("TrajectId")
@@ -447,6 +458,15 @@ namespace DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Models.ApplicationUser", b =>
+                {
+                    b.HasOne("Models.Model.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatienId");
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("Models.ApplicationUserClaim", b =>

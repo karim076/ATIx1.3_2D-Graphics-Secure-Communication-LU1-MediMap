@@ -17,6 +17,13 @@ public class HomeScreenScript : MonoBehaviour
 
     void Start()
     {
+
+        if (SessionManager.Instance.AvatarName == null)
+        {
+            Sprite sprite = Resources.Load<Sprite>("Art/Monster1");
+            SessionManager.Instance.SetAvatarName(sprite);
+        }
+
         lineRendererRoad1 = GameObject.Find("RoadLine1").GetComponent<LineRenderer>();
         lineRendererRoad2 = GameObject.Find("RoadLine2").GetComponent<LineRenderer>();
 

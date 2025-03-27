@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250323212735_ProfileInformation_Add_Arts_Migration")]
-    partial class ProfileInformation_Add_Arts_Migration
+    [Migration("20250326150849_Initial_Migraion1")]
+    partial class Initial_Migraion1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,6 +111,9 @@ namespace DataAccess.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PatienId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -133,6 +136,8 @@ namespace DataAccess.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("PatienId");
 
                     b.ToTable("User", "MediMap");
                 });
@@ -313,6 +318,9 @@ namespace DataAccess.Migrations
                     b.Property<int>("OuderVoogdId")
                         .HasColumnType("int");
 
+                    b.Property<int>("PathLocation")
+                        .HasColumnType("int");
+
                     b.Property<int>("TrajectId")
                         .HasColumnType("int");
 
@@ -447,6 +455,15 @@ namespace DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Models.ApplicationUser", b =>
+                {
+                    b.HasOne("Models.Model.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatienId");
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("Models.ApplicationUserClaim", b =>

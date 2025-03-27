@@ -9,6 +9,10 @@ using MediMapAPI.Models;
 using Models;
 using DataAccess.Repository.IRepository;
 using MediMap.Repositories;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 
@@ -52,7 +56,6 @@ builder.Services.Configure<TokenSettings>(options =>
     options.Audience = "MediMapAPI"; // Set audience
     options.Issuer = "MediMapAPI"; // Set issuer
 });
-
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
