@@ -178,16 +178,16 @@ public class HomeScreenScript : MonoBehaviour
 
 
                 GameObject[] userpathWayList = RoadTiles
-                                            .Where(obj =>
-                                            {
-                                                PathButtonScript script = obj.GetComponent<PathButtonScript>();
-                                                return script != null &&
-                                                       (script.Route == 0 || script.Route == userRoute - 1 ) &&
-                                                       script.Id <= userPathLocation;
-                                            })
-                                            .OrderBy(obj => obj.GetComponent<PathButtonScript>().Route)
-                                            .ThenBy(obj => obj.GetComponent<PathButtonScript>().Id)
-                                            .ToArray(); 
+                .Where(obj =>
+                {
+                    PathButtonScript script = obj.GetComponent<PathButtonScript>();
+                    return script != null &&
+                            (script.Route == 0 || script.Route == userRoute - 1 ) &&
+                            script.Id <= userPathLocation;
+                })
+                .OrderBy(obj => obj.GetComponent<PathButtonScript>().Route)
+                .ThenBy(obj => obj.GetComponent<PathButtonScript>().Id)
+                .ToArray(); 
 
                 CreateUserProgressLine(userpathWayList);
             }
