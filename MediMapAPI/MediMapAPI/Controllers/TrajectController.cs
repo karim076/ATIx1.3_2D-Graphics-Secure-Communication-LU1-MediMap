@@ -1,10 +1,12 @@
 ﻿using DataAccess.Repository.iUnitOfWork;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Models.Model;
+using Models.Model.Dto;
 
 namespace MediMapAPI.Controllers;
 
-[Authorize]
+
 [Route("api/[controller]")]
 [ApiController]
 
@@ -17,26 +19,72 @@ public class TrajectController : ControllerBase
         _unitOfWork = unitOfWork;
     }
 
-    [HttpGet]
-    public IEnumerable<string> Get()
+    [HttpGet("all")]
+    public async Task<ActionResult<TrajectDto>> GetAllTrajects()
     {
-        return new string[] { "value1", "value2" };
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        try
+        {
+            var trajects = await _unitOfWork.TrajectRepository.GetAllAsync(includeProperty:"TrajectZorgMomenten");
+            if (trajects == null)
+            {
+                return NotFound(new { message = "Geen traject gevonden." });
+            }
+
+            List<TrajectDto> trajectsDto = new List<TrajectDto>(); // Initialize the list
+            foreach (Traject traject in trajects)
+            {
+                var trajectDto = TrajectDto(traject);
+                if (trajectDto == null)
+                {
+                    return BadRequest(new { message = "Fout bij het ophalen van traject." });
+                }
+                else
+                {
+                    trajectsDto.Add(trajectDto);
+                }
+            }
+
+            
+
+            return Ok(trajectsDto);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { message = e.Message });
+        }
     }
 
     
     [HttpGet("{id}")]
-    public async Task<ActionResult<string>> GetTrajectByIdAsync(int id)
+    public async Task<ActionResult<TrajectDto>> GetTrajectByIdAsync(int id)
     {
-        //if (!ModelState.IsValid)
-        //{
-        //    return BadRequest(ModelState);
-        //}
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        try { 
+            var traject = await _unitOfWork.TrajectRepository.GetAsync(t => t.Id == id);
+            if (traject == null)
+            {
+                return NotFound(new { message = "Geen traject gevonden." });
+            }
+            var trajectDto = TrajectDto(traject);
 
-        //try
-        //{
-        //    //var traject = await _unitOfWork.
-        //}
-        return "value";
+            if (trajectDto == null)
+            {
+                return BadRequest(new { message = "Fout bij het ophalen van traject." });
+            }
+
+            return Ok(trajectDto);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { message = e.Message });
+        }
     }
 
     [HttpPost]
@@ -57,6 +105,17 @@ public class TrajectController : ControllerBase
     public void Delete(int id)
     {
 
+    }
+
+    private TrajectDto TrajectDto(Traject traject)
+    {
+        return new TrajectDto
+        {
+            Id = traject.Id,
+            Naam = traject.Naam,
+            //Patients = traject.Patients,
+            TrajectZorgMomenten = traject.TrajectZorgMomenten
+        };
     }
 }
 

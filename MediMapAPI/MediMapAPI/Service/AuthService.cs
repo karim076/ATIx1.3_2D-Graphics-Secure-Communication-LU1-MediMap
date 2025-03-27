@@ -114,6 +114,9 @@ namespace MediMapAPI.Service
             return response;
         }
 
+        private class loginResponse{
+            
+        }
         public async Task SignOutAsync()
         {
             await _signInManager.SignOutAsync();

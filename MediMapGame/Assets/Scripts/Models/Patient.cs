@@ -20,4 +20,5 @@ namespace Assets.Scripts.Models
         public DateTime GeboorteDatum;
         public DateTime Afspraakatum;
     }
+
 }

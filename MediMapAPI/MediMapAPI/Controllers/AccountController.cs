@@ -32,6 +32,8 @@ namespace MediMapAPI.Controllers
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
+        
+
         [HttpPost("Login")]
         [AllowAnonymous]
         public async Task<ActionResult<string>> CreateToken(UserAuthenication user)
