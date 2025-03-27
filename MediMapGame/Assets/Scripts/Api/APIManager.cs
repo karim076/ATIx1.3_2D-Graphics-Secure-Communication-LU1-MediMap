@@ -77,6 +77,12 @@ namespace MediMap.Scripts.Api
             authTokens = newAuthTokens;
         }
 
+        public void Clear()
+        {
+            authTokens = null;
+            isLogedIn = false;
+        }
+
         public IEnumerator RefreshToken()
         {
             if (authTokens == null)
