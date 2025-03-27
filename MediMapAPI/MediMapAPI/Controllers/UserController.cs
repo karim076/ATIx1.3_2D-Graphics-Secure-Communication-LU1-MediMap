@@ -69,24 +69,34 @@ public class UserController : ControllerBase
         }
         try
         {
-            var user = await _unitOfWork.ApplicationUserRepository.GetAsync(p => p.Id == id);
+            var user = await _unitOfWork.ApplicationUserRepository.GetAsync(p => p.Id == id, includeProperty: "Patient");
             if (user == null)
             {
-                return NotFound(new { message = "Geen user gevonden." });
+                return NotFound(new { message = "Onbekende user." });
             }
 
-            var traject = await _unitOfWork.TrajectRepository.GetAsync(t => t.Id == user.Patient.TrajectId);
+            //var userDto = UserDto(user);
+
+            if(user.Patient != null)
+            {
+                user.Patient.TrajectId = updateUser.TrajectId ?? 0;
+                user.Patient.PathLocation = updateUser.PatientPathLocation;
+            }
+            
+
+
+            _unitOfWork.ApplicationUserRepository.Update(user);
+            //var traject = await _unitOfWork.TrajectRepository.GetAsync(t => t.Id == user.Patient.TrajectId);
             //user.Patient.Traject = traject;
 
 
-            var userDto = UserDto(user);
 
-            if (userDto == null)
-            {
-                return BadRequest(new { message = "Fout bij het ophalen van traject." });
-            }
+            //if (userDto == null)
+            //{
+            //    return BadRequest(new { message = "Fout bij het ophalen van traject." });
+            //}
 
-            return Ok(userDto);
+            return Ok(user);
         }
         catch (Exception e)
         {
@@ -101,6 +111,23 @@ public class UserController : ControllerBase
 
     //}
 
+    private ApplicationUser CreateApplicationUser(CreateUserDto user)
+    {
+        if (user.Patient != null)
+        {
+            user.Patient.PathLocation = user.PatientPathLocation;
+            user.Patient.TrajectId = user.TrajectId ?? 0; // Fix: Ensure it's never null
+        }
+
+        return new ApplicationUser
+        {
+            Id = user.Id ?? 0,
+            UserName = user.Username,
+            Email = user.Username,
+            PatienId = user.PatienId,
+            Patient = user.Patient,
+        };
+    }
     private CreateUserDto UserDto(ApplicationUser user)
     {
         return new CreateUserDto
