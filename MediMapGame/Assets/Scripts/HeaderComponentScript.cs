@@ -26,21 +26,27 @@ public class HeaderComponentScript : MonoBehaviour
 
     public void LoadHomeScreen()
     {
-        SceneManager.LoadScene("HomeScreenScene");
+        SceneManager.LoadScene("HomeScreenScene", LoadSceneMode.Single);
     }
     public void LoadProfile()
     {
         if (APIManager.Instance.isLogedIn)
         {
-            SceneManager.LoadScene("ProfileScene");
+            SceneManager.LoadScene("ProfileScene", LoadSceneMode.Single);
         }
         else
         {
-            SceneManager.LoadScene("LoginScene");
+            SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
         }
     }
     public void LoadLogBook()
     {
-        SceneManager.LoadScene("LogBookScene");
+        SceneManager.LoadScene("LogBookScene", LoadSceneMode.Single);
+    }
+    public void Logout()
+    {
+        SessionManager.Instance.Clear();
+        APIManager.Instance.Clear();
+        SceneManager.LoadScene("LoginScene", LoadSceneMode.Single);
     }
 }

@@ -345,9 +345,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ProfileSceneScript, Assembly-CSharp
-        m_MethodName: OnExitSceneClicked
+      - m_Target: {fileID: -3881163558911053489}
+        m_TargetAssemblyTypeName: HeaderComponentScript, Assembly-CSharp
+        m_MethodName: Logout
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

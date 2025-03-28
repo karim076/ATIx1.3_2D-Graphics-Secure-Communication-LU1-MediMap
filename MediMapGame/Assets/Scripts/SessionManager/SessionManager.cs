@@ -47,6 +47,12 @@ namespace Assets.Scripts.SessionManager
         {
             StartCoroutine(LoadAvatar(patientId));
         }
+        public void Clear()
+        {
+            PatientId = 0;
+            UserId = 0;
+            AvatarName = null;
+        }
 
         private IEnumerator LoadAvatar(int patientId)
         {
