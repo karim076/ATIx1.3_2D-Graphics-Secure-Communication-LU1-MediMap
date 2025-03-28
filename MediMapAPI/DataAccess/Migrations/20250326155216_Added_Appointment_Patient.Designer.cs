@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250322144224_Initial_Migration")]
-    partial class Initial_Migration
+    [Migration("20250326155216_Added_Appointment_Patient")]
+    partial class Added_Appointment_Patient
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,6 +111,9 @@ namespace DataAccess.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PatienId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -133,6 +136,8 @@ namespace DataAccess.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("PatienId");
 
                     b.ToTable("User", "MediMap");
                 });
@@ -238,28 +243,6 @@ namespace DataAccess.Migrations
                     b.ToTable("Arts", "MediMap");
                 });
 
-            modelBuilder.Entity("Models.Model.Avatar", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AvatarName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PatientId");
-
-                    b.ToTable("Avatars", "MediMap");
-                });
-
             modelBuilder.Entity("Models.Model.LogBook", b =>
                 {
                     b.Property<int>("Id")
@@ -325,10 +308,23 @@ namespace DataAccess.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<DateTime>("AfspraakDatum")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("ArtsId")
                         .HasColumnType("int");
 
+                    b.Property<string>("AvatarNaam")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("GeboorteDatum")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("OuderVoogdId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PathLocation")
                         .HasColumnType("int");
 
                     b.Property<int>("TrajectId")
@@ -361,6 +357,9 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("AfspraakDatum")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("ArtsId")
+                        .HasColumnType("int");
+
                     b.Property<string>("BehandelPlan")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -381,6 +380,8 @@ namespace DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ArtsId");
 
                     b.HasIndex("PatientId");
 
@@ -462,6 +463,15 @@ namespace DataAccess.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Models.ApplicationUser", b =>
+                {
+                    b.HasOne("Models.Model.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatienId");
+
+                    b.Navigation("Patient");
+                });
+
             modelBuilder.Entity("Models.ApplicationUserClaim", b =>
                 {
                     b.HasOne("Models.ApplicationUser", "User")
@@ -514,17 +524,6 @@ namespace DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Models.Model.Avatar", b =>
-                {
-                    b.HasOne("Models.Model.Patient", "Patient")
-                        .WithMany()
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Patient");
-                });
-
             modelBuilder.Entity("Models.Model.LogBook", b =>
                 {
                     b.HasOne("Models.Model.Patient", "Patient")
@@ -564,11 +563,19 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Models.Model.ProfileInformation", b =>
                 {
+                    b.HasOne("Models.Model.Arts", "Arts")
+                        .WithMany()
+                        .HasForeignKey("ArtsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Models.Model.Patient", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Arts");
 
                     b.Navigation("Patient");
                 });

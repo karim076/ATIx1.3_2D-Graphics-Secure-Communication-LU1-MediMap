@@ -1959,6 +1959,14 @@ MonoBehaviour:
       m_Calls: []
 --- !u!114 &1118508827
 MonoBehaviour:
+=======
+  videoPlayer: {fileID: 547098301}
+  videoScreen: {fileID: 1536527829}
+  autoplay: 1
+  _avatar: {fileID: 1015094025}
+  renderTexture: {fileID: 8400000, guid: 8d30e7e83453d9d43b1daec99bc68979, type: 2}
+--- !u!4 &1070487195
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}

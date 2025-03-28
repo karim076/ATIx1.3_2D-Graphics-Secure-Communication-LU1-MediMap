@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial_Migration : Migration
+    public partial class Initial_Migraion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -74,30 +74,6 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
-                schema: "MediMap",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
-                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RefreshTokenExpiry = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_User", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ZorgMomnet",
                 schema: "MediMap",
                 columns: table => new
@@ -145,7 +121,9 @@ namespace DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     VoorNaam = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    AvatarNaam = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AchterNaam = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PathLocation = table.Column<int>(type: "int", nullable: false),
                     OuderVoogdId = table.Column<int>(type: "int", nullable: false),
                     TrajectId = table.Column<int>(type: "int", nullable: false),
                     ArtsId = table.Column<int>(type: "int", nullable: true)
@@ -172,6 +150,124 @@ namespace DataAccess.Migrations
                         column: x => x.TrajectId,
                         principalSchema: "MediMap",
                         principalTable: "Traject",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TrajectZorgMoment",
+                schema: "MediMap",
+                columns: table => new
+                {
+                    TrajectID = table.Column<int>(type: "int", nullable: false),
+                    ZorgMomentID = table.Column<int>(type: "int", nullable: false),
+                    Volgorde = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TrajectZorgMoment", x => new { x.TrajectID, x.ZorgMomentID });
+                    table.ForeignKey(
+                        name: "FK_TrajectZorgMoment_Traject_TrajectID",
+                        column: x => x.TrajectID,
+                        principalSchema: "MediMap",
+                        principalTable: "Traject",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TrajectZorgMoment_ZorgMomnet_ZorgMomentID",
+                        column: x => x.ZorgMomentID,
+                        principalSchema: "MediMap",
+                        principalTable: "ZorgMomnet",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LogBooks",
+                schema: "MediMap",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Log = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Place = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PatientID = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LogBooks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LogBooks_Patient_PatientID",
+                        column: x => x.PatientID,
+                        principalSchema: "MediMap",
+                        principalTable: "Patient",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProfileInformation",
+                schema: "MediMap",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Naam = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    GeboorteDatum = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NaamDokter = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BehandelPlan = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AfspraakDatum = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PatientId = table.Column<int>(type: "int", nullable: false),
+                    ArtsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProfileInformation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProfileInformation_Arts_ArtsId",
+                        column: x => x.ArtsId,
+                        principalSchema: "MediMap",
+                        principalTable: "Arts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProfileInformation_Patient_PatientId",
+                        column: x => x.PatientId,
+                        principalSchema: "MediMap",
+                        principalTable: "Patient",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                schema: "MediMap",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    PatienId = table.Column<int>(type: "int", nullable: true),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshTokenExpiry = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_User_Patient_PatienId",
+                        column: x => x.PatienId,
+                        principalSchema: "MediMap",
+                        principalTable: "Patient",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -270,112 +366,6 @@ namespace DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "TrajectZorgMoment",
-                schema: "MediMap",
-                columns: table => new
-                {
-                    TrajectID = table.Column<int>(type: "int", nullable: false),
-                    ZorgMomentID = table.Column<int>(type: "int", nullable: false),
-                    Volgorde = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TrajectZorgMoment", x => new { x.TrajectID, x.ZorgMomentID });
-                    table.ForeignKey(
-                        name: "FK_TrajectZorgMoment_Traject_TrajectID",
-                        column: x => x.TrajectID,
-                        principalSchema: "MediMap",
-                        principalTable: "Traject",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TrajectZorgMoment_ZorgMomnet_ZorgMomentID",
-                        column: x => x.ZorgMomentID,
-                        principalSchema: "MediMap",
-                        principalTable: "ZorgMomnet",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Avatars",
-                schema: "MediMap",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AvatarName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PatientId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Avatars", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Avatars_Patient_PatientId",
-                        column: x => x.PatientId,
-                        principalSchema: "MediMap",
-                        principalTable: "Patient",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LogBooks",
-                schema: "MediMap",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Log = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Place = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PatientID = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LogBooks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_LogBooks_Patient_PatientID",
-                        column: x => x.PatientID,
-                        principalSchema: "MediMap",
-                        principalTable: "Patient",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProfileInformation",
-                schema: "MediMap",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Naam = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    GeboorteDatum = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    NaamDokter = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BehandelPlan = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AfspraakDatum = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PatientId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProfileInformation", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProfileInformation_Patient_PatientId",
-                        column: x => x.PatientId,
-                        principalSchema: "MediMap",
-                        principalTable: "Patient",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Avatars_PatientId",
-                schema: "MediMap",
-                table: "Avatars",
-                column: "PatientId");
-
             migrationBuilder.CreateIndex(
                 name: "IX_LogBooks_PatientID",
                 schema: "MediMap",
@@ -399,6 +389,12 @@ namespace DataAccess.Migrations
                 schema: "MediMap",
                 table: "Patient",
                 column: "TrajectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProfileInformation_ArtsId",
+                schema: "MediMap",
+                table: "ProfileInformation",
+                column: "ArtsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProfileInformation_PatientId",
@@ -425,6 +421,12 @@ namespace DataAccess.Migrations
                 schema: "MediMap",
                 table: "TrajectZorgMoment",
                 column: "ZorgMomentID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_PatienId",
+                schema: "MediMap",
+                table: "User",
+                column: "PatienId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -456,10 +458,6 @@ namespace DataAccess.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Avatars",
-                schema: "MediMap");
-
             migrationBuilder.DropTable(
                 name: "LogBooks",
                 schema: "MediMap");
@@ -493,10 +491,6 @@ namespace DataAccess.Migrations
                 schema: "MediMap");
 
             migrationBuilder.DropTable(
-                name: "Patient",
-                schema: "MediMap");
-
-            migrationBuilder.DropTable(
                 name: "ZorgMomnet",
                 schema: "MediMap");
 
@@ -506,6 +500,10 @@ namespace DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "User",
+                schema: "MediMap");
+
+            migrationBuilder.DropTable(
+                name: "Patient",
                 schema: "MediMap");
 
             migrationBuilder.DropTable(

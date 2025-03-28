@@ -32,6 +32,8 @@ namespace MediMapAPI.Controllers
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
+        
+
         [HttpPost("Login")]
         [AllowAnonymous]
         public async Task<ActionResult<string>> CreateToken(UserAuthenication user)
@@ -76,13 +78,13 @@ namespace MediMapAPI.Controllers
                 // Check if the username already exists
                 if (await _userRepository.UserExistsAsync(user.Username))
                 {
-                    return Conflict(new { message = "Username already exists." });
+                    return Conflict(new { message = "Gebruikersnaam bestaat al." });
                 }
                 // Check if the email is already registered
                 var existingUser = await _userManager.FindByEmailAsync(user.Email);
                 if (existingUser != null)
                 {
-                    return BadRequest(new { message = "Email is already registered." });
+                    return BadRequest(new { message = "Email is al in gebruik." });
                 }
 
                 // Create the new user
@@ -94,7 +96,8 @@ namespace MediMapAPI.Controllers
                     NormalizedEmail = user.Email?.ToUpper(),
                     PasswordHash = SecureHash.Hash(user.Password), // Hash the password
                     RefreshToken = "", // Explicitly set to null = ""
-                    RefreshTokenExpiry = null // Explicitly set to NULL
+                    RefreshTokenExpiry = null, // Explicitly set to NULL
+                    PatienId = 0 // Tijdelijk
                 };
 
                 await _userManager.CreateAsync(newUser);
@@ -106,7 +109,7 @@ namespace MediMapAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while creating the user." });
+                return StatusCode(500, new { message = "Er is een fout opgetreden bij het aanmaken van de gebruiker." });
             }
         }
         [HttpPost("RefreshToken")]

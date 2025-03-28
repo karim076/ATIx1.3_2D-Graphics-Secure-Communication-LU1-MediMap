@@ -1,3 +1,4 @@
+using Assets.Scripts.SessionManager;
 using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -14,8 +15,13 @@ public class MovableAvatarScript : MonoBehaviour
     private void Start()
     {
         homeScreenScript = GameObject.Find("EventSystem").GetComponent<HomeScreenScript>();
-        ResetAvatarPosition();
-        SetLocation(0, 0);
+        //ResetAvatarPosition();
+        //SetLocation(0, 0);
+
+        if (SessionManager.Instance.AvatarName != null)
+        {
+            GameObject.Find("MovableAvatar").GetComponent<SpriteRenderer>().sprite = SessionManager.Instance.AvatarName;
+        }
     }
 
     public void MoveAvatar(int newPosition, int route, Transform newLocation)
@@ -54,10 +60,14 @@ public class MovableAvatarScript : MonoBehaviour
 
     }
 
+    public void SetAvatarFromDataBase(Vector3 location)
+    {
+        transform.position = location;
+
+    }
     public void ResetAvatarPosition()
     {
         transform.position = homeScreenScript.RoadTiles[0].transform.position;
-
     }
     public void MoveAvatarToLocation(Transform location)
     {

@@ -15,37 +15,53 @@ public class ProfileSceneScript : MonoBehaviour
     {
         SetProfileData();
     }
-    public void SaveAvatar()
+    public void SaveAvatar(AvatarName avatarNaam)
     {
-
-    }
-
-    public void SaveProfileData(ProfileInformation profileInformation)
-    {
-        StartCoroutine(APIManager.Instance.SendRequest($"api/ProfileInformation/{1}", "PUT", profileInformation, (response) =>
+        StartCoroutine(APIManager.Instance.SendRequest($"api/Patient/avatar/{SessionManager.Instance.PatientId}", "PUT", avatarNaam, (response) =>
         {
             Debug.Log(response);
+            var json = JsonConvert.DeserializeObject<AvatarName>(response);
 
-            _profileSceneUI.SetProfileData(profileInformation.naam, profileInformation.geboorteDatum.ToShortDateString(), profileInformation.afspraakDatum.ToShortDateString(), profileInformation.naamDokter, profileInformation.behandelPlan);
+            if (json != null)
+            {
+                Sprite sprite = Resources.Load<Sprite>($"Art/{json.avatar}");
+                SessionManager.Instance.SetAvatarName(sprite);
+            }
+        }, (error) =>
+        {
+            if (error != null)
+            {
+                Debug.Log(error);
+            }
+        }));
+    }
+
+    public void SaveProfileData(Patient patient)
+    {
+        StartCoroutine(APIManager.Instance.SendRequest($"api/Patient/{SessionManager.Instance.PatientId}", "PUT", patient, (response) =>
+        {
+            Debug.Log(response);
+            var profile = JsonConvert.DeserializeObject<Patient>(response);
+
+            _profileSceneUI.SetProfileData(profile.VoorNaam, profile.AchterNaam, profile.GeboorteDatum.ToShortDateString(), profile.Afspraakatum.ToShortDateString(), profile.ArtsNaam, profile.TrajectNaam);
 
         }, (error) =>
         {
             if (error != null)
             {
-                var json = JsonConvert.DeserializeObject<ErrorMessage>(error);
-                if (json != null) { Debug.LogError(json.message); }
+                Debug.Log(error);
             }
         }));
     }
 
     public void SetProfileData()
     {
-        StartCoroutine(APIManager.Instance.SendRequest($"api/ProfileInformation/{1}", "GET", null, (response) =>
+        StartCoroutine(APIManager.Instance.SendRequest($"api/Patient/{SessionManager.Instance.PatientId}", "GET", null, (response) =>
         {
-            var profile = JsonConvert.DeserializeObject<ProfileInformation>(response);
+            var profile = JsonConvert.DeserializeObject<Patient>(response);
             if(profile != null)
             {
-                _profileSceneUI.SetProfileData(profile.naam, profile.geboorteDatum.ToShortDateString(), profile.afspraakDatum.ToShortDateString(), profile.naamDokter, profile.behandelPlan);
+                _profileSceneUI.SetProfileData(profile.VoorNaam, profile.AchterNaam, profile.GeboorteDatum.ToShortDateString(), profile.Afspraakatum.ToShortDateString(), profile.ArtsNaam, profile.TrajectNaam);
             }
         }));
     }

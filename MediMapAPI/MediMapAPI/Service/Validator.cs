@@ -7,37 +7,38 @@ namespace MediMapAPI.Service
         public static string ValidateUserCredentials(string username, string password, string email)
         {
             if (string.IsNullOrWhiteSpace(username))
-                return "Username cannot be empty.";
+                return "Gebruikersnaam mag niet leeg zijn.";
 
             if (!Regex.IsMatch(username, @"^[a-zA-Z0-9]+$"))
-                return "Username must only contain letters and numbers.";
+                return "Gebruikersnaam mag alleen letters en cijfers bevatten.";
 
             if (string.IsNullOrWhiteSpace(password))
-                return "Password cannot be empty.";
+                return "Wachtwoord mag niet leeg zijn.";
 
             if (password.Length < 10)
-                return "Password must be at least 10 characters long.";
+                return "Wachtwoord moet minimaal 10 tekens lang zijn.";
 
-            if (!Regex.IsMatch(password, @"[a-z]")) return "Password must contain at least one lowercase letter.";
-            if (!Regex.IsMatch(password, @"[A-Z]")) return "Password must contain at least one uppercase letter.";
-            if (!Regex.IsMatch(password, @"\d")) return "Password must contain at least one number.";
-            if (!Regex.IsMatch(password, @"[^a-zA-Z0-9]")) return "Password must contain at least one special character.";
+            if (!Regex.IsMatch(password, @"[a-z]")) return "Wachtwoord moet minimaal één kleine letter bevatten.";
+            if (!Regex.IsMatch(password, @"[A-Z]")) return "Wachtwoord moet minimaal één hoofdletter bevatten.";
+            if (!Regex.IsMatch(password, @"\d")) return "Wachtwoord moet minimaal één cijfer bevatten.";
+            if (!Regex.IsMatch(password, @"[^a-zA-Z0-9]")) return "Wachtwoord moet minimaal één speciaal teken bevatten.";
 
             if (string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-                return "Invalid email format.";
+                return "Ongeldig e-mailformaat.";
 
-            return null; // No errors
+            return null; // Geen fouten
         }
+
         // Helper method to validate credentials
         public static string ValidateCredentials(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username))
-                return "Username cannot be empty.";
+                return "Gebruikersnaam mag niet leeg zijn.";
 
             if (string.IsNullOrWhiteSpace(password))
-                return "Password cannot be empty.";
+                return "Wachtwoord mag niet leeg zijn.";
 
-            return null; // No errors
+            return null; // Geen fouten
         }
     }
 }

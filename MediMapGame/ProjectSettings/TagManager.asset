@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Pathway
+  - TrajectText
   layers:
   - Default
   - TransparentFX

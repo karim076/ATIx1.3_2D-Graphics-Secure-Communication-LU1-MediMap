@@ -3,12 +3,25 @@ using UnityEngine.Video;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DG.Tweening;
+using Assets.Scripts.SessionManager;
 
 public class EnhancedVideoPlayer : MonoBehaviour
 {
     [Header("Video Settings")]
     public VideoPlayer videoPlayer;
     public RawImage videoScreen;
+    
+    public RawImage videoScreen; // Waar de video wordt weergegeven
+    public bool autoplay = true; // Auto-play in- of uitschakelen
+    private bool isPaused = false;
+
+    // Dynamisch gegenereerde UI-componenten
+    private Slider timeSlider; // Tijdlijn-slider voor vooruitspoelen
+    private Text timeText; // Tekst die de huidige tijd van de video weergeeft
+
+    [SerializeField] private Image _avatar;
+
+    // RenderTexture voor het weergeven van de video op de RawImage
     public RenderTexture renderTexture;
 
     [Header("UI Elements")]
@@ -38,6 +51,15 @@ public class EnhancedVideoPlayer : MonoBehaviour
         videoPlayer.playOnAwake = false;
         videoPlayer.source = VideoSource.VideoClip;
         videoPlayer.isLooping = false;
+
+        if (SessionManager.Instance.AvatarName != null)
+        {
+            _avatar.GetComponent<Image>().sprite = SessionManager.Instance.AvatarName;
+        }
+        // Initialisatie van de video-player
+        videoPlayer.loopPointReached += OnVideoEnd; // Event voor het einde van de video
+        videoPlayer.playOnAwake = false; // Zet autoplay uit bij opstarten, tenzij expliciet aangevinkt
+
 
         // 2. Setup video output
         videoPlayer.renderMode = VideoRenderMode.RenderTexture;

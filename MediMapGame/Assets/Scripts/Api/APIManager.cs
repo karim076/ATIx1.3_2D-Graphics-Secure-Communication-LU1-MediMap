@@ -34,6 +34,7 @@ namespace MediMap.Scripts.Api
             }
         }
         public string userName { get; set; }
+        public int userId { get; set; }
         public bool isLogedIn = false;
         public static APIManager Instance
         {
@@ -52,7 +53,7 @@ namespace MediMap.Scripts.Api
             }
         }
 
-        private string apiBaseUrl = "https://localhost:44340/";
+        private string apiBaseUrl = "https://localhost:5001/";
 
         private void Awake()
         {
@@ -76,6 +77,12 @@ namespace MediMap.Scripts.Api
             authTokens = newAuthTokens;
         }
 
+        public void Clear()
+        {
+            authTokens = null;
+            isLogedIn = false;
+        }
+
         public IEnumerator RefreshToken()
         {
             if (authTokens == null)
@@ -93,7 +100,7 @@ namespace MediMap.Scripts.Api
             string jsonData = JsonConvert.SerializeObject(refreshTokenRequest);
             byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonData);
 
-            using (UnityWebRequest request = new UnityWebRequest("https://localhost:7038/Account/RefreshToken", "POST"))
+            using (UnityWebRequest request = new UnityWebRequest("https://localhost:5001/Account/RefreshToken", "POST"))
             {
                 request.uploadHandler = new UploadHandlerRaw(jsonBytes);
                 request.downloadHandler = new DownloadHandlerBuffer();
