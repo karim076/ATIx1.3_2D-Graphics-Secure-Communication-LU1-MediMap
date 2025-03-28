@@ -26,40 +26,58 @@ namespace MediMapAPI.Service
 
         public async Task<RefreshTokenResponse> AuthenticateUserAsync(string username, string password)
         {
-            var user = await _userManager.FindByNameAsync(username);
-            if (user == null || !SecureHash.Verify(password, user.PasswordHash))
+            
+            try
             {
-                return null; // Invalid credentials
+                ApplicationUser user;
+                try
+                {
+                    user = await _userManager.FindByNameAsync(username);
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
+
+                if (user == null || !SecureHash.Verify(password, user.PasswordHash))
+                {
+                    return null; // Invalid credentials
+                }
+
+                var userRoles = await _userManager.GetRolesAsync(user);
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+
+                foreach (var role in userRoles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+                }
+
+                var token = _tokenService.GenerateToken(claims);
+                var refreshToken = _tokenService.GenerateRefreshToken();
+                // validate token and refresh token
+                if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(refreshToken))
+                {
+                    return null;
+                }
+
+                // Save the refresh token to the database
+                user.RefreshToken = refreshToken;
+                user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7); // Set refresh token expiry
+                await _userManager.UpdateAsync(user);
+                // create refresh token response
+                var response = new RefreshTokenResponse(token, refreshToken, user.Id, (int)user.PatienId);
+                return (response);
             }
-
-            var userRoles = await _userManager.GetRolesAsync(user);
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, username),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            };
-
-            foreach (var role in userRoles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
-
-            var token = _tokenService.GenerateToken(claims);
-            var refreshToken = _tokenService.GenerateRefreshToken();
-            // validate token and refresh token
-            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(refreshToken))
+            catch(Exception ex)
             {
                 return null;
             }
-
-            // Save the refresh token to the database
-            user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7); // Set refresh token expiry
-            await _userManager.UpdateAsync(user);
-            // create refresh token response
-            var response = new RefreshTokenResponse(token, refreshToken, user.Id, user.PatienId);
-            return (response);
+            
         }
 
         public async Task<RefreshTokenResponse> RefreshUserTokenAsync(string username)
@@ -109,7 +127,7 @@ namespace MediMapAPI.Service
             }
 
             // Create refresh token response
-            var response = new RefreshTokenResponse(token, refreshToken, user.Id, user.PatienId);
+            var response = new RefreshTokenResponse(token, refreshToken, user.Id, (int)user.PatienId);
 
             return response;
         }

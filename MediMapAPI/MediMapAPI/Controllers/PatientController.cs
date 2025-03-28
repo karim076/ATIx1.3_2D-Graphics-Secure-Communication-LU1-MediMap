@@ -11,6 +11,7 @@ namespace MediMapAPI.Controllers
     //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PatientController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
