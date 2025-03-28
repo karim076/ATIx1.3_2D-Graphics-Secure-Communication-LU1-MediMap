@@ -53,7 +53,7 @@ namespace MediMap.Scripts.Api
             }
         }
 
-        private string apiBaseUrl = "https://localhost:44340/";
+        private string apiBaseUrl = "https://localhost:5001/";
 
         private void Awake()
         {
@@ -100,7 +100,7 @@ namespace MediMap.Scripts.Api
             string jsonData = JsonConvert.SerializeObject(refreshTokenRequest);
             byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonData);
 
-            using (UnityWebRequest request = new UnityWebRequest("https://localhost:44340/Account/RefreshToken", "POST"))
+            using (UnityWebRequest request = new UnityWebRequest("https://localhost:5001/Account/RefreshToken", "POST"))
             {
                 request.uploadHandler = new UploadHandlerRaw(jsonBytes);
                 request.downloadHandler = new DownloadHandlerBuffer();
