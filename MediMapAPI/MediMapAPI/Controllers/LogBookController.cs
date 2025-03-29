@@ -57,7 +57,8 @@ namespace MediMapAPI.Controllers
                 {
                     Place = log.Place,
                     Date = log.Date,
-                    Log = log.Note
+                    Note = log.Note,
+                    Id = log.Id
                 });
             }
 

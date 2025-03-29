@@ -1,11 +1,15 @@
 using Assets.models;
 using Assets.Scripts.Api.LogBookControllerConnection;
+using Assets.Scripts.Models;
+using MediMap.Scripts.Api;
 using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
 
 public class CreatePanelScene : MonoBehaviour
 {
@@ -13,6 +17,7 @@ public class CreatePanelScene : MonoBehaviour
     public GameObject createPanel;
     public GameObject logPanel;
     public GameObject errorPanel;
+    public GameObject inputfieldErroPanel;
 
     [Header("Prefabs")]
     public GameObject prefab;
@@ -23,6 +28,7 @@ public class CreatePanelScene : MonoBehaviour
     public TMP_InputField place;
     public TMP_InputField note;
 
+
     [Header("Canvas")]
     public GameObject canvas;
 
@@ -31,17 +37,15 @@ public class CreatePanelScene : MonoBehaviour
 
     public LogbookControllerConnection logbookControllerConnection;
 
-    public List<LogModel> models = new List<LogModel>();
-
     public void Start()
     {
         createPanel.SetActive(false);
         errorPanel.SetActive(false);
+        inputfieldErroPanel.SetActive(false);
         logPanel.SetActive(true);
         scrollbar.SetActive(true);
+        StartCoroutine(logbookControllerConnection.GetAllLogs());
     }
-
-    
 
     public void OpenCreatePanel()
     {
@@ -49,6 +53,7 @@ public class CreatePanelScene : MonoBehaviour
         logPanel.SetActive(false);
         scrollbar.SetActive(false);
         errorPanel.SetActive(false);
+        inputfieldErroPanel.SetActive(false);
     }
 
 
@@ -65,10 +70,14 @@ public class CreatePanelScene : MonoBehaviour
         {
             Debug.Log("Voer een geldige datum in");
             errorPanel.SetActive(true);
+            createPanel.SetActive(false);
+            logPanel.SetActive(false);
+            scrollbar.SetActive(false);
+            inputfieldErroPanel.SetActive(false);
             return;
         }
 
-        var newModel = new LogModel
+        var newModel = new LogModelDTO
         {
             PatientId = 1,
             place = place.text,
@@ -76,11 +85,10 @@ public class CreatePanelScene : MonoBehaviour
             date = datee
         };
 
-        //logbookControllerConnection.createPanelScene = this;
         logbookControllerConnection.SaveLogData(newModel);
-        models.Add(newModel);
-        LoadLogs(models);
     }
+
+
     public void LoadLogs(List<LogModel> models)
     {
         foreach (Transform child in gridContent)
@@ -96,16 +104,13 @@ public class CreatePanelScene : MonoBehaviour
             TMP_Text dateText = modelItem.transform.Find("Date").GetComponent<TMP_Text>();
             TMP_Text placeText = modelItem.transform.Find("Place").GetComponent<TMP_Text>();
             TMP_Text noteText = modelItem.transform.Find("Note").GetComponent<TMP_Text>();
+            Button deleteButton = modelItem.transform.Find("DeleteButton").GetComponent<Button>();
 
             dateText.text = model.date?.ToString("dd/MM/yyyy");
             placeText.text = model.place;
             noteText.text = model.note;
+            deleteButton.onClick.AddListener(() => logbookControllerConnection.DeleteLog(model));
         }
     }
-
-    //public void SaveLogData()
-    //{
-    //    logbookControllerConnection.createPanelScene = this;
-    //    logbookControllerConnection.SaveLogData();
-    //}
 }
+

@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.models
+namespace Assets.Scripts.Models
 {
-    [Serializable]
-    public class LogModel
+    public class LogModelDTO
     {
-        public int id;
         public DateTime? date;
         public string place;
         public string note;
+        public int PatientId;
     }
 }

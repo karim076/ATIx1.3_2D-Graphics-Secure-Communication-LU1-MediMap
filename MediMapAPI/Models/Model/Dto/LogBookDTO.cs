@@ -8,12 +8,12 @@ namespace Models.Model.Dto
 {
     public class LogBookDTO
     {
-        public int PatientId { get; set; }
-
         public string Place { get; set; }
 
         public DateTime? Date { get; set; }
 
-        public string Log { get; set; }
+        public string Note { get; set; }
+
+        public int Id { get; set; }
     }
 }
