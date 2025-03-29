@@ -11,14 +11,7 @@ public class EnhancedVideoPlayer : MonoBehaviour
     public VideoPlayer videoPlayer;
     public RawImage videoScreen;
     
-    public RawImage videoScreen; // Waar de video wordt weergegeven
     public bool autoplay = true; // Auto-play in- of uitschakelen
-    private bool isPaused = false;
-
-    // Dynamisch gegenereerde UI-componenten
-    private Slider timeSlider; // Tijdlijn-slider voor vooruitspoelen
-    private Text timeText; // Tekst die de huidige tijd van de video weergeeft
-
     [SerializeField] private Image _avatar;
 
     // RenderTexture voor het weergeven van de video op de RawImage
