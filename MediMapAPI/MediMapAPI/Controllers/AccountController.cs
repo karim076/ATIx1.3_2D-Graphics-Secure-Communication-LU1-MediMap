@@ -17,7 +17,6 @@ namespace MediMapAPI.Controllers
     public class AccountController : Controller
     {
         private readonly IAuthService _authService;
-
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUnitOfWork _unitOfWork;
 
