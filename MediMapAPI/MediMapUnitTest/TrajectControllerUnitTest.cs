@@ -59,7 +59,7 @@ public class TrajectControllerUnitTest
         var notFoundResult = result.Result as NotFoundObjectResult;
         Assert.IsNotNull(notFoundResult);
 
-        var resultMessage = Deserialize(notFoundResult.Value);
+        var resultMessage = Deserializer.Deserialize(notFoundResult.Value);
 
         Assert.AreEqual("Geen traject gevonden.", resultMessage.message);
         Assert.AreEqual(404, notFoundResult.StatusCode);
@@ -88,7 +88,7 @@ public class TrajectControllerUnitTest
         var badRequestResult = result.Result as BadRequestObjectResult;
         Assert.IsNotNull(badRequestResult);
 
-        var resultMessage = Deserialize(badRequestResult.Value);
+        var resultMessage = Deserializer.Deserialize(badRequestResult.Value);
 
         Assert.AreEqual("Fout fout fout", resultMessage.message);
         Assert.AreEqual(400, badRequestResult.StatusCode);
@@ -119,7 +119,7 @@ public class TrajectControllerUnitTest
         // Assert
         var notFoundResult = result.Result as NotFoundObjectResult;
         Assert.IsNotNull(notFoundResult);
-        var resultMessage = Deserialize(notFoundResult.Value);
+        var resultMessage = Deserializer.Deserialize(notFoundResult.Value);
         Assert.AreEqual("Geen traject gevonden.", resultMessage.message);
         Assert.AreEqual(404, notFoundResult.StatusCode);
     }
@@ -145,20 +145,9 @@ public class TrajectControllerUnitTest
         // Assert
         var badRequestResult = result.Result as BadRequestObjectResult;
         Assert.IsNotNull(badRequestResult);
-        var resultMessage = Deserialize(badRequestResult.Value);
+        var resultMessage = Deserializer.Deserialize(badRequestResult.Value);
         Assert.AreEqual("Fout fout fout", resultMessage.message);
         Assert.AreEqual(400, badRequestResult.StatusCode);
     }
-
-
-    private Error Deserialize(object value)
-    {
-        var sjson = JsonConvert.SerializeObject(value);
-        var json = JsonConvert.DeserializeObject<Error>(sjson);
-        return json;
-    }
 }
-public class Error
-{
-    public string message = string.Empty;
-}
+
