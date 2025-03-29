@@ -7,7 +7,6 @@ using Models.Model.Dto;
 using Moq;
 using Newtonsoft.Json;
 using System.Linq.Expressions;
-using System.Text.Json;
 
 namespace MediMapUnitTest;
 

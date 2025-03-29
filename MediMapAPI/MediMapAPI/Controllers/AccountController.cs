@@ -19,17 +19,15 @@ namespace MediMapAPI.Controllers
         private readonly IAuthService _authService;
 
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly UserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public AccountController(IAuthService authService,
                               UserManager<ApplicationUser> userManager,
-                              UserRepository userRepository,
                               IUnitOfWork unitOfWork)
         {
             _authService = authService ?? throw new ArgumentNullException(nameof(authService));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         
@@ -76,7 +74,7 @@ namespace MediMapAPI.Controllers
                 }
 
                 // Check if the username already exists
-                if (await _userRepository.UserExistsAsync(user.Username))
+                if (await _unitOfWork.ApplicationUserRepository.AnyAsync(u => u.UserName == user.Username))
                 {
                     return Conflict(new { message = "Gebruikersnaam bestaat al." });
                 }
