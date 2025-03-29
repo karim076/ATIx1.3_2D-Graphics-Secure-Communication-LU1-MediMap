@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.Model
+namespace Models.Model.Dto
 {
-    public class ProfileInformation
+    public class ProfileInformationDto
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]
@@ -30,16 +28,6 @@ namespace Models.Model
         public DateTime AfspraakDatum { get; set; }
 
         public int PatientId { get; set; }
-        [Required]
-        [ForeignKey("PatientId")]
-        public Patient? Patient { get; set; }
-
-        [Required]
-        [ForeignKey("ArtsId")]
-        public Arts? Arts { get; set; }
-
-        [Required]
         public int ArtsId { get; set; }
-
     }
 }

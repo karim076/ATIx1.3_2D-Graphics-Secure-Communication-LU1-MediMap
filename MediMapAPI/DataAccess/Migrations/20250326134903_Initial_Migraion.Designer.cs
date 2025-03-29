@@ -4,6 +4,7 @@ using DataAccess.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250326134903_Initial_Migraion")]
+    partial class Initial_Migraion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,7 +111,7 @@ namespace DataAccess.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PatienId")
+                    b.Property<int>("PatienId")
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
@@ -305,18 +308,12 @@ namespace DataAccess.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("AfspraakDatum")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("ArtsId")
                         .HasColumnType("int");
 
                     b.Property<string>("AvatarNaam")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("GeboorteDatum")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("OuderVoogdId")
                         .HasColumnType("int");
@@ -464,7 +461,9 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Models.Model.Patient", "Patient")
                         .WithMany()
-                        .HasForeignKey("PatienId");
+                        .HasForeignKey("PatienId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Patient");
                 });

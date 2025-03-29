@@ -579,7 +579,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1070487194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -595,6 +595,7 @@ MonoBehaviour:
   videoPlayer: {fileID: 547098301}
   videoScreen: {fileID: 1536527829}
   autoplay: 1
+  _avatar: {fileID: 1015094025}
   renderTexture: {fileID: 8400000, guid: 8d30e7e83453d9d43b1daec99bc68979, type: 2}
 --- !u!4 &1070487195
 Transform:
@@ -801,7 +802,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1536527828
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1009,7 +1010,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1667058666
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1196,8 +1197,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1785096084}
   - {fileID: 1711964548}
+  - {fileID: 1785096084}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

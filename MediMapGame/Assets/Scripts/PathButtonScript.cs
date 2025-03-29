@@ -1,31 +1,78 @@
+using Assets.Scripts.Models;
+using Assets.Scripts.SessionManager;
+using MediMap.Scripts.Api;
+using Newtonsoft.Json;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.U2D;
 
 public class PathButtonScript : MonoBehaviour
 {
-    public GameObject MovableAvatar;
+    public int Id;
+    public int Route;
+    //public Transform position;
 
-    private float lastClickTime = 0f;
-    private float doubleClickThreshold = 0.3f;
+    public GameObject MovableAvatar;
 
     void OnMouseDown()
     {
-        MovableAvatar.GetComponent<MovableAvatarScript>().MoveAvatarToLocation(gameObject.transform);
-        
 
-        if (Time.time - lastClickTime < doubleClickThreshold)
+
+        if (MovableAvatar.GetComponent<MovableAvatarScript>().pathPosition == Id && MovableAvatar.GetComponent<MovableAvatarScript>().routePosition == Route)
         {
-            Debug.Log(gameObject.name + " double-clicked!");
-            if (MovableAvatar.transform.position == gameObject.transform.position)
+            if (APIManager.Instance.isLogedIn)
             {
-                SceneManager.LoadScene("LogBookScene");
+                StartCoroutine(UpdatePatientLocation());
             }
+            SceneManager.LoadScene("InfoScene");
         }
-        lastClickTime = Time.time; // Update last click time
+        else
+        {
+            
+            MovableAvatar.GetComponent<MovableAvatarScript>().MoveAvatar(Id, Route, gameObject.transform);
+        }
     }
 
     public void Start()
     {
         MovableAvatar = GameObject.Find("MovableAvatar");
+    }
+
+
+    private IEnumerator UpdatePatientLocation()
+    {
+        int userId = SessionManager.Instance.UserId;
+        UserDto updateUser = new UserDto
+        {
+            Id = userId,
+            Username = APIManager.Instance.userName,
+            PatientPathLocation = Id,
+            TrajectId = Route + 1,
+        };
+        Debug.Log(updateUser.ToString());
+        yield return APIManager.Instance.SendRequest("api/User/" + userId, "PUT", updateUser, response =>
+        {
+            Debug.Log(response);
+        }, error =>
+        {
+
+            // Parse the error response from the API
+            try
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ErrorMessage>(error);
+                if (!string.IsNullOrEmpty(errorResponse?.message))
+                {
+                    // ErrorText("Registration failed: " + errorResponse.message); // Use the API's error message
+                }
+                else
+                {
+                    // ErrorText("Registration failed: " + error); // Fallback to the generic error message
+                }
+            }
+            catch
+            {
+            }
+        });
     }
 }
