@@ -113,6 +113,11 @@ public class PatientControllerUnitTest
         Assert.IsNotNull(okResult);
         Assert.IsInstanceOfType(okResult.Value, typeof(PatientDto));
         Assert.AreEqual(200, okResult.StatusCode);
+
+        var returnedDto = okResult.Value as PatientDto;
+        Assert.IsNotNull(returnedDto);
+        Assert.AreEqual(patientDto.VoorNaam, returnedDto.VoorNaam);
+        Assert.AreEqual(patientDto.AchterNaam, returnedDto.AchterNaam);
     }
     [TestMethod]
     public async Task Put_ReturnsNotFound()
@@ -192,9 +197,90 @@ public class PatientControllerUnitTest
 
         //act
         var result = await _patientController.UpdateAvatar(patientId, avatarName);
+
+        //assert
         Assert.IsNotNull(result);
         var notFoundResult = result.Result as NotFoundObjectResult;
         Assert.IsNotNull(notFoundResult);
         Assert.AreEqual(404, notFoundResult.StatusCode);
+    }
+    [TestMethod]
+    public async Task UpdateAvatar_Exception_RetunsBadRequest()
+    {
+        //arrange
+        var patientId = 1;
+        var avatarName = new AvatarName { Avatar = "test1" };
+        _mockPatientRepository.Setup(p => p.GetAsync(It.IsAny<Expression<Func<Patient, bool>>>(), It.IsAny<string>()))
+            .ThrowsAsync(new Exception());
+        //act
+        var result = await _patientController.UpdateAvatar(patientId, avatarName);
+
+        //assert
+        Assert.IsNotNull(result);
+        var badRequestResult = result.Result as BadRequestObjectResult;
+        Assert.IsNotNull(badRequestResult);
+        Assert.AreEqual(400, badRequestResult.StatusCode);
+    }
+    [TestMethod]
+    public async Task GetAvatar_ReturnOk()
+    {
+        //arrange
+        var patientId = 1;
+        var patient = new Patient { Id = patientId, AvatarNaam = "Monster1" };
+        _mockPatientRepository.Setup(p => p.GetAsync(It.IsAny<Expression<Func<Patient, bool>>>(), It.IsAny<string>()))
+            .ReturnsAsync(patient);
+        //act
+        var result = await _patientController.GetAvatar(patientId);
+        //assert
+        Assert.IsNotNull(result);
+        var okResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okResult);
+        Assert.AreEqual(200, okResult.StatusCode);
+    }
+    [TestMethod]
+    public async Task GetAvatar_NotFound()
+    {
+        //arrange
+        var patientId = 1;
+        Patient patient = null!;
+        _mockPatientRepository.Setup(p => p.GetAsync(It.IsAny<Expression<Func<Patient, bool>>>(), It.IsAny<string>()))
+            .ReturnsAsync(patient);
+        //act
+        var result = await _patientController.GetAvatar(patientId);
+        //assert
+        Assert.IsNotNull(result);
+        var notFoundResult = result.Result as NotFoundObjectResult;
+        Assert.IsNotNull(notFoundResult);
+        Assert.AreEqual(404, notFoundResult.StatusCode);
+    }
+    [TestMethod]
+    public async Task GetAvatar_Exception_ReturnsBadRequest()
+    {
+        //arrange
+        var patientId = 1;
+        _mockPatientRepository.Setup(p => p.GetAsync(It.IsAny<Expression<Func<Patient, bool>>>(), It.IsAny<string>()))
+            .ThrowsAsync(new Exception());
+        //act
+        var result = await _patientController.GetAvatar(patientId);
+        //assert
+        Assert.IsNotNull(result);
+        var badRequestResult = result.Result as BadRequestObjectResult;
+        Assert.IsNotNull(badRequestResult);
+        Assert.AreEqual(400, badRequestResult.StatusCode);
+    }
+    [TestMethod]
+    public async Task GetAvatar_ModelState_NotValid()
+    {
+        //arrange
+        AvatarName avatarName = null!;
+        var patientId = 0;
+        _patientController.ModelState.AddModelError("Id", "Id is verplicht");
+        //act
+        var result = await _patientController.GetAvatar(patientId);
+        //assert
+        Assert.IsNotNull(result);
+        var badRequestResult = result.Result as BadRequestObjectResult;
+        Assert.IsNotNull(badRequestResult);
+        Assert.AreEqual(400, badRequestResult.StatusCode);
     }
 }
