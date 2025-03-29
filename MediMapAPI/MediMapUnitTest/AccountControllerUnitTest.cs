@@ -6,14 +6,10 @@ using MediMapAPI.Service.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Models;
 using Models.Model.Dto;
 using Moq;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
-using System.Security.Cryptography.Xml;
 using static MediMapAPI.Controllers.AccountController;
 using Validator = MediMapAPI.Service.Validator;
 
@@ -222,8 +218,8 @@ public class AccountControllerUnitTest
             Email = "enes@hotmail.com"
         };
         _mockUserRepository.Setup(x => x.AnyAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>())).ReturnsAsync(false);
-        _userManager.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
 
+        _mockUserRepository.Setup(x => x.GetAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>(), It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
         // Act
         var result = await _accountController.CreateAccount(user);
 
@@ -264,7 +260,9 @@ public class AccountControllerUnitTest
             TrajectId = 1,
             Email = "enes@hotmail.com"
         };
-        _userManager.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ThrowsAsync(new Exception());
+        _mockUserRepository.Setup(x => x.AnyAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>())).ThrowsAsync(new Exception());
+        _mockUserRepository.Setup(x => x.GetAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>(), It.IsAny<string>())).ThrowsAsync(new Exception());
+
 
         // Act
         var result = await _accountController.CreateAccount(user);
@@ -275,4 +273,106 @@ public class AccountControllerUnitTest
         var Djson = Deserializer.Deserialize(instance.Value);
         Assert.AreEqual("Er is een fout opgetreden bij het aanmaken van de gebruiker.", Djson.message);
     }
+    [TestMethod]
+    public async Task RefreshToken_InvalidToken_ReturnsBadRequest()
+    {
+        // Arrange
+        var request = new RefreshTokenRequest { RefreshToken = "invalid_token" };
+
+        _mockUserRepository.Setup(x => x.GetAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>(), It.IsAny<string>())).ReturnsAsync((ApplicationUser)null);
+
+
+        // Act
+        var result = await _accountController.RefreshToken(request);
+
+        // Assert
+        Assert.IsInstanceOfType(result.Result, typeof(BadRequestObjectResult));
+        var badRequestResult = (BadRequestObjectResult)result.Result;
+        Assert.AreEqual("Invalid refresh token.", badRequestResult.Value);
+    }
+
+    [TestMethod]
+    public async Task RefreshToken_ExpiredToken_ReturnsBadRequest()
+    {
+        // Arrange
+        var request = new RefreshTokenRequest { RefreshToken = "expired_token" };
+        var user = new ApplicationUser
+        {
+            RefreshToken = "expired_token",
+            RefreshTokenExpiry = DateTime.UtcNow.AddDays(-1) 
+        };
+
+        _mockUserRepository.Setup(x => x.GetAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>(), It.IsAny<string>())).ReturnsAsync(user);
+
+
+        // Act
+        var result = await _accountController.RefreshToken(request);
+
+        // Assert
+        Assert.IsInstanceOfType(result.Result, typeof(BadRequestObjectResult));
+        var badRequestResult = (BadRequestObjectResult)result.Result;
+        Assert.AreEqual("Invalid refresh token.", badRequestResult.Value);
+    }
+
+    [TestMethod]
+    public async Task RefreshToken_ValidToken_ReturnsNewTokens()
+    {
+        // Arrange
+        var request = new RefreshTokenRequest { RefreshToken = "valid_token" };
+        var user = new ApplicationUser
+        {
+            UserName = "testuser",
+            RefreshToken = "valid_token",
+            RefreshTokenExpiry = DateTime.UtcNow.AddDays(1)
+        };
+
+        _mockUserRepository.Setup(x => x.GetAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>(), It.IsAny<string>())).ReturnsAsync(user);
+
+
+
+        var expectedResponse = new RefreshTokenResponse("dfjdjfdf", "abcdefghiyklm", 1, 1);
+  
+
+        _authService.Setup(x => x.RefreshUserTokenAsync(user.UserName))
+                    .ReturnsAsync(expectedResponse);
+
+        // Act
+        var result = await _accountController.RefreshToken(request);
+
+        // Assert
+        Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
+        var okResult = (OkObjectResult)result.Result;
+        var response = (RefreshTokenResponse)okResult.Value;
+        Assert.AreEqual(expectedResponse.Token, response.Token);
+        Assert.AreEqual(expectedResponse.RefreshToken, response.RefreshToken);
+    }
+
+    [TestMethod]
+    public async Task RefreshToken_NullResponseFromAuthService_ReturnsBadRequest()
+    {
+        // Arrange
+        var request = new RefreshTokenRequest { RefreshToken = "valid_token" };
+        var user = new ApplicationUser
+        {
+            UserName = "testuser",
+            RefreshToken = "valid_token",
+            RefreshTokenExpiry = DateTime.UtcNow.AddDays(1)
+        };
+
+        _mockUserRepository.Setup(x => x.GetAsync(It.IsAny<Expression<Func<ApplicationUser, bool>>>(), It.IsAny<string>())).ReturnsAsync(user);
+
+
+        _authService.Setup(x => x.RefreshUserTokenAsync(user.UserName))
+                       .ReturnsAsync((RefreshTokenResponse)null);
+
+        // Act
+        var result = await _accountController.RefreshToken(request);
+
+        // Assert
+        Assert.IsInstanceOfType(result.Result, typeof(BadRequestObjectResult));
+        var badRequestResult = (BadRequestObjectResult)result.Result;
+        Assert.AreEqual("Invalid refresh token.", badRequestResult.Value);
+    }
+
+
 }
