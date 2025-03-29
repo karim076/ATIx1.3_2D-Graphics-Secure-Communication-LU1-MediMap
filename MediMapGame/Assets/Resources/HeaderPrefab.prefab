@@ -225,6 +225,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0121dd14f0f7604fac5672b00bf6fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _avatarButton: {fileID: 7483858390054279506}
+  logoutButton: {fileID: 3152796081997249150}
+  logBookButton: {fileID: 5824430611444248437}
 --- !u!1 &3525380861114405970
 GameObject:
   m_ObjectHideFlags: 0

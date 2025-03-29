@@ -225,6 +225,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _avatarButton: {fileID: 7483858390054279506}
+  logoutButton: {fileID: 3152796081997249150}
+  logBookButton: {fileID: 5824430611444248437}
 --- !u!1 &3981190399436973036
 GameObject:
   m_ObjectHideFlags: 0
