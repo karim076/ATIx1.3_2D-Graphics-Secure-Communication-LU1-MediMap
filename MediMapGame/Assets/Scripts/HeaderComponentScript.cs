@@ -10,11 +10,26 @@ public class HeaderComponentScript : MonoBehaviour
 
     [SerializeField] private Button _avatarButton;
 
+    public Button logoutButton;
+    public Button logBookButton;
+
     void Start()
     {
         if (SessionManager.Instance.AvatarName != null)
         {
             _avatarButton.GetComponent<Image>().sprite = SessionManager.Instance.AvatarName;
+        }
+        Debug.Log(APIManager.Instance.isLogedIn);
+
+        if (APIManager.Instance.isLogedIn)
+        {
+            logoutButton.gameObject.SetActive(true);
+            logBookButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            logoutButton.gameObject.SetActive(false);
+            logBookButton.gameObject.SetActive(false);
         }
     }
 
