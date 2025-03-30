@@ -45,10 +45,10 @@ public class EnhancedVideoPlayer : MonoBehaviour
         videoPlayer.source = VideoSource.VideoClip;
         videoPlayer.isLooping = false;
 
-        if (SessionManager.Instance.AvatarName != null)
+        /*if (SessionManager.Instance.AvatarName != null)
         {
             _avatar.GetComponent<Image>().sprite = SessionManager.Instance.AvatarName;
-        }
+        }*/
         // Initialisatie van de video-player
         videoPlayer.loopPointReached += OnVideoEnd; // Event voor het einde van de video
         videoPlayer.playOnAwake = false; // Zet autoplay uit bij opstarten, tenzij expliciet aangevinkt
@@ -202,11 +202,4 @@ public class EnhancedVideoPlayer : MonoBehaviour
         return $"{minutes:00}:{seconds:00}";
     }
 
-    void OnDestroy()
-    {
-        playButton.transform.DOKill();
-        stopButton.transform.DOKill();
-        overlayImage.DOKill();
-        overlayTransform.DOKill();
-    }
 }
