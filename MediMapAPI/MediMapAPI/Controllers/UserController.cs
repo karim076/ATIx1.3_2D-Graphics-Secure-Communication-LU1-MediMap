@@ -84,13 +84,12 @@ public class UserController : ControllerBase
                 patient.PathLocation = updateUser.PatientPathLocation;
             }
             
-
-            
             _unitOfWork.ApplicationUserRepository.Update(user);
             _unitOfWork.PatientRepository.Update(patient);
 
             await _unitOfWork.SaveAsync();
-            return Ok(user);
+
+            return Ok(new {message = "Update succesvol"});
         }
         catch (Exception e)
         {

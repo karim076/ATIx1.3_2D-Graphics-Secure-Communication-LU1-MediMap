@@ -21,7 +21,7 @@ namespace Models.Model
         [MaxLength(256)]
         public string? Url { get; set; }
 
-        public byte[]? Plaatje { get; set; }
+        public string? Plaatje { get; set; }
 
         public int? TijdsduurInMin { get; set; }
 

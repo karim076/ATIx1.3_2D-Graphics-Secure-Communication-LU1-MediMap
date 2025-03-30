@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -13,13 +14,13 @@ namespace Models.Model.Dto
         public string Username { get; set; }
         public string? Email { get; set; }
         public string? Password { get; set; }
-        public int PatientPathLocation { get; set; }
+        [Required] public int PatientPathLocation { get; set; }
 
         public int? PatienId { get; set; }
 
         public Patient? Patient { get; set; }
 
-        public int? TrajectId { get; set; }
+        [Required] public int? TrajectId { get; set; }
         public Traject? Traject { get; set; }
     }
 }

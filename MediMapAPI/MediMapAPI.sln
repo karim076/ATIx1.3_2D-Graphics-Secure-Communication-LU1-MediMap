@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{97F5AC65-D4CD-487B-9057-805CD5820F75}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediMapUnitTest", "MediMapUnitTest\MediMapUnitTest.csproj", "{419DF790-902C-4D24-B2F9-8475B9842407}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{97F5AC65-D4CD-487B-9057-805CD5820F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97F5AC65-D4CD-487B-9057-805CD5820F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97F5AC65-D4CD-487B-9057-805CD5820F75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{419DF790-902C-4D24-B2F9-8475B9842407}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{419DF790-902C-4D24-B2F9-8475B9842407}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{419DF790-902C-4D24-B2F9-8475B9842407}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{419DF790-902C-4D24-B2F9-8475B9842407}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
