@@ -13,64 +13,65 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
-
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add logging for debugging
+// Add logging
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
 builder.Services.AddHttpLogging(o => { });
 
 // Configure database connection
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-// ?? throw new InvalidOperationException("Database connection string is missing!");
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Database connection string is missing!");
 
 // Configure JWT settings
 string jwtKey = builder.Configuration["Jwt:Key"]
     ?? throw new InvalidOperationException("JWT Key is missing in the configuration!");
 
-//  dependency injection
+// Dependency injection
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<UserService>();
-// Repositories
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped(typeof(Repository<>)); // Ensure generic base repository is also registered
+builder.Services.AddScoped(typeof(Repository<>));
 
-// services
+// Services
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-
 
 // Configure TokenSettings
 builder.Services.Configure<TokenSettings>(options =>
 {
     options.Key = jwtKey;
-    options.Audience = "MediMapAPI"; // Set audience
-    options.Issuer = "MediMapAPI"; // Set issuer
+    options.Audience = "MediMapAPI";
+    options.Issuer = "MediMapAPI";
 });
 
+// Database context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(connectionString);
 });
 
+// Identity
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
 {
     option.SignIn.RequireConfirmedAccount = false;
     option.SignIn.RequireConfirmedPhoneNumber = false;
     option.SignIn.RequireConfirmedEmail = false;
-
 }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-// Add controllers
-/*builder.Services.AddControllers()
-.AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.PropertyNamingPolicy = null;
-});*/
 
-// Add JWT authentication
-/*builder.Services.AddAuthentication(options =>
+// Controllers
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    });
+
+// JWT Authentication
+builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -87,39 +88,75 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
         ValidateIssuer = true,
         ValidAudience = "MediMapAPI",
         ValidIssuer = "MediMapAPI",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)) // Use the configured JWT key
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
     };
 });
-*/
-// Add Swagger for API documentation
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-// Add authorization
-builder.Services.AddAuthorization();
-builder.Services.AddControllers();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "MediMap API", Version = "v1" });
+
+    // Configure JWT in Swagger
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme.",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Middleware pipeline
 if (app.Environment.IsDevelopment())
 {
-/*    app.MapOpenApi();*/
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MediMap API v1"));
 }
 
-// Add a redirect from the root URL to Swagger UI
-app.MapGet("/", context =>
-{
-    context.Response.Redirect("/swagger/index.html");
-    return Task.CompletedTask;
-});
-
-// redirect HTTP to HTTPS
 app.UseHttpsRedirection();
-app.UseHsts();
+app.UseRouting();
 
-// Add security headers
+// CORS must come after UseRouting and before UseAuthentication
+app.UseCors("AllowAll");
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseHttpLogging();
+
+// Security headers
 app.Use(async (context, next) =>
 {
     context.Response.Headers.Append("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
@@ -130,10 +167,13 @@ app.Use(async (context, next) =>
     context.Response.Headers.TryAdd("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
     await next();
 });
-// Enable authentication and authorization
-app.UseAuthentication();
-app.UseAuthorization();
 
-app.UseHttpLogging();
 app.MapControllers();
+
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/swagger/index.html");
+    return Task.CompletedTask;
+});
+
 app.Run();
