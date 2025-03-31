@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace Assets.models
 {
+    [Serializable]
     public class LogModel
     {
-        public int Id { get; set; }
-        public string Date { get; set; }
-        public string Place { get; set; }
-        public string Note { get; set; }
+        public int id;
+        public DateTime? date;
+        public string place;
+        public string note;
     }
 }
