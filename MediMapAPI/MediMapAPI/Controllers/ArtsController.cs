@@ -47,11 +47,6 @@ namespace MediMapAPI.Controllers
             }
             try
             {
-                if (artsDto == null)
-                {
-                    return BadRequest(new { message = "Arts is leeg." });
-                }
-
                 var arts = new Arts
                 {
                     Naam = artsDto.Naam,
