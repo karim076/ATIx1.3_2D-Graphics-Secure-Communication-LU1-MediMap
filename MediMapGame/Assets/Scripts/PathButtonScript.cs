@@ -14,6 +14,7 @@ public class PathButtonScript : MonoBehaviour
     //public Transform position;
 
     public GameObject MovableAvatar;
+    public string NavigateTo;
 
     void OnMouseDown()
     {
@@ -25,7 +26,7 @@ public class PathButtonScript : MonoBehaviour
             {
                 StartCoroutine(UpdatePatientLocation());
             }
-            SceneManager.LoadScene("InfoScene");
+            SceneManager.LoadScene(NavigateTo);
         }
         else
         {
@@ -37,6 +38,10 @@ public class PathButtonScript : MonoBehaviour
     public void Start()
     {
         MovableAvatar = GameObject.Find("MovableAvatar");
+        if(NavigateTo == "" || NavigateTo == null)
+        {
+            NavigateTo = "InfoScene";
+        }
     }
 
 
