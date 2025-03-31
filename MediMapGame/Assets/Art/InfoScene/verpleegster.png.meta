@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      verpleegster_0: -6945556686889198715
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
