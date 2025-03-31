@@ -10,7 +10,7 @@ using Models.Model.Dto;
 
 namespace MediMapAPI.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LogBookController : ControllerBase
@@ -34,7 +34,7 @@ namespace MediMapAPI.Controllers
             return Ok($"New log added: {log}");
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<LogBook>>> GetLogsbyPatientId(int id)
         {
             if (!ModelState.IsValid)
