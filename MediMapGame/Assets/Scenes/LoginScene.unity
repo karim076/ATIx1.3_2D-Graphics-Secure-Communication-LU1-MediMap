@@ -4057,16 +4057,7 @@ MonoBehaviour:
   m_Value: 0
   m_MultiSelect: 0
   m_Options:
-    m_Options:
-    - m_Text: Option A
-      m_Image: {fileID: 0}
-      m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: Option B
-      m_Image: {fileID: 0}
-      m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: Option C
-      m_Image: {fileID: 0}
-      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    m_Options: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -7193,7 +7184,6 @@ MonoBehaviour:
   _gardianSurName: {fileID: 767108716}
   _birthDay: {fileID: 1054251600}
   _appointmentDate: {fileID: 1596870236}
-  _ToDo: 
   _trajectDropdown: {fileID: 597853607}
   errorText: {fileID: 1797815188}
   successText: {fileID: 972502667}

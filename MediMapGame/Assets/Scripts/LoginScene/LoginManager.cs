@@ -31,11 +31,11 @@ public class LoginManager : MonoBehaviour
     [SerializeField] private TMP_InputField _gardianSurName;
     [SerializeField] private TMP_InputField _birthDay;
     [SerializeField] private TMP_InputField _appointmentDate;
-    [SerializeField] private string _ToDo = "todo"; // ToDo
-
     [SerializeField] private TMP_Dropdown _trajectDropdown;
 
     private List<Traject> allTrajects = new List<Traject>();
+
+
 
 
     private RegisterViewModel RegisterViewModel()
@@ -88,9 +88,13 @@ public class LoginManager : MonoBehaviour
         };
     }
 
-    public void GetValue(int index)
+    public void AddTrajctToDropDown(List<Traject> trajects)
     {
-        Debug.Log("Index: " + index);
+        _trajectDropdown.options.Clear();
+        foreach (var traject in trajects)
+        {
+            _trajectDropdown.options.Add(new TMP_Dropdown.OptionData(traject.Naam));
+        }
     }
 
     private IEnumerator GetTrajects()
@@ -104,6 +108,7 @@ public class LoginManager : MonoBehaviour
             }
 
             allTrajects = JsonConvert.DeserializeObject<List<Traject>>(response);
+            AddTrajctToDropDown(allTrajects);
         }, error =>
         {
             Debug.LogError("Error: " + error);
