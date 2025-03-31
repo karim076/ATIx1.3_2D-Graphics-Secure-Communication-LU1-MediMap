@@ -55,3 +55,4 @@ Azure/
 
 # Docker bestanden
 **/docker-compose.override.yml
+/MediMapGame/Assets/Art.meta

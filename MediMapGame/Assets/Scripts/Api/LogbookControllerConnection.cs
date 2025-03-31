@@ -47,8 +47,8 @@ namespace Assets.Scripts.Api.LogBookControllerConnection
 
         public IEnumerator GetAllLogsFromPatient()
         {
-            //yield return APIManager.Instance.SendRequest($"api/LogBook/{SessionManager.SessionManager.Instance.PatientId}", "GET", null, response =>
-            yield return APIManager.Instance.SendRequest($"api/LogBook?id=1", "GET", null, response =>
+            yield return APIManager.Instance.SendRequest($"api/LogBook/{SessionManager.SessionManager.Instance.PatientId}", "GET", null, response =>
+            //yield return APIManager.Instance.SendRequest($"api/LogBook?id=1", "GET", null, response =>
             {
                 List<LogModel> responseParsed = JsonConvert.DeserializeObject<List<LogModel>>(response);
 

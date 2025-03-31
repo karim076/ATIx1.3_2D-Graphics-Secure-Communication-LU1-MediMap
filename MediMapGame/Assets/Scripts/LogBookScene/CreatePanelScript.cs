@@ -77,8 +77,7 @@ public class CreatePanelScene : MonoBehaviour
         //hier moet wat aanpassingen gemaakt worden.
         var newModel = new LogModelDTO
         {
-            //PatientId = SessionManager.Instance.PatientId,
-            PatientId = 1,
+            PatientId = SessionManager.Instance.PatientId,
             place = place.text,
             note = note.text,
             date = datee
