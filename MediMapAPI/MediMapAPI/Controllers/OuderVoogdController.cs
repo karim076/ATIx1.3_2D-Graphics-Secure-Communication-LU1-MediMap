@@ -30,7 +30,7 @@ namespace MediMapAPI.Controllers
                     return NotFound(new { message = "OuderVoogd niet gevonden." });
                 }
 
-                var ouderVoogdDto = ConmvertDtoToModel(ouderVoogd);
+                var ouderVoogdDto = ModelToDto(ouderVoogd);
 
                 if (ouderVoogdDto == null)
                 {
@@ -55,23 +55,26 @@ namespace MediMapAPI.Controllers
             }
             try
             {
-                if (ouderVoogdDto == null)
-                {
-                    return BadRequest(new { message = "OuderVoogd is leeg." });
-                }
-
-                var ouderVoogd = ConvertDtoToModel(ouderVoogdDto);
+                var ouderVoogd = DtoToModel(ouderVoogdDto);
 
                 await _unitOfWork.OuderVoogdRepository.AddAsync(ouderVoogd);
                 await _unitOfWork.SaveAsync();
-                return Ok(ouderVoogdDto);
+
+                if(ouderVoogd.Id == 0)
+                {
+                    return BadRequest(new { message = "OuderVoogd is niet toegevoegd." });
+                }
+
+                var result = ModelToDto(ouderVoogd);
+
+                return Ok(result);
             }
             catch (Exception e)
             {
                 return BadRequest(new { message = e.Message });
             }
         }
-        private OuderVoogdDto ConmvertDtoToModel(OuderVoogd dto)
+        private OuderVoogdDto ModelToDto(OuderVoogd dto)
         {
             return new OuderVoogdDto
             {
@@ -80,7 +83,7 @@ namespace MediMapAPI.Controllers
                 AchterNaam = dto.AchterNaam,
             };
         }
-        private OuderVoogd ConvertDtoToModel(OuderVoogdDto ouderVoogdDto)
+        private OuderVoogd DtoToModel(OuderVoogdDto ouderVoogdDto)
         {
             return new OuderVoogd
             {
