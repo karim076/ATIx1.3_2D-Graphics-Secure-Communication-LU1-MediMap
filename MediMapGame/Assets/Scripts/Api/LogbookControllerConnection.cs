@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Assets.Scripts.SessionManager;
+using JetBrains.Annotations;
 
 namespace Assets.Scripts.Api.LogBookControllerConnection
 {
@@ -24,7 +26,7 @@ namespace Assets.Scripts.Api.LogBookControllerConnection
         {
             StartCoroutine(APIManager.Instance.SendRequest($"api/LogBook", "POST", logModel, (response) =>
             {
-                StartCoroutine(GetAllLogs());
+                StartCoroutine(GetAllLogsFromPatient());
                 Debug.Log(response);
             }, (error) =>
             {
@@ -33,33 +35,34 @@ namespace Assets.Scripts.Api.LogBookControllerConnection
                     Debug.Log("database error:  " + error);
                 }
 
-                if(error == "HTTP/1.1 400 Bad Request")
+                if (error == "HTTP/1.1 400 Bad Request")
                 {
-                   createPanelScene.inputfieldErroPanel.SetActive(true);
-                   createPanelScene.errorPanel.SetActive(false);
-                   createPanelScene.createPanel.SetActive(false);
-                   createPanelScene.logPanel.SetActive(false);
-                   createPanelScene.scrollbar.SetActive(false);
+                    createPanelScene.logPanel.SetActive(false);
+                    createPanelScene.scrollbar.SetActive(false);
+                    createPanelScene.createPanel.SetActive(false);
+                    createPanelScene.inputfieldErroPanel.SetActive(true);
                 }
             }));
         }
 
-        public IEnumerator GetAllLogs()
+        public IEnumerator GetAllLogsFromPatient()
         {
-            yield return APIManager.Instance.SendRequest("api/LogBook/", "GET", null, response =>
+            //yield return APIManager.Instance.SendRequest($"api/LogBook/{SessionManager.SessionManager.Instance.PatientId}", "GET", null, response =>
+            yield return APIManager.Instance.SendRequest($"api/LogBook?id=1", "GET", null, response =>
             {
                 List<LogModel> responseParsed = JsonConvert.DeserializeObject<List<LogModel>>(response);
-                
-                for (int i = 0; i < responseParsed.Count(); i++)
+
+                if (responseParsed == null)
                 {
-                    if (responseParsed[i] != null)
+                    foreach (Transform child in createPanelScene.gridContent)
                     {
-                        createPanelScene.LoadLogs(responseParsed);
+                        Destroy(child.gameObject);
                     }
-                    else
-                    {
-                        Debug.Log("no logs found");
-                    }
+                    Debug.Log("no logs found");
+                }
+                else
+                {
+                    createPanelScene.LoadLogs(responseParsed);
                 }
             }, error =>
             {
@@ -74,7 +77,7 @@ namespace Assets.Scripts.Api.LogBookControllerConnection
         {
             StartCoroutine(APIManager.Instance.SendRequest($"api/LogBook/{model.id}", "DELETE", model, (response) =>
             {
-                StartCoroutine(GetAllLogs());
+                StartCoroutine(GetAllLogsFromPatient());
                 Debug.Log(response);
             }, (error) =>
             {

@@ -6,7 +6,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.U2D;
-
 public class PathButtonScript : MonoBehaviour
 {
     public int Id;

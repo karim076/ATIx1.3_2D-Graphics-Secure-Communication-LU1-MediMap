@@ -35,14 +35,14 @@ namespace MediMapAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<LogBook>>> GetLogs()
+        public async Task<ActionResult<IEnumerable<LogBook>>> GetLogsbyPatientId(int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var logs = await _unitOfWork.LogBookRepository.GetAllAsync();
+            var logs = await _unitOfWork.LogBookRepository.GetById(log => log.PatientID == id);
 
             if (logs == null)
             {

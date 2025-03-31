@@ -1,6 +1,7 @@
 using Assets.models;
 using Assets.Scripts.Api.LogBookControllerConnection;
 using Assets.Scripts.Models;
+using Assets.Scripts.SessionManager;
 using MediMap.Scripts.Api;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,6 @@ public class CreatePanelScene : MonoBehaviour
     [Header("Panels")]
     public GameObject createPanel;
     public GameObject logPanel;
-    public GameObject errorPanel;
     public GameObject inputfieldErroPanel;
 
     [Header("Prefabs")]
@@ -40,11 +40,10 @@ public class CreatePanelScene : MonoBehaviour
     public void Start()
     {
         createPanel.SetActive(false);
-        errorPanel.SetActive(false);
         inputfieldErroPanel.SetActive(false);
         logPanel.SetActive(true);
         scrollbar.SetActive(true);
-        StartCoroutine(logbookControllerConnection.GetAllLogs());
+        StartCoroutine(logbookControllerConnection.GetAllLogsFromPatient());
     }
 
     public void OpenCreatePanel()
@@ -52,7 +51,6 @@ public class CreatePanelScene : MonoBehaviour
         createPanel.SetActive(true);
         logPanel.SetActive(false);
         scrollbar.SetActive(false);
-        errorPanel.SetActive(false);
         inputfieldErroPanel.SetActive(false);
     }
 
@@ -69,16 +67,17 @@ public class CreatePanelScene : MonoBehaviour
         if (!DateTime.TryParse(date.text, out DateTime datee))
         {
             Debug.Log("Voer een geldige datum in");
-            errorPanel.SetActive(true);
             createPanel.SetActive(false);
             logPanel.SetActive(false);
             scrollbar.SetActive(false);
-            inputfieldErroPanel.SetActive(false);
+            inputfieldErroPanel.SetActive(true);
             return;
         }
 
+        //hier moet wat aanpassingen gemaakt worden.
         var newModel = new LogModelDTO
         {
+            //PatientId = SessionManager.Instance.PatientId,
             PatientId = 1,
             place = place.text,
             note = note.text,
@@ -95,6 +94,8 @@ public class CreatePanelScene : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+
+        models.Reverse();
 
         foreach (LogModel model in models)
         {
