@@ -52,9 +52,30 @@ namespace MediMapAPI.Controllers
         }
         // POST api/<PatientController>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<ActionResult<PatientDto>> Post(PatientDto patientDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            try
+            {
+
+                var patient = GetPatient(patientDto);
+
+                if (patient == null)
+                {
+                    return BadRequest(new { message = "Fout bij het ophalen van patient." });
+                }
+                await _unitOfWork.PatientRepository.AddAsync(patient);
+                await _unitOfWork.SaveAsync();
+                return Ok(patientDto);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
         }
 
         // PUT api/<PatientController>/5
@@ -173,6 +194,19 @@ namespace MediMapAPI.Controllers
                 //    Omschrijving = l.Log,
                 //    PatientId = l.PatientID
                 //}).ToList() ?? new List<LogBookDto>()
+            };
+        }
+        private Patient GetPatient(PatientDto patientDto)
+        {
+            return new Patient
+            {
+                VoorNaam = patientDto.VoorNaam,
+                AchterNaam = patientDto.AchterNaam,
+                GeboorteDatum = patientDto.GeboorteDatum,
+                AvatarNaam = patientDto.AvatarNaam,
+                OuderVoogdId = patientDto.OuderVoogdId,
+                TrajectId = patientDto.TrajectId,
+                ArtsId = patientDto.ArtsId
             };
         }
 
