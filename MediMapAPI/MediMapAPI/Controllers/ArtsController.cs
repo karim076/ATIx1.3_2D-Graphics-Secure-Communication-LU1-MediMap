@@ -59,7 +59,14 @@ namespace MediMapAPI.Controllers
                 };
                 await unitOfWork.ArtsRepository.AddAsync(arts);
                 await unitOfWork.SaveAsync();
-                return Ok(artsDto);
+
+                if(arts.Id == 0)
+                {
+                    return BadRequest(new { message = "Arts is niet toegevoegd." });
+                }
+                var result = GetArtsDto(arts);
+
+                return Ok(result);
             }
             catch (Exception e)
             {
