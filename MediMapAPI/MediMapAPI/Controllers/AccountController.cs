@@ -17,19 +17,16 @@ namespace MediMapAPI.Controllers
     public class AccountController : Controller
     {
         private readonly IAuthService _authService;
-
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly UserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public AccountController(IAuthService authService,
                               UserManager<ApplicationUser> userManager,
-                              UserRepository userRepository,
                               IUnitOfWork unitOfWork)
         {
             _authService = authService ?? throw new ArgumentNullException(nameof(authService));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         
@@ -76,12 +73,12 @@ namespace MediMapAPI.Controllers
                 }
 
                 // Check if the username already exists
-                if (await _userRepository.UserExistsAsync(user.Username))
+                if (await _unitOfWork.ApplicationUserRepository.AnyAsync(u => u.UserName == user.Username))
                 {
                     return Conflict(new { message = "Gebruikersnaam bestaat al." });
                 }
                 // Check if the email is already registered
-                var existingUser = await _userManager.FindByEmailAsync(user.Email);
+                var existingUser = await _unitOfWork.ApplicationUserRepository.GetAsync(u => u.Email == user.Email);
                 if (existingUser != null)
                 {
                     return BadRequest(new { message = "Email is al in gebruik." });
@@ -97,7 +94,7 @@ namespace MediMapAPI.Controllers
                     PasswordHash = SecureHash.Hash(user.Password), // Hash the password
                     RefreshToken = "", // Explicitly set to null = ""
                     RefreshTokenExpiry = null, // Explicitly set to NULL
-                    PatienId = 0 // Tijdelijk
+                    PatienId = null // Tijdelijk
                 };
 
                 await _userManager.CreateAsync(newUser);
@@ -116,7 +113,7 @@ namespace MediMapAPI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<RefreshTokenResponse>> RefreshToken([FromBody] RefreshTokenRequest request)
         {
-            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
+            var user = await _unitOfWork.ApplicationUserRepository.GetAsync(u => u.RefreshToken == request.RefreshToken);
             if (user == null || user.RefreshTokenExpiry <= DateTime.UtcNow)
             {
                 return BadRequest("Invalid refresh token.");
