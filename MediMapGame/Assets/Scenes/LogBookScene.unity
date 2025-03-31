@@ -3881,6 +3881,7 @@ MonoBehaviour:
   inputfieldErroPanel: {fileID: 1229039529}
   prefab: {fileID: 7829356601059324930, guid: d35421fd69138bc42878233d0ce05236, type: 3}
   gridContent: {fileID: 278673195}
+  _avatar: {fileID: 1834780052}
   date: {fileID: 50325499}
   place: {fileID: 511791480}
   note: {fileID: 1304224754}

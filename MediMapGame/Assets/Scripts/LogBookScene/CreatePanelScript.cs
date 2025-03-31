@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
+using Image = UnityEngine.UI.Image;
 
 public class CreatePanelScene : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class CreatePanelScene : MonoBehaviour
     [Header("Prefabs")]
     public GameObject prefab;
     public Transform gridContent;
+    [SerializeField] private Image _avatar;
 
     [Header("Input Fields")]
     public TMP_InputField date;
@@ -39,6 +41,11 @@ public class CreatePanelScene : MonoBehaviour
 
     public void Start()
     {
+        if (SessionManager.Instance.AvatarName != null)
+        {
+            _avatar.GetComponent<Image>().sprite = SessionManager.Instance.AvatarName;
+        }
+
         createPanel.SetActive(false);
         inputfieldErroPanel.SetActive(false);
         logPanel.SetActive(true);
