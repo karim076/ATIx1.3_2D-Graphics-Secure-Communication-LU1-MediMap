@@ -8,11 +8,6 @@ public class LogBookManagerScript : MonoBehaviour
 
     void Start()
     {
-        if (APIManager.Instance.isLogedIn)
-        {
-            SceneManager.LoadScene("HomeScreenScene", LoadSceneMode.Single);
-            
-        }
 
     }
 }
