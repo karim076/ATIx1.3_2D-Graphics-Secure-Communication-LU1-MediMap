@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.Model;
 using Models.Model.Dto;
+using System.ComponentModel.DataAnnotations;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -51,9 +52,30 @@ namespace MediMapAPI.Controllers
         }
         // POST api/<PatientController>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<ActionResult<PatientDto>> Post(PatientDto patientDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            try
+            {
+
+                var patient = GetPatient(patientDto);
+
+                if (patient == null)
+                {
+                    return BadRequest(new { message = "Fout bij het ophalen van patient." });
+                }
+                await _unitOfWork.PatientRepository.AddAsync(patient);
+                await _unitOfWork.SaveAsync();
+                return Ok(patientDto);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
         }
 
         // PUT api/<PatientController>/5
@@ -174,9 +196,23 @@ namespace MediMapAPI.Controllers
                 //}).ToList() ?? new List<LogBookDto>()
             };
         }
+        private Patient GetPatient(PatientDto patientDto)
+        {
+            return new Patient
+            {
+                VoorNaam = patientDto.VoorNaam,
+                AchterNaam = patientDto.AchterNaam,
+                GeboorteDatum = patientDto.GeboorteDatum,
+                AvatarNaam = patientDto.AvatarNaam,
+                OuderVoogdId = patientDto.OuderVoogdId,
+                TrajectId = patientDto.TrajectId,
+                ArtsId = patientDto.ArtsId
+            };
+        }
 
         public class AvatarName
         {
+            [Required]
             public string Avatar { get; set; }
         }
     }

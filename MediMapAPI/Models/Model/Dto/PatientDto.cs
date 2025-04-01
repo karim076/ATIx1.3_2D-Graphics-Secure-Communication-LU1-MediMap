@@ -17,6 +17,9 @@ namespace Models.Model.Dto
         public string OuderVoogdNaam { get; set; }
         public string ArtsNaam { get; set; }
         public string TrajectNaam { get; set; }
+        public int OuderVoogdId { get; set; }
+        public int ArtsId { get; set; }
+        public int TrajectId { get; set; }
         public DateTime GeboorteDatum { get; set; }
         public DateTime Afspraakatum { get; set; }
     }

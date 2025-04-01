@@ -223,7 +223,10 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Models.Model.Arts", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Naam")
                         .IsRequired()
@@ -434,8 +437,8 @@ namespace DataAccess.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<byte[]>("Plaatje")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("Plaatje")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TijdsduurInMin")
                         .HasColumnType("int");
