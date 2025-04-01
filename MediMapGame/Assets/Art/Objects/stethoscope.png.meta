@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      stethoscope_0: -6597828917799900021
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

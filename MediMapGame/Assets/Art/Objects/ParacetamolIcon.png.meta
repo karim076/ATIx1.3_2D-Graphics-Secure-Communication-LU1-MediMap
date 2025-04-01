@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ParacetamolIcon_0: 1227490615318743587
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

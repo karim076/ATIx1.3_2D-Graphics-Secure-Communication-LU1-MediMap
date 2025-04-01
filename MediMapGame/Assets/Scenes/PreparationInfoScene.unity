@@ -8167,8 +8167,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstMission: {fileID: 1690642055}
   secondMission: {fileID: 1908518587}
-  levelCompleteButton: {fileID: 0}
-  endCanvas: {fileID: 0}
+  levelCompleteButton: {fileID: 1964641646}
+  endCanvas: {fileID: 2070112253}
 --- !u!114 &1745456676
 MonoBehaviour:
   m_ObjectHideFlags: 0
