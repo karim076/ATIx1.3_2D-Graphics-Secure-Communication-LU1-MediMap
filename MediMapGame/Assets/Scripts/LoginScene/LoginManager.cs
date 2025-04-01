@@ -1,11 +1,18 @@
+using Assets.Scripts.Models;
+using Assets.Scripts.Models.ViewModel;
 using Assets.Scripts.SessionManager;
 using MediMap.Scripts.Api;
 using Newtonsoft.Json;
+using NUnit.Framework;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LoginManager : MonoBehaviour
 {
@@ -19,6 +26,102 @@ public class LoginManager : MonoBehaviour
     public TMP_InputField usernameInputRegister;
     public TMP_InputField passwordInputRegister;
     public TMP_InputField emailInputRegister;
+    [SerializeField] private TMP_InputField _nameInputField;
+    [SerializeField] private TMP_InputField _sureNameInputField; 
+    [SerializeField] private TMP_InputField _doctorName;
+    [SerializeField] private TMP_InputField _gardianName;
+    [SerializeField] private TMP_InputField _gardianSurName;
+    [SerializeField] private TMP_InputField _birthDay;
+    [SerializeField] private TMP_InputField _appointmentDate;
+    [SerializeField] private TMP_Dropdown _trajectDropdown;
+
+    private List<Traject> allTrajects = new List<Traject>();
+
+    //private void Start()
+    //{
+    //    _trajectDropdown.;
+    //}
+
+  
+
+
+    private RegisterViewModel RegisterViewModel()
+    {
+        if(!DateTime.TryParse(_birthDay.text, out DateTime result))
+        {
+            Debug.LogError("Geboortedatum is niet correct.");
+            return null;
+        }
+        if (!DateTime.TryParse(_appointmentDate.text, out DateTime result2))
+        {
+            Debug.LogError("Afspraakdatum is niet correct.");
+            return null;
+        }
+        return new RegisterViewModel
+        {
+            CreateUserDto = new CreateUserDto
+            {
+                Id = null,
+                Username = usernameInputRegister.text.Trim(),
+                Email = emailInputRegister.text.Trim(),
+                Password = passwordInputRegister.text
+            },
+            Arts = new Arts
+            {
+                Id = 0,
+                Naam = _doctorName.text.Trim(),
+                Specialisatie = "KunstGebit",
+            },
+            Patient = new Patient
+            {
+                Id = 0,
+                VoorNaam = _nameInputField.text.Trim(),
+                AchterNaam = _sureNameInputField.text.Trim(),
+                AvatarNaam = "",
+                AfspraakDatum = result2,
+                GeboorteDatum = result,
+                PathLocation = 0,
+                ArtsNaam = "",
+                OuderVoogdNaam = "",
+                TrajectNaam = ""
+            },
+            OuderVoogd = new OuderVoogd
+            {
+                Id = 0,
+                VoorNaam = _gardianName.text.Trim(),
+                AchterNaam = _gardianSurName.text.Trim()
+            },
+            trajectId = allTrajects[_trajectDropdown.value].Id
+        };
+    }
+
+    public void AddTrajctToDropDown(List<Traject> trajects)
+    {
+        _trajectDropdown.options.Clear();
+        foreach (var traject in trajects)
+        {
+            _trajectDropdown.options.Add(new TMP_Dropdown.OptionData(traject.Naam));
+        }
+    }
+
+    private IEnumerator GetTrajects()
+    {
+        yield return APIManager.Instance.SendRequest("api/Traject/all", "GET", null, response =>
+        {
+            if (string.IsNullOrEmpty(response))
+            {
+                Debug.LogError("No data received from the API.");
+                return;
+            }
+
+            allTrajects = JsonConvert.DeserializeObject<List<Traject>>(response);
+            AddTrajctToDropDown(allTrajects);
+        }, error =>
+        {
+            Debug.LogError("Error: " + error);
+        });
+    }
+
     [Header("Logging")]
     public TMP_Text errorText;
     public TMP_Text successText;
@@ -30,6 +133,7 @@ public class LoginManager : MonoBehaviour
     public void OnRegisterClick()
     {
         // Go to Register Scene
+        StartCoroutine(GetTrajects());
         Register.SetActive(true);
         Login.SetActive(false);
     }
@@ -90,6 +194,8 @@ public class LoginManager : MonoBehaviour
         });
     }
 
+    
+
     public void OnRegisterSubmit()
     {
         string username = usernameInputRegister.text.Trim();
@@ -100,17 +206,18 @@ public class LoginManager : MonoBehaviour
             ErrorText("Gebruikersnaam, Wachtwoord en email mag niet leeg zijn.");
             return;
         }
-        StartCoroutine(RegisterAuthentication(username, password, email));
+        var registerViewModel = RegisterViewModel();
+        StartCoroutine(RegisterAuthentication(registerViewModel));
     }
 
     // Register user
-    private IEnumerator RegisterAuthentication(string username, string password, string email)
+    private IEnumerator RegisterAuthentication(RegisterViewModel registerViewModel)
     {
         // loadingScreenCanvas.gameObject.SetActive(true);
 
-        var user = new CreateUserDto { Id = null,  Username = username, Email = email, Password = password }; // Role = "User" = future implementation
-
-        yield return APIManager.Instance.SendRequest("Account/Create", "POST", user, response =>
+        //var user = new CreateUserDto { Id = null,  Username = username, Email = email, Password = password }; // Role = "User" = future implementation
+        
+        yield return APIManager.Instance.SendRequest("Account/Create", "POST", registerViewModel, response =>
         {
             // loadingScreenCanvas.gameObject.SetActive(false);
             LoginPage();
@@ -177,12 +284,5 @@ public class LoginManager : MonoBehaviour
         canvasError.gameObject.SetActive(false);
         canvasSuccess.gameObject.SetActive(true);
         successText.text = message;
-    }
-    public class CreateUserDto
-    {
-        public int? Id { get; set; }
-        public string Username { get; set; }
-        public string? Email { get; set; }
-        public string? Password { get; set; }
     }
 }
