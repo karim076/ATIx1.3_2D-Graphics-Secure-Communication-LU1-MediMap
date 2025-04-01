@@ -36,7 +36,7 @@ public class HomeScreenScript : MonoBehaviour
         movableAvatar.GetComponent<SpriteRenderer>().sortingOrder = 10;
         trajectTextList = GameObject.FindGameObjectsWithTag("TrajectText").OrderBy(obj => obj.name).ToArray();
 
-        StartCoroutine(GetAllTraject());
+        //StartCoroutine(GetAllTraject());
         StartCoroutine(GetUserLocation());
 
 
