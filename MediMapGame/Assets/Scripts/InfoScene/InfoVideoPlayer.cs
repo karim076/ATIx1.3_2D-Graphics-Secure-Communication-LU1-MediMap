@@ -130,11 +130,21 @@ public class EnhancedVideoPlayer : MonoBehaviour
         overlayImage.DOKill();
         overlayTransform.DOKill();
 
+        // Set initial transparent state
+        overlayImage.color = new Color(overlayImage.color.r, overlayImage.color.g, overlayImage.color.b, 0);
+
         Sequence showSequence = DOTween.Sequence();
-        showSequence.Join(overlayImage.DOFade(0.5f, overlayFadeInDuration));
+        showSequence.Join(DOTween.To(() => overlayImage.color.a,
+                                   x => overlayImage.color = new Color(overlayImage.color.r,
+                                                                     overlayImage.color.g,
+                                                                     overlayImage.color.b,
+                                                                     x),
+                                   0.5f,
+                                   overlayFadeInDuration));
+
         showSequence.Join(overlayTransform.DOScale(Vector3.one, overlayScaleDuration)
-            .From(Vector3.zero)
-            .SetEase(overlayEase));
+                    .From(Vector3.zero)
+                    .SetEase(overlayEase));
         showSequence.Play();
     }
 
@@ -146,9 +156,16 @@ public class EnhancedVideoPlayer : MonoBehaviour
         overlayTransform.DOKill();
 
         Sequence hideSequence = DOTween.Sequence();
-        hideSequence.Join(overlayImage.DOFade(0, overlayFadeOutDuration));
+        hideSequence.Join(DOTween.To(() => overlayImage.color.a,
+                                 x => overlayImage.color = new Color(overlayImage.color.r,
+                                                                   overlayImage.color.g,
+                                                                   overlayImage.color.b,
+                                                                   x),
+                                 0f,
+                                 overlayFadeOutDuration));
+
         hideSequence.Join(overlayTransform.DOScale(Vector3.zero, overlayScaleDuration)
-            .SetEase(overlayEase));
+                    .SetEase(overlayEase));
         hideSequence.AppendInterval(overlayEndDelay);
         hideSequence.OnComplete(() => overlayImage.gameObject.SetActive(false));
         hideSequence.Play();

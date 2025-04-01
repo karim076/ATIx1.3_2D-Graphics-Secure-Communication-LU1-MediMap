@@ -20,6 +20,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LogBookScene.unity
     guid: cacf80a5a7e6bdd4ba8e03552e8659fa
+  - enabled: 1
+    path: Assets/Scenes/QuizScene.unity
+    guid: 467aaf86260f05f4eaddefa14be38d21
+  - enabled: 1
+    path: Assets/Scenes/IntroductionScene.unity
+    guid: 3a61bbe8f5131994e8cbf231bd1de04b
+  - enabled: 1
+    path: Assets/Scenes/PreperationInfoScene.unity
+    guid: 5d90988badb60d34681997ac8995a8a4
+  - enabled: 1
+    path: Assets/Scenes/RecoveryProcessScene.unity
+    guid: 7ce6c131cfde3384fa86737dc9f32218
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
