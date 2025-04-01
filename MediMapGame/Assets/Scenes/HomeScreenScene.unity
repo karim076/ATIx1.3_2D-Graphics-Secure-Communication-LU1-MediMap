@@ -679,6 +679,10 @@ PrefabInstance:
       propertyPath: Id
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4498353862471700590, guid: 0a3b93e59f4a9f34ab0f4663e10395fe, type: 3}
+      propertyPath: NavigateTo
+      value: QuizScene
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1588,6 +1592,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RoadTiles: []
+  userPathLocation: 0
+  userRoute: 0
 --- !u!4 &875547090 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2549633581814113892, guid: 0a3b93e59f4a9f34ab0f4663e10395fe, type: 3}
