@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Mintella_0: 5495824153534389505
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

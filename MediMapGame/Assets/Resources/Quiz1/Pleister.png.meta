@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Pleister_0: 5064650309387919395
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
