@@ -185,7 +185,7 @@ namespace MediMapAPI.Controllers
                 ArtsNaam = patient.Arts.Naam,
                 TrajectNaam = patient.Traject.Naam,
                 OuderVoogdNaam = $"{patient.OuderVoogd.VoorNaam} {patient.OuderVoogd.AchterNaam}",
-                AfspraakDatum = patient.AfspraakDatum,
+                Afspraakatum = patient.AfspraakDatum,
                 GeboorteDatum = patient.GeboorteDatum,
                 //logbook = patient.LogBooks.Select(l => new LogBookDto
                 //{

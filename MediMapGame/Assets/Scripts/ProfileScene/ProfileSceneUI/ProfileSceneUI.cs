@@ -181,7 +181,7 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
                 TrajectNaam = _treatmentPlanText.text ?? string.Empty,
                 OuderVoogdNaam = string.Empty,
                 GeboorteDatum = geboorteDatum,
-                AfspraakDatum = DateTime.Parse(_userAppointmentText.text)
+                Afspraakatum = DateTime.Parse(_userAppointmentText.text)
             };
             try
             {

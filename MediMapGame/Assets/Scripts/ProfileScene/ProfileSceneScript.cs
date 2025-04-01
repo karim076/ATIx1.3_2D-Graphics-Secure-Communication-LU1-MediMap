@@ -43,7 +43,7 @@ public class ProfileSceneScript : MonoBehaviour
             Debug.Log(response);
             var profile = JsonConvert.DeserializeObject<Patient>(response);
 
-            _profileSceneUI.SetProfileData(profile.VoorNaam, profile.AchterNaam, profile.GeboorteDatum.ToShortDateString(), profile.AfspraakDatum.ToShortDateString(), profile.ArtsNaam, profile.TrajectNaam);
+            _profileSceneUI.SetProfileData(profile.VoorNaam, profile.AchterNaam, profile.GeboorteDatum.ToShortDateString(), profile.Afspraakatum.ToShortDateString(), profile.ArtsNaam, profile.TrajectNaam);
 
         }, (error) =>
         {
@@ -61,7 +61,7 @@ public class ProfileSceneScript : MonoBehaviour
             var profile = JsonConvert.DeserializeObject<Patient>(response);
             if(profile != null)
             {
-                _profileSceneUI.SetProfileData(profile.VoorNaam, profile.AchterNaam, profile.GeboorteDatum.ToShortDateString(), profile.AfspraakDatum.ToShortDateString(), profile.ArtsNaam, profile.TrajectNaam);
+                _profileSceneUI.SetProfileData(profile.VoorNaam, profile.AchterNaam, profile.GeboorteDatum.ToShortDateString(), profile.Afspraakatum.ToShortDateString(), profile.ArtsNaam, profile.TrajectNaam);
             }
         }));
     }

@@ -21,7 +21,7 @@ namespace Models.Model.Dto
         public int ArtsId { get; set; }
         public int TrajectId { get; set; }
         public DateTime GeboorteDatum { get; set; }
-        public DateTime AfspraakDatum { get; set; }
+        public DateTime Afspraakatum { get; set; }
     }
 
 }
