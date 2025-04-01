@@ -44,7 +44,7 @@ public class LoginManager : MonoBehaviour
 
   
 
-
+    //
     private RegisterViewModel RegisterViewModel()
     {
         if(!DateTime.TryParse(_birthDay.text, out DateTime result))
