@@ -680,8 +680,8 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4498353862471700590, guid: 0a3b93e59f4a9f34ab0f4663e10395fe, type: 3}
-      propertyPath: NavigateTo
-      value: QuizScene
+      propertyPath: Route
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
