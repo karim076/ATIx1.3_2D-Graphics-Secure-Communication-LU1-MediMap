@@ -9,8 +9,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LoginManager : MonoBehaviour
 {
@@ -35,7 +37,12 @@ public class LoginManager : MonoBehaviour
 
     private List<Traject> allTrajects = new List<Traject>();
 
+    //private void Start()
+    //{
+    //    _trajectDropdown.;
+    //}
 
+  
 
 
     private RegisterViewModel RegisterViewModel()
@@ -71,7 +78,7 @@ public class LoginManager : MonoBehaviour
                 VoorNaam = _nameInputField.text.Trim(),
                 AchterNaam = _sureNameInputField.text.Trim(),
                 AvatarNaam = "",
-                Afspraakatum = result2,
+                AfspraakDatum = result2,
                 GeboorteDatum = result,
                 PathLocation = 0,
                 ArtsNaam = "",
