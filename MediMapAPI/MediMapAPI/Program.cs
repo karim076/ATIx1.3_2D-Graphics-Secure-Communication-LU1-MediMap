@@ -68,13 +68,6 @@ if (string.IsNullOrEmpty(jwtKey))
 {
     throw new InvalidOperationException("JWT Key is missing in the configuration!");
 }
-/*// Configure database connection
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Database connection string is missing!");
-
-// Configure JWT settings
-string jwtKey = builder.Configuration["Jwt:Key"]
-    ?? throw new InvalidOperationException("JWT Key is missing in the configuration!");*/
 
 // Dependency injection
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -184,12 +177,12 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Middleware pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
+//if (app.Environment.IsDevelopment())
+//{
+    //app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "MediMap API v1"); c.RoutePrefix = string.Empty; }); 
-}
+//}
 
 app.UseHttpsRedirection();
 app.UseRouting();
