@@ -7,7 +7,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -37,7 +36,7 @@ public class HomeScreenScript : MonoBehaviour
         movableAvatar.GetComponent<SpriteRenderer>().sortingOrder = 10;
         trajectTextList = GameObject.FindGameObjectsWithTag("TrajectText").OrderBy(obj => obj.name).ToArray();
 
-        StartCoroutine(GetAllTraject());
+        //StartCoroutine(GetAllTraject());
         StartCoroutine(GetUserLocation());
 
 

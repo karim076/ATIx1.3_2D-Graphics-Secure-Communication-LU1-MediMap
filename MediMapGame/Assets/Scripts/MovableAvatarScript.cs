@@ -2,7 +2,6 @@ using Assets.Scripts.SessionManager;
 using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class MovableAvatarScript : MonoBehaviour
 {
