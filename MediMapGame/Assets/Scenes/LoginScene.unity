@@ -4062,8 +4062,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1087078382}
-        m_TargetAssemblyTypeName: LoginManager, Assembly-CSharp
-        m_MethodName: GetValue
+        m_TargetAssemblyTypeName: LoginManager, Scripts
+        m_MethodName: GetDropDonwValue
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

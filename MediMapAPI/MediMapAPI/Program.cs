@@ -16,6 +16,7 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Options;
 using Google.Protobuf.WellKnownTypes;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,13 +25,49 @@ builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 builder.Services.AddHttpLogging(o => { });
 
-// Configure database connection
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Database connection string is missing!");
+// Set variables for connection string and JWT key
+string connectionString = string.Empty;
+string jwtKey = string.Empty;
+// Choose the correct database connection based on the environment
+if (builder.Environment.IsProduction())
+{
+    connectionString = builder.Configuration["SqlConnectionStrings"]
+    ?? throw new InvalidOperationException("Connection string is missing");
 
-// Configure JWT settings
-string jwtKey = builder.Configuration["Jwt:Key"]
-    ?? throw new InvalidOperationException("JWT Key is missing in the configuration!");
+    // Configure JWT settings
+    jwtKey = builder.Configuration["AzureJWTSecret"]
+         ?? throw new InvalidOperationException("AzureJWTSecret string is missing");
+
+
+
+    // Add database context
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlServer(connectionString, sqlOptions =>
+            sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,   // Number of retries
+            maxRetryDelay: TimeSpan.FromSeconds(30), // Wait time between retries
+            errorNumbersToAdd: null))); // Additional SQL error codes to retry on) );
+}
+else if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<ApplicationDbContext>();
+    // Use the default connection string for development
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+         ?? throw new InvalidOperationException("Database connection string is missing!");
+
+    // Configure JWT settings
+    jwtKey = builder.Configuration["Jwt:Key"]
+        ?? throw new InvalidOperationException("JWT Key is missing in the configuration!");
+}
+// Check if the connection string and jwtKey is missing
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("Database connection string is missing!");
+}
+if (string.IsNullOrEmpty(jwtKey))
+{
+    throw new InvalidOperationException("JWT Key is missing in the configuration!");
+}
 
 // Dependency injection
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -140,12 +177,12 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Middleware pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
+//if (app.Environment.IsDevelopment())
+//{
+    //app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "MediMap API v1"); c.RoutePrefix = string.Empty; }); 
-}
+//}
 
 app.UseHttpsRedirection();
 app.UseRouting();

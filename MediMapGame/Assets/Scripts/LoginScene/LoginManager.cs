@@ -35,14 +35,30 @@ public class LoginManager : MonoBehaviour
     [SerializeField] private TMP_InputField _appointmentDate;
     [SerializeField] private TMP_Dropdown _trajectDropdown;
 
+    private int _dropDownIndex = 0;
+
     private List<Traject> allTrajects = new List<Traject>();
 
-    //private void Start()
-    //{
-    //    _trajectDropdown.;
-    //}
+    private void Start()
+    {
+        InitializeTrajectDropdown();
+    }
+    private void InitializeTrajectDropdown()
+    {
+        _trajectDropdown.ClearOptions();
 
-  
+        // Voeg de standaard routes toe
+        var options = new List<TMP_Dropdown.OptionData>
+        {
+            new TMP_Dropdown.OptionData("Route A"),
+            new TMP_Dropdown.OptionData("Route B")
+        };
+
+        _trajectDropdown.AddOptions(options);
+        _trajectDropdown.value = 0; // Standaard selectie
+        _trajectDropdown.RefreshShownValue();
+    }
+
 
     //
     private RegisterViewModel RegisterViewModel()
@@ -57,6 +73,10 @@ public class LoginManager : MonoBehaviour
             Debug.LogError("Afspraakdatum is niet correct.");
             return null;
         }
+
+        // Bepaal trajectId op basis van dropdown selectie
+        int trajectIdU = _trajectDropdown.value + 1; // 0 -> 1, 1 -> 2
+
         return new RegisterViewModel
         {
             CreateUserDto = new CreateUserDto
@@ -91,8 +111,13 @@ public class LoginManager : MonoBehaviour
                 VoorNaam = _gardianName.text.Trim(),
                 AchterNaam = _gardianSurName.text.Trim()
             },
-            trajectId = allTrajects[_trajectDropdown.value].Id
+            trajectId = trajectIdU
         };
+    }
+
+    public void GetDropDonwValue(int value)
+    {
+        _dropDownIndex = _trajectDropdown.value;
     }
 
     public void AddTrajctToDropDown(List<Traject> trajects)

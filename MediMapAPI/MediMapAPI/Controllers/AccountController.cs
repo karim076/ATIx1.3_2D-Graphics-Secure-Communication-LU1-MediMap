@@ -68,7 +68,7 @@ namespace MediMapAPI.Controllers
             try
             {
 
-                if (user.CreateUserDto == null)
+                if (user.CreateUserDto == null || user.CreateUserDto.Password == null || user.CreateUserDto.Username == null || user.CreateUserDto.Email == null)
                 {
                     return BadRequest(new { message = "Gebruikersnaam en wachtwoord zijn verplicht." });
                 }
@@ -148,7 +148,7 @@ namespace MediMapAPI.Controllers
                     {
                         return BadRequest(new { message = "Traject bestaat niet." });
                     }
-                    patient.TrajectId = traject.Id;
+                    patient.TrajectId = user.TrajectId;
                 }
 
                 await _unitOfWork.PatientRepository.AddAsync(patient);
