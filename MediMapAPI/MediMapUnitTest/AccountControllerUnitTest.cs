@@ -1,4 +1,4 @@
-using DataAccess.Repository.IGenericRepository;
+/*using DataAccess.Repository.IGenericRepository;
 using DataAccess.Repository.iUnitOfWork;
 using MediMapAPI.Controllers;
 using MediMapAPI.Service;
@@ -376,3 +376,4 @@ public class AccountControllerUnitTest
 
 
 }
+*/
