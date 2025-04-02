@@ -1,4 +1,6 @@
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MemoryGameButton : MonoBehaviour
 {
@@ -23,6 +25,7 @@ public class MemoryGameButton : MonoBehaviour
         {
             if (memoryManagerScript.ImageButtonPressed != 0)
             {
+                int oldButtonId = memoryManagerScript.ImageButtonPressed;
                 if (memoryManagerScript.ImageButtonPressed != ButtonId)
                 {
                     EventSystem.GetComponent<MemoryGameManager>().ImageButtonPressed = ButtonId;
@@ -35,6 +38,13 @@ public class MemoryGameButton : MonoBehaviour
 
                     ButtonUnSelected();
                 }
+                //GameObject deselectButton = EventSystem.GetComponent<MemoryGameManager>().ImageButtons.FirstOrDefault(button =>
+                //{
+                //    MemoryGameButton script = button.GetComponent<MemoryGameButton>();
+                //    return script.ButtonId == oldButtonId;
+                //});
+                memoryManagerScript.ButtonUnSelected(oldButtonId);
+
             }
             else
             {
@@ -49,8 +59,11 @@ public class MemoryGameButton : MonoBehaviour
 
             if (memoryManagerScript.NameButtonPressed != 0)
             {
-                if(memoryManagerScript.NameButtonPressed != ButtonId)
+                int oldButtonId = memoryManagerScript.NameButtonPressed;
+
+                if (memoryManagerScript.NameButtonPressed != ButtonId)
                 {
+
                     EventSystem.GetComponent<MemoryGameManager>().NameButtonPressed = ButtonId;
 
                     ButtonSelected();
@@ -61,6 +74,14 @@ public class MemoryGameButton : MonoBehaviour
 
                     ButtonUnSelected();
                 }
+                //GameObject deselectButton = EventSystem.GetComponent<MemoryGameManager>().NameButtons.FirstOrDefault(button =>
+                //{
+                //    MemoryGameButton script = button.GetComponent<MemoryGameButton>();
+                //    return script.ButtonId == oldButtonId;
+                //});
+                //ButtonUnSelected(oldButtonId);
+                memoryManagerScript.ButtonUnSelected(oldButtonId);
+
             }
             else
             {
@@ -78,15 +99,18 @@ public class MemoryGameButton : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
-    public void ButtonUnSelected(int buttonId)
-    {
-
-    }
+    
     public void ButtonUnSelected()
     {
+        //147 118 102
+        Color buttonColor = new Color(147f / 255f, 118f / 255f, 102f / 255f);
+        gameObject.GetComponent<Image>().color = buttonColor;
     }
 
     public void ButtonSelected()
     {
+        
+
+        gameObject.GetComponent<Image>().color = Color.gray;
     }
 }

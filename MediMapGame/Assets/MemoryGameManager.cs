@@ -1,6 +1,8 @@
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class MemoryGameManager : MonoBehaviour
@@ -45,14 +47,17 @@ public class MemoryGameManager : MonoBehaviour
                 Debug.Log("correct");
 
                 CorrectAwnser();
+                ButtonUnSelected(NameButtonPressed);
+                ButtonUnSelected(ImageButtonPressed);
             }
             
             
         }
         else if(NameButtonPressed != ImageButtonPressed && NameButtonPressed != 0 && ImageButtonPressed != 0)
         {
+            ButtonUnSelected(NameButtonPressed);
+            ButtonUnSelected(ImageButtonPressed);
             IncorrectAwnser();
-
         }
 
     }
@@ -85,7 +90,7 @@ public class MemoryGameManager : MonoBehaviour
         IncorrectScreen.SetActive(true);
 
         MemoryGameButton memoryNameButton = NameButtons.FirstOrDefault(button => button.GetComponent<MemoryGameButton>().ButtonId == NameButtonPressed).GetComponent<MemoryGameButton>();
-        MemoryGameButton memoryImageButton = ImageButtons.FirstOrDefault(button => button.GetComponent<MemoryGameButton>().ButtonId == NameButtonPressed).GetComponent<MemoryGameButton>();
+        MemoryGameButton memoryImageButton = ImageButtons.FirstOrDefault(button => button.GetComponent<MemoryGameButton>().ButtonId == ImageButtonPressed).GetComponent<MemoryGameButton>();
         if (memoryNameButton != null && memoryImageButton != null)
         {
             memoryNameButton.IsUsed = false;
@@ -113,5 +118,16 @@ public class MemoryGameManager : MonoBehaviour
     public void CloseWinScreen()
     {
         WinScreen.SetActive(false);
+    }
+
+    public void ButtonUnSelected(int buttonId)
+    {
+        GameObject deselectButton = NameButtons.FirstOrDefault(button =>
+        {
+            MemoryGameButton script = button.GetComponent<MemoryGameButton>();
+            return script.ButtonId == buttonId;
+        });
+        Color buttonColor = new Color(147f / 255f, 118f / 255f, 102f / 255f);
+        deselectButton.GetComponent<UnityEngine.UI.Image>().color = buttonColor;
     }
 }
