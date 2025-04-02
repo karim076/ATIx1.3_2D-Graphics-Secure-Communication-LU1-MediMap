@@ -20,7 +20,7 @@ namespace Models.Model.Dto
 
         public Patient? Patient { get; set; }
 
-        [Required] public int? TrajectId { get; set; }
+        public int? TrajectId { get; set; }
         public Traject? Traject { get; set; }
     }
 }

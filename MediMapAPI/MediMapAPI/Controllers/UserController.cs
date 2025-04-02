@@ -80,7 +80,7 @@ public class UserController : ControllerBase
 
             if (user.Patient != null)
             {
-                patient.TrajectId = updateUser.TrajectId ?? 0;
+                //patient.TrajectId = updateUser.TrajectId ?? 0;
                 patient.PathLocation = updateUser.PatientPathLocation;
             }
             
