@@ -52,7 +52,6 @@ public class PathButtonScript : MonoBehaviour
             Id = userId,
             Username = APIManager.Instance.userName,
             PatientPathLocation = Id,
-            TrajectId = Route + 1,
         };
         Debug.Log(updateUser.ToString());
         yield return APIManager.Instance.SendRequest("api/User/" + userId, "PUT", updateUser, response =>
