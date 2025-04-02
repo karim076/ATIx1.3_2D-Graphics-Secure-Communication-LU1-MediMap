@@ -148,7 +148,7 @@ namespace MediMapAPI.Controllers
                     {
                         return BadRequest(new { message = "Traject bestaat niet." });
                     }
-                    patient.TrajectId = traject.Id;
+                    patient.TrajectId = user.TrajectId;
                 }
 
                 await _unitOfWork.PatientRepository.AddAsync(patient);

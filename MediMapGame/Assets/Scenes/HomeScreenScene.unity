@@ -828,6 +828,10 @@ PrefabInstance:
       propertyPath: Id
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 4498353862471700590, guid: 0a3b93e59f4a9f34ab0f4663e10395fe, type: 3}
+      propertyPath: NavigateTo
+      value: RecoveryProcessScene
+      objectReference: {fileID: 0}
     - target: {fileID: 6276562116653422917, guid: 0a3b93e59f4a9f34ab0f4663e10395fe, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -2769,7 +2773,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4498353862471700590, guid: 0a3b93e59f4a9f34ab0f4663e10395fe, type: 3}
       propertyPath: NavigateTo
-      value: RecoveryProcessScene
+      value: RouteScene
       objectReference: {fileID: 0}
     - target: {fileID: 6276562116653422917, guid: 0a3b93e59f4a9f34ab0f4663e10395fe, type: 3}
       propertyPath: m_Sprite
