@@ -59,7 +59,7 @@ jobs:
         run: dotnet build --no-restore ./MediMapAPI/MediMapAPI.sln
     
       - name: Run .NET Tests 🧪
-        run: dotnet test --no-build --verbosity normal ./MediMapAPI/MediMapUnitTest/MediMapAPI.Test.csproj
+        run: dotnet test --no-build --verbosity normal ./MediMapAPI/MediMapUnitTest/MediMapUnitTest.csproj
     
       - name: Publish
         run: dotnet publish ./MediMapAPI/MediMapAPI.sln --output ${{ env.PUBLISH_DIRECTORY }} --configuration Release 
