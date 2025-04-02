@@ -25,6 +25,11 @@ public class PathButtonScript : MonoBehaviour
             {
                 StartCoroutine(UpdatePatientLocation());
             }
+            else
+            {
+                SessionManager.Instance.geustPathLocation = Id;
+                Debug.Log("Changed to " + SessionManager.Instance.geustPathLocation);
+            }
             SceneManager.LoadScene(NavigateTo);
         }
         else

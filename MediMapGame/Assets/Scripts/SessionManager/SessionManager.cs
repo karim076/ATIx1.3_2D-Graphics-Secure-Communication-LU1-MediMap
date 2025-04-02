@@ -19,6 +19,8 @@ namespace Assets.Scripts.SessionManager
         public int UserId { get; private set; }
         public int PatientId { get; private set; }
 
+        public int geustPathLocation { get; set; }
+
         private void Awake()
         {
             if (Instance == null)

@@ -32,20 +32,15 @@ public class HomeScreenScript : MonoBehaviour
 
     void Start()
     {
+        RoadTiles = GameObject.FindGameObjectsWithTag("Pathway")
+                              .OrderBy(obj => obj.GetComponent<PathButtonScript>().Route)
+                              .ThenBy(obj => obj.GetComponent<PathButtonScript>().Id)
+                              .ToArray();
+        Debug.Log("session position " + SessionManager.Instance.geustPathLocation);
+
         movableAvatar = GameObject.Find("MovableAvatar");
         movableAvatar.GetComponent<SpriteRenderer>().sortingOrder = 10;
         trajectTextList = GameObject.FindGameObjectsWithTag("TrajectText").OrderBy(obj => obj.name).ToArray();
-
-        //StartCoroutine(GetAllTraject());
-        StartCoroutine(GetUserLocation());
-
-
-
-        if (SessionManager.Instance.AvatarName == null)
-        {
-            Sprite sprite = Resources.Load<Sprite>("Art/Monster1");
-            SessionManager.Instance.SetAvatarName(sprite);
-        }
 
         lineRendererRoad1 = GameObject.Find("RoadLine1").GetComponent<LineRenderer>();
         lineRendererRoad2 = GameObject.Find("RoadLine2").GetComponent<LineRenderer>();
@@ -54,17 +49,25 @@ public class HomeScreenScript : MonoBehaviour
         lineRendererRoad1.sortingOrder = 1;
         lineRendererRoad2.sortingOrder = 1;
         userProgressLineRenderer.sortingOrder = 2;
+        
+        if (APIManager.Instance.isLogedIn)
+        {
+            StartCoroutine(GetUserLocation());
+        }
+        else
+        {
+            userPathLocation = SessionManager.Instance.geustPathLocation;
+            userRoute = 1;
+            LoadUserData();
+        }
 
-        //SessionManager.Instance.LoadHeader();
-        //roadTilePrefab = Resources.Load<GameObject>("RoadButtonPrefab");
-        RoadTiles = GameObject.FindGameObjectsWithTag("Pathway")
-                              .OrderBy(obj => obj.GetComponent<PathButtonScript>().Route)
-                              .ThenBy(obj => obj.GetComponent<PathButtonScript>().Id)
-                              .ToArray(); // Convert the List<GameObject> back to an array
+        if (SessionManager.Instance.AvatarName == null)
+        {
+            Sprite sprite = Resources.Load<Sprite>("Art/Monster1");
+            SessionManager.Instance.SetAvatarName(sprite);
+        }
 
         LoadPathWay();
-        //LoadUserData();
-
     }
 
     void DrawLines()
@@ -153,52 +156,59 @@ public class HomeScreenScript : MonoBehaviour
 
     public void LoadUserData()
     {
+        GameObject foundTile;
         if (APIManager.Instance.isLogedIn)
         {
-
-            Debug.Log(userPathLocation);
-            Debug.Log(userRoute);
-            //int userRouteFromDatabase = 1;
-            //int userPlaceFromDatabase = 3;
-            Debug.Log("user is logged in");
-            GameObject foundTile = RoadTiles
+            foundTile = RoadTiles
             .FirstOrDefault(tile =>
             {
                 PathButtonScript script = tile.GetComponent<PathButtonScript>();
-                return script != null && script.Route == userRoute - 1 && script.Id == userPathLocation;
+                return script != null && script.Route == 0 && script.Id == userPathLocation;
             });
 
-            if(foundTile != null)
+        }
+        else
+        {
+            //Debug.Log("foundtile thing session " + SessionManager.Instance.geustPathLocation);
+            //Debug.Log("ffrom variable " + userPathLocation);
+            //Debug.Log(RoadTiles[userPathLocation]);
+            foundTile = RoadTiles
+            .FirstOrDefault(tile =>
             {
-                Vector3 location = foundTile.transform.position;
+                PathButtonScript script = tile.GetComponent<PathButtonScript>();
+                return script != null && script.Route == 0 && script.Id == SessionManager.Instance.geustPathLocation;
+            });
 
-                movableAvatar.GetComponent<MovableAvatarScript>().SetAvatarFromDataBase(location);
-                movableAvatar.GetComponent<MovableAvatarScript>().SetLocation(foundTile.GetComponent<PathButtonScript>().Id, foundTile.GetComponent<PathButtonScript>().Route);
+        }
 
 
-                GameObject[] userpathWayList = RoadTiles
-                .Where(obj =>
-                {
-                    PathButtonScript script = obj.GetComponent<PathButtonScript>();
-                    return script != null &&
-                            (script.Route == 0 || script.Route == userRoute - 1 ) &&
-                            script.Id <= userPathLocation;
-                })
-                .OrderBy(obj => obj.GetComponent<PathButtonScript>().Route)
-                .ThenBy(obj => obj.GetComponent<PathButtonScript>().Id)
-                .ToArray(); 
+        if (foundTile != null)
+        {
+            Vector3 location = foundTile.transform.position;
 
+            movableAvatar.GetComponent<MovableAvatarScript>().SetAvatarFromDataBase(location);
+            movableAvatar.GetComponent<MovableAvatarScript>().SetLocation(foundTile.GetComponent<PathButtonScript>().Id, foundTile.GetComponent<PathButtonScript>().Route);
+
+            Debug.Log("roadtiles length" + RoadTiles);
+            GameObject[] userpathWayList = RoadTiles
+            .Where(obj =>
+            {
+                PathButtonScript script = obj.GetComponent<PathButtonScript>();
+                return script != null &&script.Route == 0 && script.Id <= userPathLocation;
+            })
+            .OrderBy(obj => obj.GetComponent<PathButtonScript>().Route)
+            .ThenBy(obj => obj.GetComponent<PathButtonScript>().Id)
+            .ToArray();
+            Debug.Log("userlist size" + userpathWayList.Length);
+            if (userpathWayList != null || userpathWayList.Length == 0)
+            {
                 CreateUserProgressLine(userpathWayList);
-            }
-            else
-            {
-                Debug.Log("nog found");
-                movableAvatar.GetComponent<MovableAvatarScript>().SetLocation(0,0);
             }
         }
         else
         {
-            movableAvatar.GetComponent<MovableAvatarScript>().SetLocation(0,0);
+            Debug.Log("nog found");
+            movableAvatar.GetComponent<MovableAvatarScript>().SetLocation(0, 0);
         }
     }
 
@@ -207,7 +217,6 @@ public class HomeScreenScript : MonoBehaviour
         Debug.Log("userid" + APIManager.Instance.userId);
         yield return APIManager.Instance.SendRequest("api/User/" + APIManager.Instance.userId, "GET", null, response =>
         {
-            //Debug.Log("before parse" + response);
             UserDto responceParsed = JsonConvert.DeserializeObject<UserDto>(response);
             Debug.Log("response getlocation" + response);
             userPathLocation = responceParsed.PatientPathLocation;
@@ -217,8 +226,6 @@ public class HomeScreenScript : MonoBehaviour
 
         }, error =>
         {
-
-            // Parse the error response from the API
             try
             {
                 var errorResponse = JsonConvert.DeserializeObject<ErrorMessage>(error);
