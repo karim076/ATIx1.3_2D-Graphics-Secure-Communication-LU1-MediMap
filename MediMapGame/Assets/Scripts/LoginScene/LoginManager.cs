@@ -35,6 +35,8 @@ public class LoginManager : MonoBehaviour
     [SerializeField] private TMP_InputField _appointmentDate;
     [SerializeField] private TMP_Dropdown _trajectDropdown;
 
+    private int _dropDownIndex = 0;
+
     private List<Traject> allTrajects = new List<Traject>();
 
     //private void Start()
@@ -91,8 +93,13 @@ public class LoginManager : MonoBehaviour
                 VoorNaam = _gardianName.text.Trim(),
                 AchterNaam = _gardianSurName.text.Trim()
             },
-            trajectId = allTrajects[_trajectDropdown.value].Id
+            trajectId = allTrajects[_dropDownIndex].Id
         };
+    }
+
+    public void GetDropDonwValue(int value)
+    {
+        _dropDownIndex = _trajectDropdown.value;
     }
 
     public void AddTrajctToDropDown(List<Traject> trajects)
