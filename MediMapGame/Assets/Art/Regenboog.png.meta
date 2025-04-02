@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Regenboog_0: -7169240051840155075
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

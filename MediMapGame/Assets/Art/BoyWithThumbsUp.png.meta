@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      BoyWithThumbsUp_0: -5094816326749269963
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
