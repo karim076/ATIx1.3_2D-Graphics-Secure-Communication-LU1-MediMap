@@ -71,7 +71,7 @@ public class HomeScreenScript : MonoBehaviour
     {
         for (int i = 0; i < RoadTiles.Length; i++)
         {
-            RoadTiles[i].GetComponent<SpriteRenderer>().sortingOrder = 2;
+            RoadTiles[i].GetComponent<SpriteRenderer>().sortingOrder = 3;
             int currentTileRouteId = RoadTiles[i].GetComponent<PathButtonScript>().Route;
             int currentTileId = RoadTiles[i].GetComponent<PathButtonScript>().Id;
 
@@ -199,7 +199,6 @@ public class HomeScreenScript : MonoBehaviour
         else
         {
             movableAvatar.GetComponent<MovableAvatarScript>().SetLocation(0,0);
-
         }
     }
 

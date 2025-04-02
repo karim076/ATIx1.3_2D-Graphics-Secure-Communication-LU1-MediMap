@@ -35,6 +35,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RecoveryProcessScene.unity
     guid: 7ce6c131cfde3384fa86737dc9f32218
+  - enabled: 1
+    path: Assets/Scenes/MemoryGameScene.unity
+    guid: 7c70a604b1ebcb7408a83210e2ca64d6
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
