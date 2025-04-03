@@ -17,6 +17,7 @@ namespace Assets.Scripts.Models
         public string ArtsNaam;
         public string TrajectNaam;
         public int PathLocation;
+        public int TrajectId;
         public string OuderVoogdNaam;
         public DateTime GeboorteDatum;
         public DateTime AfspraakDatum;

@@ -38,11 +38,33 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
         private TMP_Text _treatmentPlanText;
         private TMP_Text _lastNameText;
 
+        [SerializeField] private TMP_Dropdown _trajectDropdown;
+
+        private void InitializeTrajectDropdown()
+        {
+            _trajectDropdown.ClearOptions();
+
+            // Voeg de standaard routes toe
+            var options = new List<TMP_Dropdown.OptionData>
+            {
+                new TMP_Dropdown.OptionData("Route A"),
+                new TMP_Dropdown.OptionData("Route B")
+            };
+
+            _trajectDropdown.AddOptions(options);
+        }
+
+        
+
         private List<string> images = new List<string>();
 
         private void Start()
         {
+
+            
             InitializeTextComponent();
+
+            InitializeTrajectDropdown();
 
             CollectAvatarNames();
 
@@ -171,18 +193,7 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
                 Debug.Log("Voer een geldige datum in");
                 return;
             }
-            Patient patient = new()
-            {
-                Id = 0,
-                VoorNaam = _nameInputField.text,
-                AchterNaam = _lastNameText.text,
-                AvatarNaam = string.Empty,
-                ArtsNaam = _doctorNameText.text ?? string.Empty,
-                TrajectNaam = _treatmentPlanText.text ?? string.Empty,
-                OuderVoogdNaam = string.Empty,
-                GeboorteDatum = geboorteDatum,
-                AfspraakDatum = DateTime.Parse(_userAppointmentText.text)
-            };
+            var patient = GetPatientModel();
             try
             {
                 ProfileSceneScript.SaveProfileData(patient);
@@ -192,6 +203,31 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
             {
                 Debug.LogError($"Error bij het opslaan van gegevens: {e.Message}");
             }
+        }
+        public void ChangeTraject()
+        {
+            if (_trajectDropdown != null)
+            {
+                int selectedIndex = _trajectDropdown.value;
+                var patient = GetPatientModel();
+                ProfileSceneScript.ChangeTraject(patient);
+            }
+        }
+        private Patient GetPatientModel()
+        {
+            return new Patient
+            {
+                Id = 0,
+                VoorNaam = _userNameText.text,
+                AchterNaam = _lastNameText.text,
+                AvatarNaam = string.Empty,
+                ArtsNaam = _doctorNameText.text ?? string.Empty,
+                TrajectNaam = _trajectDropdown.options[_trajectDropdown.value].text ?? string.Empty,
+                OuderVoogdNaam = string.Empty,
+                GeboorteDatum = DateTime.Parse(_userBirthDayText.text),
+                AfspraakDatum = DateTime.Parse(_userAppointmentText.text),
+                TrajectId = _trajectDropdown.value + 1,
+            };
         }
     }
 }

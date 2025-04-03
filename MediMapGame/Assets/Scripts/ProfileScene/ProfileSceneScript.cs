@@ -15,6 +15,20 @@ public class ProfileSceneScript : MonoBehaviour
     {
         SetProfileData();
     }
+
+    public void ChangeTraject(Patient patient)
+    {
+        StartCoroutine(APIManager.Instance.SendRequest($"api/Patient/traject/{SessionManager.Instance.PatientId}", "PUT", patient, (response) =>
+        {
+            var profile = JsonConvert.DeserializeObject<Patient>(response);
+            if (profile != null)
+            {
+                _profileSceneUI.SetProfileData(profile.VoorNaam, profile.AchterNaam, profile.GeboorteDatum.ToShortDateString(), profile.AfspraakDatum.ToShortDateString(), profile.ArtsNaam, profile.TrajectNaam);
+            }
+        }));
+    }
+
+
     public void SaveAvatar(AvatarName avatarNaam)
     {
         StartCoroutine(APIManager.Instance.SendRequest($"api/Patient/avatar/{SessionManager.Instance.PatientId}", "PUT", avatarNaam, (response) =>
