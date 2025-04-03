@@ -19,7 +19,7 @@ namespace MediMapAPI.Controllers
             this.unitOfWork = unitOfWork;
         }
         [HttpGet("{Id}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "User,Admin")]
         public async Task<ActionResult<ArtsDto>> Get(int Id)
         {
             try
@@ -38,7 +38,7 @@ namespace MediMapAPI.Controllers
             }
         }
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = "User,Admin")]
         public async Task<ActionResult<ArtsDto>> PostArts(ArtsDto artsDto)
         {
             if (!ModelState.IsValid)

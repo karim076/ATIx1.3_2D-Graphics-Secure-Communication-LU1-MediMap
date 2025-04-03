@@ -23,6 +23,7 @@ namespace MediMapAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> AddLog(LogBook log)
         {
             if (log == null) {
@@ -35,6 +36,7 @@ namespace MediMapAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "User,Admin")]
         public async Task<ActionResult<IEnumerable<LogBook>>> GetLogsbyPatientId(int id)
         {
             if (!ModelState.IsValid)
@@ -67,6 +69,7 @@ namespace MediMapAPI.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> DeleteLog(LogBook id)
         {
             if (id == null)

@@ -20,6 +20,7 @@ public class TrajectController : ControllerBase
     }
 
     [HttpGet("all")]
+    [AllowAnonymous]
     public async Task<ActionResult<TrajectDto>> GetAllTrajects()
     {
         if (!ModelState.IsValid)
@@ -60,6 +61,7 @@ public class TrajectController : ControllerBase
 
     
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<ActionResult<TrajectDto>> GetTrajectByIdAsync(int id)
     {
         if (!ModelState.IsValid)

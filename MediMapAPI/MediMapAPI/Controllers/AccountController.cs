@@ -158,7 +158,7 @@ namespace MediMapAPI.Controllers
                 await _userManager.UpdateAsync(newUser);
 
                 // Assign the "User" role by default
-                // await _userManager.AddToRoleAsync(newUser, "User");
+                await _userManager.AddToRoleAsync(newUser, "User");
 
                 return Ok(new { message = "User created successfully." });
             }

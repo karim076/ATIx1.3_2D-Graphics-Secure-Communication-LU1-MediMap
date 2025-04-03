@@ -20,6 +20,7 @@ public class ProfileInformationController : ControllerBase
 
     // GET: api/<ProfileInformationController>
     [HttpGet("{id}")]
+    [Authorize(Roles = "User,Admin")]
     public async Task<ActionResult<ProfileInformationDto>> GetProfileInformationByIdAsync(int id)
     {
         if (!ModelState.IsValid)
@@ -47,7 +48,9 @@ public class ProfileInformationController : ControllerBase
             return BadRequest(new { message = e.Message });
         }
     }
+
     [HttpPost]
+    [AllowAnonymous]
     public async Task<ActionResult<ProfileInformationDto>> CreateProfileInformationAsync(ProfileInformationDto profileInformationDto)
     {
         if (!ModelState.IsValid)
@@ -73,6 +76,7 @@ public class ProfileInformationController : ControllerBase
     }
     // PUT api/<ProfileInformationController>/5
     [HttpPut("{id}")]
+    [Authorize(Roles = "User,Admin")]
     public async Task<ActionResult<ProfileInformationDto>> UpdateProfileInformationAsync(int id, ProfileInformationDto profileInformationDto)
     {
         if (!ModelState.IsValid)

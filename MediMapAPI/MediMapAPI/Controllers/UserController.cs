@@ -21,6 +21,7 @@ public class UserController : ControllerBase
     }
     
     [HttpGet("{id}")]
+    [Authorize(Roles = "User,Admin")]
     public async Task<ActionResult<CreateUserDto>> GetUserByIdAsync(int id)
     {
         if (!ModelState.IsValid)
@@ -57,6 +58,7 @@ public class UserController : ControllerBase
 
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "User,Admin")]
     public async Task<ActionResult<CreateUserDto>> Put(int id, CreateUserDto updateUser)
     {
         if (!ModelState.IsValid)

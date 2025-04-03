@@ -24,6 +24,7 @@ namespace MediMapAPI.Controllers
 
         // GET api/<PatientController>/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "User,Admin")]
         public async Task<ActionResult<PatientDto>> Get(int id)
         {
             if (!ModelState.IsValid)
@@ -52,6 +53,7 @@ namespace MediMapAPI.Controllers
         }
         // POST api/<PatientController>
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<PatientDto>> Post(PatientDto patientDto)
         {
             if (!ModelState.IsValid)
@@ -80,6 +82,7 @@ namespace MediMapAPI.Controllers
 
         // PUT api/<PatientController>/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "User,Admin")]
         public async Task<ActionResult<PatientDto>> Put(int id, PatientDto patientDTO)
         {
             if (!ModelState.IsValid)
@@ -117,6 +120,7 @@ namespace MediMapAPI.Controllers
         }
 
         [HttpPut("avatar/{Id}")]
+        [Authorize(Roles = "User,Admin")]
         public async Task<ActionResult<AvatarName>> UpdateAvatar(int Id, AvatarName avatarName)
         {
             if (!ModelState.IsValid)
@@ -148,6 +152,7 @@ namespace MediMapAPI.Controllers
         }
 
         [HttpGet("avatar/{Id}")]
+        [Authorize(Roles = "User,Admin")]
         public async Task<ActionResult<AvatarName>> GetAvatar(int Id)
         {
             if (!ModelState.IsValid)
