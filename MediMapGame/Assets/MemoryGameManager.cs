@@ -128,6 +128,9 @@ public class MemoryGameManager : MonoBehaviour
             return script.ButtonId == buttonId;
         });
         Color buttonColor = new Color(147f / 255f, 118f / 255f, 102f / 255f);
-        deselectButton.GetComponent<UnityEngine.UI.Image>().color = buttonColor;
+        if(deselectButton != null)
+        {
+            deselectButton.GetComponent<UnityEngine.UI.Image>().color = buttonColor;
+        }
     }
 }
