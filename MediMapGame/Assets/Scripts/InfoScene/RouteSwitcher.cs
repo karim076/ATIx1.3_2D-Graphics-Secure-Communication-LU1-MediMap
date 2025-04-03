@@ -56,69 +56,79 @@ public class RouteSwitcher : MonoBehaviour
             yield break;
         }
 
-        yield return APIManager.Instance.SendRequest($"api/User/{APIManager.Instance.userId}", "GET", null, response =>
+        if(APIManager.Instance.isLogedIn == true)
         {
-            try
+            yield return APIManager.Instance.SendRequest($"api/User/{APIManager.Instance.userId}", "GET", null, response =>
             {
-                // 3. Veilige deserialisatie met null-checks
-                UserDto responceParsed = JsonConvert.DeserializeObject<UserDto>(response);
+                try
+                {
+                    // 3. Veilige deserialisatie met null-checks
+                    UserDto responceParsed = JsonConvert.DeserializeObject<UserDto>(response);
 
-                if (responceParsed == null)
-                {
-                    Debug.LogError("Failed to parse API response");
-                    userRouteChoice.SetActive(true);
-                    return;
-                }
+                    if (responceParsed == null)
+                    {
+                        Debug.LogError("Failed to parse API response");
+                        userRouteChoice.SetActive(true);
+                        return;
+                    }
 
-                // 4. Default waarde voor TrajectId als het null is
-                userRoute = responceParsed.TrajectId ?? 0;
+                    // 4. Default waarde voor TrajectId als het null is
+                    userRoute = responceParsed.TrajectId ?? 0;
 
-                // 5. Veilige toegang tot geneste properties
-                if (responceParsed.TrajectId != null)
-                {
-                    Debug.Log($"userRoute: {responceParsed.TrajectId ?? null}");
-                }
-                else
-                {
-                    Debug.Log("Patient data is null");
-                }
+                    // 5. Veilige toegang tot geneste properties
+                    if (responceParsed.TrajectId != null)
+                    {
+                        Debug.Log($"userRoute: {responceParsed.TrajectId ?? null}");
+                    }
+                    else
+                    {
+                        Debug.Log("Patient data is null");
+                    }
 
-                // 6. Route selectie met null-checks
-                if (!routeA || !routeB || !userRouteChoice)
-                {
-                    Debug.LogError("Route GameObjects are not assigned in inspector");
-                    return;
-                }
+                    // 6. Route selectie met null-checks
+                    if (!routeA || !routeB || !userRouteChoice)
+                    {
+                        Debug.LogError("Route GameObjects are not assigned in inspector");
+                        return;
+                    }
 
-                if (userRoute == 1)
-                {
-                    routeA.SetActive(true);
-                    routeB.SetActive(false);
-                    userRouteChoice.SetActive(false);
-                }
-                else if (userRoute == 2)
-                {
-                    routeB.SetActive(true);
-                    routeA.SetActive(false);
-                    userRouteChoice.SetActive(false);
-                }
-                else
-                {
-                    userRouteChoice.SetActive(true);
-                    routeA.SetActive(false);
-                    routeB.SetActive(false);
-                }
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Error processing response: {e.Message}");
-                userRouteChoice.SetActive(true);
-            }
-        },
-        error =>
+                    if (userRoute == 1)
+                    {
+                        routeA.SetActive(true);
+                        routeB.SetActive(false);
+                        userRouteChoice.SetActive(false);
+                    }
+                    else if (userRoute == 2)
+                    {
+                        routeB.SetActive(true);
+                        routeA.SetActive(false);
+                        userRouteChoice.SetActive(false);
+                    }
+                    else
+                    {
+                        userRouteChoice.SetActive(true);
+                        routeA.SetActive(false);
+                        routeB.SetActive(false);
+                    }
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogError($"Error processing response: {e.Message}");
+                        userRouteChoice.SetActive(true);
+                    }
+                        },
+                    error =>
+                    {
+                        Debug.LogError($"API request failed: {error}");
+                        userRouteChoice.SetActive(true);
+                    });
+        }
+        else
         {
-            Debug.LogError($"API request failed: {error}");
             userRouteChoice.SetActive(true);
-        });
+            yield break;
+        }
+
+        
     }
 }
