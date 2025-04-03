@@ -176,11 +176,27 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Seed roles
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        await RoleSeeder.SeedRolesAsync(services);
+        await RoleSeeder.UpdateRoleConcurrencyStampsAsync(services); // Update existing roles
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding roles.");
+    }
+}
+
 // Middleware pipeline
 //if (app.Environment.IsDevelopment())
 //{
-    //app.UseDeveloperExceptionPage();
-    app.UseSwagger();
+//app.UseDeveloperExceptionPage();
+app.UseSwagger();
     app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "MediMap API v1"); c.RoutePrefix = string.Empty; }); 
 //}
 
