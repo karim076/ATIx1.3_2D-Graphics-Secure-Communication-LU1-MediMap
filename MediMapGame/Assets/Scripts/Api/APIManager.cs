@@ -8,6 +8,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SocialPlatforms;
+using static System.Net.WebRequestMethods;
 
 namespace MediMap.Scripts.Api
 {
@@ -53,7 +54,7 @@ namespace MediMap.Scripts.Api
             }
         }
 
-        private string apiBaseUrl = "https://localhost:5001/";
+        private string apiBaseUrl = "https://avansict2227978.azurewebsites.net/";
 
         private void Awake()
         {
@@ -100,7 +101,7 @@ namespace MediMap.Scripts.Api
             string jsonData = JsonConvert.SerializeObject(refreshTokenRequest);
             byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonData);
 
-            using (UnityWebRequest request = new UnityWebRequest("https://localhost:5001/Account/RefreshToken", "POST"))
+            using (UnityWebRequest request = new UnityWebRequest("https://avansict2227978.azurewebsites.net/Account/RefreshToken", "POST"))
             {
                 request.uploadHandler = new UploadHandlerRaw(jsonBytes);
                 request.downloadHandler = new DownloadHandlerBuffer();
