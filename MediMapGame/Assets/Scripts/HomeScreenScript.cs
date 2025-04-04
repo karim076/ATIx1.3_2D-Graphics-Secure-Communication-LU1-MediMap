@@ -218,7 +218,7 @@ public class HomeScreenScript : MonoBehaviour
         yield return APIManager.Instance.SendRequest("api/User/" + APIManager.Instance.userId, "GET", null, response =>
         {
             UserDto responceParsed = JsonConvert.DeserializeObject<UserDto>(response);
-            Debug.Log("response getlocation" + response);
+            //Debug.Log("response getlocation" + response);
             userPathLocation = responceParsed.PatientPathLocation;
             SessionManager.Instance.loggedUserPathLocation = userPathLocation;
             userRoute = responceParsed.TrajectId ?? 0;
