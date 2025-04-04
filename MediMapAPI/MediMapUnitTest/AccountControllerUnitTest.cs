@@ -11,14 +11,13 @@ using Models.Model.Dto;
 using Models.ViewModel;
 using Moq;
 using System.Linq.Expressions;
+using System.Text;
 using static MediMapAPI.Controllers.AccountController;
 using Validator = MediMapAPI.Service.Validator;
 
 namespace MediMapUnitTest;
 
 [TestClass]
-// Voeg dit toe bovenaan je testbestand:
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("MediMapUnitTest")]
 public class AccountControllerUnitTest
 {
 
@@ -140,13 +139,12 @@ public class AccountControllerUnitTest
     [DataRow(null, "GoedWachtwoord51.", "enes@hotmail.com", "Gebruikersnaam mag niet leeg zijn.")]
     [DataRow("", "GoedWachtwoord51.", "enes@hotmail.com", "Gebruikersnaam mag niet leeg zijn.")]
     [DataRow("  ", "GoedWachtwoord51.", "enes@hotmail.com", "Gebruikersnaam mag niet leeg zijn.")]
-    [DataRow("EnesTekinbas51", "GoedWachtwoord51.", "test@hotmail.com", "Gebruikersnaam mag alleen letters en cijfers bevatten.")]
     [DataRow("EnesTekinbas51", null, "enes@hotmail.com", "Wachtwoord mag niet leeg zijn.")]
     [DataRow("EnesTekinbas51", "", "enes@hotmail.com", "Wachtwoord mag niet leeg zijn.")]
     [DataRow("EnesTekinbas51", "Kort51.", "enes@hotmail.com", "Wachtwoord moet minimaal 10 tekens lang zijn.")]
     [DataRow("EnesTekinbas51", "FOUTWACHTWOORD!", "enes@hotmailcom", "Wachtwoord moet minimaal één kleine letter bevatten.")]
     [DataRow("EnesTekinbas51", "foutwachtwoord51.", "enes@hotmailcom", "Wachtwoord moet minimaal één hoofdletter bevatten.")]
-    [DataRow("EnesTekinbas51", "FoutWachtwoord!", "enes@hotmailcom" , "Wachtwoord moet minimaal één cijfer bevatten.")]
+    [DataRow("EnesTekinbas51", "FoutWachtwoord!", "enes@hotmailcom", "Wachtwoord moet minimaal één cijfer bevatten.")]
     [DataRow("EnesTekinbas51", "FoutWachtwoord51", "enes@hotmail.com", "Wachtwoord moet minimaal één speciaal teken bevatten.")]
     [DataRow("EnesTekinbas51", "GoedWachtwoord51.", null, "Ongeldig e-mailformaat.")]
     [DataRow("EnesTekinbas51", "GoedWachtwoord51.", "", "Ongeldig e-mailformaat.")]
@@ -156,14 +154,14 @@ public class AccountControllerUnitTest
     {
         // Arrange
         var validate = Validator.ValidateUserCredentials(username, password, email);
-        // Act
+
+        // Normalize strings for consistent comparison
+        var normalizedValidate = validate?.Normalize(NormalizationForm.FormC);
+        var normalizedError = error.Normalize(NormalizationForm.FormC);
 
         // Assert
-        if (validate != null)
-        {
-            Assert.IsNotNull(validate);
-            Assert.AreEqual(validate, error);
-        }
+        Assert.IsNotNull(validate, "Validatie zou een foutmelding moeten retourneren");
+        Assert.AreEqual(normalizedError, normalizedValidate, "Foutmelding komt niet overeen met verwachting");
     }
     //[TestMethod]
     //public async Task CreateAcoount_IfValid_ReturnOk()
