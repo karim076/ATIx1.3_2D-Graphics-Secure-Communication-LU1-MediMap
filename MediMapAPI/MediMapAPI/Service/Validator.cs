@@ -18,10 +18,10 @@ namespace MediMapAPI.Service
             if (password.Length < 10)
                 return "Wachtwoord moet minimaal 10 tekens lang zijn.";
 
-            if (!Regex.IsMatch(password, @"[a-z]")) return "Wachtwoord moet minimaal één kleine letter bevatten.";
-            if (!Regex.IsMatch(password, @"[A-Z]")) return "Wachtwoord moet minimaal één hoofdletter bevatten.";
-            if (!Regex.IsMatch(password, @"\d")) return "Wachtwoord moet minimaal één cijfer bevatten.";
-            if (!Regex.IsMatch(password, @"[^a-zA-Z0-9]")) return "Wachtwoord moet minimaal één speciaal teken bevatten.";
+            if (!Regex.IsMatch(password, @"[a-z]")) return "Wachtwoord moet minimaal een kleine letter bevatten.";
+            if (!Regex.IsMatch(password, @"[A-Z]")) return "Wachtwoord moet minimaal een hoofdletter bevatten.";
+            if (!Regex.IsMatch(password, @"\d")) return "Wachtwoord moet minimaal een cijfer bevatten.";
+            if (!Regex.IsMatch(password, @"[^a-zA-Z0-9]")) return "Wachtwoord moet minimaal een speciaal teken bevatten.";
 
             if (string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 return "Ongeldig e-mailformaat.";
