@@ -119,6 +119,37 @@ namespace MediMapAPI.Controllers
             }
         }
 
+        [HttpPut("traject/{id}")]
+        public async Task<ActionResult<PatientDto>> UpdateTraject(int id, PatientDto patientDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var patient = await _unitOfWork.PatientRepository.GetAsync(p => p.Id == id, includeProperty: "Arts,Traject,OuderVoogd");
+                if (patient == null)
+                {
+                    return NotFound(new { message = "Geen patient gevonden." });
+                }
+                patient.TrajectId = patientDto.TrajectId;
+
+                _unitOfWork.PatientRepository.Update(patient);
+                await _unitOfWork.SaveAsync();
+
+                var updatedPatient = await _unitOfWork.PatientRepository.GetAsync(t => t.Id == id, includeProperty: "Arts,Traject,OuderVoogd");
+
+                var patientDtoResult = ConvertToPatientDto(updatedPatient);
+
+                return Ok(patientDtoResult);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+        }
+
         [HttpPut("avatar/{Id}")]
         [Authorize(Roles = "User,Admin")]
         public async Task<ActionResult<AvatarName>> UpdateAvatar(int Id, AvatarName avatarName)
