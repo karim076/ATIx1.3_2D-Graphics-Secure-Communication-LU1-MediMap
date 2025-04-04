@@ -220,6 +220,7 @@ public class HomeScreenScript : MonoBehaviour
             UserDto responceParsed = JsonConvert.DeserializeObject<UserDto>(response);
             Debug.Log("response getlocation" + response);
             userPathLocation = responceParsed.PatientPathLocation;
+            SessionManager.Instance.loggedUserPathLocation = userPathLocation;
             userRoute = responceParsed.TrajectId ?? 0;
 
             Debug.Log("setuoasf" + userRoute + " " + userPathLocation);
