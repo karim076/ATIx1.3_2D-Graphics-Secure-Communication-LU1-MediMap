@@ -11,15 +11,16 @@ public class StickerShowcaseScript : MonoBehaviour
     private Color unlockedColor = Color.white;
     private Color lockedColor = Color.gray;
 
-    private void Start()
+    void Start()
     {
         stickerList = GameObject.FindGameObjectsWithTag("ShowcaseStickers").OrderBy(sticker => sticker.name).ToArray();
         int userlocation = SessionManager.Instance.loggedUserPathLocation;
+        CloseStickerShowcase();
         Debug.Log(userlocation);
         Debug.Log(stickerList.Length);
         for (int i = 0; i <= stickerList.Length - 1; i++)
         {
-            if (userlocation >= i || (i == 7 && userlocation == 7))
+            if (userlocation >= i || (i == 7 && userlocation == 6))
             {
                 stickerList[i].GetComponent<Image>().color = unlockedColor;
             }
