@@ -83,7 +83,10 @@ public class UserController : ControllerBase
             if (user.Patient != null)
             {
                 //patient.TrajectId = updateUser.TrajectId ?? 0;
-                patient.PathLocation = updateUser.PatientPathLocation;
+                if(updateUser.PatientPathLocation > patient.PathLocation)
+                {
+                    patient.PathLocation = updateUser.PatientPathLocation;
+                }
             }
             
             _unitOfWork.ApplicationUserRepository.Update(user);

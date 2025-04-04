@@ -8,6 +8,7 @@ TagManager:
   - TrajectText
   - QuizButton
   - MemoryButton
+  - ShowcaseStickers
   layers:
   - Default
   - TransparentFX
