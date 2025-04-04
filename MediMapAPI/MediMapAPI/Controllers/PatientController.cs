@@ -44,6 +44,7 @@ namespace MediMapAPI.Controllers
                 {
                     return BadRequest(new { message = "Fout bij het ophalen van patient." });
                 }
+
                 return Ok(patientDto);
             }
             catch (Exception e)
@@ -112,6 +113,37 @@ namespace MediMapAPI.Controllers
                 await _unitOfWork.SaveAsync();
 
                 return Ok(patientDto);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+        }
+
+        [HttpPut("traject/{id}")]
+        public async Task<ActionResult<PatientDto>> UpdateTraject(int id, PatientDto patientDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var patient = await _unitOfWork.PatientRepository.GetAsync(p => p.Id == id, includeProperty: "Arts,Traject,OuderVoogd");
+                if (patient == null)
+                {
+                    return NotFound(new { message = "Geen patient gevonden." });
+                }
+                patient.TrajectId = patientDto.TrajectId;
+
+                _unitOfWork.PatientRepository.Update(patient);
+                await _unitOfWork.SaveAsync();
+
+                var updatedPatient = await _unitOfWork.PatientRepository.GetAsync(t => t.Id == id, includeProperty: "Arts,Traject,OuderVoogd");
+
+                var patientDtoResult = ConvertToPatientDto(updatedPatient);
+                patientDtoResult.TrajectId = patientDto.TrajectId;
+                return Ok(patientDtoResult);
             }
             catch (Exception e)
             {
@@ -192,6 +224,7 @@ namespace MediMapAPI.Controllers
                 OuderVoogdNaam = $"{patient.OuderVoogd.VoorNaam} {patient.OuderVoogd.AchterNaam}",
                 AfspraakDatum = patient.AfspraakDatum,
                 GeboorteDatum = patient.GeboorteDatum,
+                TrajectId = patient.TrajectId
                 //logbook = patient.LogBooks.Select(l => new LogBookDto
                 //{
                 //    Id = l.Id,

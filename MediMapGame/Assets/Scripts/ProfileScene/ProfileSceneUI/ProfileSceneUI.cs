@@ -13,12 +13,12 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
 {
     public class ProfileSceneUI : MonoBehaviour
     {
-        [SerializeField] private Image _userName;
-        [SerializeField] private Image _userBirthDay;
-        [SerializeField] private Image _userAppointment;
-        [SerializeField] private Image _doctorName;
-        [SerializeField] private Image _treatmentPlan;
-        [SerializeField] private Image _lastName;
+        [SerializeField] private TMP_InputField _userName;
+        [SerializeField] private TMP_InputField _userBirthDay;
+        [SerializeField] private TMP_InputField _userAppointment;
+        [SerializeField] private TMP_InputField _doctorName;
+        [SerializeField] private TMP_InputField _treatmentPlan;
+        [SerializeField] private TMP_InputField _lastName;
 
         [SerializeField] private GameObject _avatarPanel1;
         [SerializeField] private GameObject _avatarPanel2;
@@ -31,14 +31,14 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
 
         [SerializeField] private ProfileSceneScript ProfileSceneScript;
 
-        private TMP_Text _userNameText;
+        /*private TMP_Text _userNameText;
         private TMP_Text _userBirthDayText;
         private TMP_Text _userAppointmentText;
-        private TMP_Text _doctorNameText;
-        private TMP_Text _treatmentPlanText;
-        private TMP_Text _lastNameText;
+        private TMP_Text _doctorNameText;*/
+        //private TMP_Text _treatmentPlanText;
+        /*private TMP_Text _lastNameText;*/
 
-        [SerializeField] private TMP_Dropdown _trajectDropdown;
+        [SerializeField] public TMP_Dropdown _trajectDropdown;
 
         private void InitializeTrajectDropdown()
         {
@@ -62,7 +62,7 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
         {
 
             
-            InitializeTextComponent();
+            //InitializeTextComponent();
 
             InitializeTrajectDropdown();
 
@@ -70,17 +70,19 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
 
             MakeAvatarsClickble();
         }
-        public void SetProfileData(string userName, string lastName, string userBirthDay, string userAppointment, string doctorName, string treatmentPlan)
+        public void SetProfileData(string userName, string lastName, string userBirthDay, string userAppointment, string doctorName, string treatmentPlan, int trajectId)
         {
-            _userNameText.text = userName;
-            _userBirthDayText.text = userBirthDay;
-            _userAppointmentText.text = userAppointment;
-            _doctorNameText.text = doctorName;
-            _treatmentPlanText.text = treatmentPlan;
-            _lastNameText.text = lastName;
+            _userName.text = userName;
+            _userName.text = userName;
+            _userBirthDay.text = userBirthDay;
+            _userAppointment.text = userAppointment;
+            _doctorName.text = doctorName;
+            /*_treatmentPlanText.text = treatmentPlan;*/
+            _trajectDropdown.value = trajectId - 1;
+            _lastName.text = lastName;
         }
 
-        private void InitializeTextComponent()
+        /*private void InitializeTextComponent()
         {
             _userNameText = _userName.GetComponentInChildren<TMP_Text>();
             _userBirthDayText = _userBirthDay.GetComponentInChildren<TMP_Text>();
@@ -93,7 +95,7 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
             {
                 Debug.LogError("Geen Text gevonden");
             }
-        }
+        }*/
         private void CollectAvatarNames()
         {
             if(_avatarPanel1 != null)
@@ -170,8 +172,8 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
         public void EditProfile()
         {
             _editProfilePanel.SetActive(true);
-            _nameInputField.text = _userNameText.text;
-            _birthDayInputField.text = _userBirthDayText.text;
+            _nameInputField.text = _userName.text;
+            _birthDayInputField.text = _userBirthDay.text;
         }
         public void CloseProfilePanel()
         {
@@ -194,6 +196,10 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
                 return;
             }
             var patient = GetPatientModel();
+            patient.VoorNaam = _nameInputField.text;
+            patient.GeboorteDatum = DateTime.Parse(_birthDayInputField.text);
+
+
             try
             {
                 ProfileSceneScript.SaveProfileData(patient);
@@ -215,17 +221,23 @@ namespace Assets.Scripts.ProfileScene.ProfileSceneUI
         }
         private Patient GetPatientModel()
         {
+            // check if the input fields are not null
+            if (_nameInputField.text == null || _birthDayInputField.text == null)
+            {
+                Debug.LogError("Input fields zijn niet gevonden");
+                return null;
+            }
             return new Patient
             {
                 Id = 0,
-                VoorNaam = _userNameText.text,
-                AchterNaam = _lastNameText.text,
+                VoorNaam = _userName.text,
+                AchterNaam = _lastName.text,
                 AvatarNaam = string.Empty,
-                ArtsNaam = _doctorNameText.text ?? string.Empty,
+                ArtsNaam = _doctorName.text ?? string.Empty,
                 TrajectNaam = _trajectDropdown.options[_trajectDropdown.value].text ?? string.Empty,
                 OuderVoogdNaam = string.Empty,
-                GeboorteDatum = DateTime.Parse(_userBirthDayText.text),
-                AfspraakDatum = DateTime.Parse(_userAppointmentText.text),
+                GeboorteDatum = DateTime.Parse(_userBirthDay.text),
+                AfspraakDatum = DateTime.Parse(_userAppointment.text),
                 TrajectId = _trajectDropdown.value + 1,
             };
         }
