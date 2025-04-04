@@ -62,7 +62,7 @@ public class ProfileSceneScript : MonoBehaviour
     {
         StartCoroutine(APIManager.Instance.SendRequest($"api/Patient/{SessionManager.Instance.PatientId}", "PUT", patient, (response) =>
         {
-            Debug.Log(response);
+            //Debug.Log(response);
             var profile = JsonConvert.DeserializeObject<Patient>(response);
 
             _profileSceneUI.SetProfileData(profile.VoorNaam, profile.AchterNaam, profile.GeboorteDatum.ToShortDateString(), profile.AfspraakDatum.ToShortDateString(), profile.ArtsNaam, profile.TrajectNaam, profile.TrajectId);
