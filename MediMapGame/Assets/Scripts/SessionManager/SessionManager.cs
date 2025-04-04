@@ -20,6 +20,7 @@ namespace Assets.Scripts.SessionManager
         public int PatientId { get; private set; }
 
         public int geustPathLocation { get; set; }
+        public int loggedUserPathLocation { get; set; }
 
         private void Awake()
         {

@@ -27,6 +27,10 @@ public class PathButtonScript : MonoBehaviour
             }
             else
             {
+                if(SessionManager.Instance.geustPathLocation < Id)
+                {
+
+                }
                 SessionManager.Instance.geustPathLocation = Id;
                 Debug.Log("Changed to " + SessionManager.Instance.geustPathLocation);
             }
@@ -52,6 +56,10 @@ public class PathButtonScript : MonoBehaviour
     private IEnumerator UpdatePatientLocation()
     {
         int userId = SessionManager.Instance.UserId;
+        if(Id > SessionManager.Instance.loggedUserPathLocation)
+        {
+            SessionManager.Instance.loggedUserPathLocation = Id;
+        }
         UserDto updateUser = new UserDto
         {
             Id = userId,
