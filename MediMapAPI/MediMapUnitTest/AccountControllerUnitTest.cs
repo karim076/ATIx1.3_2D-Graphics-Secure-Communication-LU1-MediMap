@@ -17,6 +17,8 @@ using Validator = MediMapAPI.Service.Validator;
 namespace MediMapUnitTest;
 
 [TestClass]
+// Voeg dit toe bovenaan je testbestand:
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("MediMapUnitTest")]
 public class AccountControllerUnitTest
 {
 
