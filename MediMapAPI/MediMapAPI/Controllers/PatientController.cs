@@ -44,6 +44,7 @@ namespace MediMapAPI.Controllers
                 {
                     return BadRequest(new { message = "Fout bij het ophalen van patient." });
                 }
+
                 return Ok(patientDto);
             }
             catch (Exception e)
@@ -141,7 +142,7 @@ namespace MediMapAPI.Controllers
                 var updatedPatient = await _unitOfWork.PatientRepository.GetAsync(t => t.Id == id, includeProperty: "Arts,Traject,OuderVoogd");
 
                 var patientDtoResult = ConvertToPatientDto(updatedPatient);
-
+                patientDtoResult.TrajectId = patientDto.TrajectId;
                 return Ok(patientDtoResult);
             }
             catch (Exception e)
@@ -223,6 +224,7 @@ namespace MediMapAPI.Controllers
                 OuderVoogdNaam = $"{patient.OuderVoogd.VoorNaam} {patient.OuderVoogd.AchterNaam}",
                 AfspraakDatum = patient.AfspraakDatum,
                 GeboorteDatum = patient.GeboorteDatum,
+                TrajectId = patient.TrajectId
                 //logbook = patient.LogBooks.Select(l => new LogBookDto
                 //{
                 //    Id = l.Id,

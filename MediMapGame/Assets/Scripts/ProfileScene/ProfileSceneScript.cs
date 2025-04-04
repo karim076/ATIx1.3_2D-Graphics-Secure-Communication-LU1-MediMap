@@ -18,14 +18,22 @@ public class ProfileSceneScript : MonoBehaviour
 
     public void ChangeTraject(Patient patient)
     {
-        StartCoroutine(APIManager.Instance.SendRequest($"api/Patient/traject/{SessionManager.Instance.PatientId}", "PUT", patient, (response) =>
+        if (patient.TrajectId == 1) 
         {
-            var profile = JsonConvert.DeserializeObject<Patient>(response);
-            if (profile != null)
+            patient.TrajectNaam = "Route A";
+        } else if (patient.TrajectId == 2)
+        {
+            patient.TrajectNaam = "Route B";
+        }
+
+        StartCoroutine(APIManager.Instance.SendRequest($"api/Patient/traject/{SessionManager.Instance.PatientId}", "PUT", patient, (response) =>
             {
-                _profileSceneUI.SetProfileData(profile.VoorNaam, profile.AchterNaam, profile.GeboorteDatum.ToShortDateString(), profile.AfspraakDatum.ToShortDateString(), profile.ArtsNaam, profile.TrajectNaam);
-            }
-        }));
+                var profile = JsonConvert.DeserializeObject<Patient>(response);
+                if (profile != null)
+                {
+                    _profileSceneUI.SetProfileData(profile.VoorNaam, profile.AchterNaam, profile.GeboorteDatum.ToShortDateString(), profile.AfspraakDatum.ToShortDateString(), profile.ArtsNaam, profile.TrajectNaam, profile.TrajectId);
+                }
+            }));
     }
 
 
@@ -57,7 +65,7 @@ public class ProfileSceneScript : MonoBehaviour
             Debug.Log(response);
             var profile = JsonConvert.DeserializeObject<Patient>(response);
 
-            _profileSceneUI.SetProfileData(profile.VoorNaam, profile.AchterNaam, profile.GeboorteDatum.ToShortDateString(), profile.AfspraakDatum.ToShortDateString(), profile.ArtsNaam, profile.TrajectNaam);
+            _profileSceneUI.SetProfileData(profile.VoorNaam, profile.AchterNaam, profile.GeboorteDatum.ToShortDateString(), profile.AfspraakDatum.ToShortDateString(), profile.ArtsNaam, profile.TrajectNaam, profile.TrajectId);
 
         }, (error) =>
         {
@@ -75,7 +83,7 @@ public class ProfileSceneScript : MonoBehaviour
             var profile = JsonConvert.DeserializeObject<Patient>(response);
             if(profile != null)
             {
-                _profileSceneUI.SetProfileData(profile.VoorNaam, profile.AchterNaam, profile.GeboorteDatum.ToShortDateString(), profile.AfspraakDatum.ToShortDateString(), profile.ArtsNaam, profile.TrajectNaam);
+                _profileSceneUI.SetProfileData(profile.VoorNaam, profile.AchterNaam, profile.GeboorteDatum.ToString("dd/MM/yyyy"), profile.AfspraakDatum.ToString("dd/MM/yyyy"), profile.ArtsNaam, profile.TrajectNaam, profile.TrajectId);
             }
         }));
     }
